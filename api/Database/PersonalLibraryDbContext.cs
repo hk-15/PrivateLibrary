@@ -1,9 +1,10 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PersonalLibrary.Models.Database;
 
 namespace PersonalLibrary.Database;
 
-public class PersonalLibraryDbContext : DbContext
+public class PersonalLibraryDbContext : IdentityDbContext
 {
     public DbSet<Book> Books { get; set; }
     public DbSet<Author> Authors { get; set; }
