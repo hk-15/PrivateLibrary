@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using PersonalLibrary.Database;
+using PersonalLibrary.Repositories;
+using PersonalLibrary.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,9 +23,12 @@ builder.Services.AddCors(options =>
 // Add services to the container.
 builder.Services.AddDbContext<PersonalLibraryDbContext>();
 builder.Services.AddControllers();
-// builder.Services.AddScoped<IWhaleSpeciesRepository, WhaleSpeciesRepository>();
-// builder.Services.AddScoped<ISightingReportsRepo, SightingReportsRepo>();
-// builder.Services.AddScoped<ISightingReportsService, SightingReportsService>();
+builder.Services.AddScoped<IAuthorsRepo, AuthorsRepo>();
+builder.Services.AddScoped<IBooksRepo, BooksRepo>();
+builder.Services.AddScoped<ICollectionsRepo, CollectionsRepo>();
+builder.Services.AddScoped<IBooksService, BooksService>();
+builder.Services.AddScoped<ICollectionsService, CollectionsService>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
