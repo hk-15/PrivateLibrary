@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using PersonalLibrary.Models.Request;
-using PersonalLibrary.Models.Response;
+using PersonalLibrary.Models.Database;
 using PersonalLibrary.Services;
 
 namespace PersonalLibrary.Controllers;
 
 [ApiController]
-[Route("/Collections")]
+[Route("/collections")]
 public class CollectionsController : ControllerBase
 {
     private readonly ICollectionsService _collectionsService;
@@ -15,8 +14,15 @@ public class CollectionsController : ControllerBase
         _collectionsService = collectionsService;
     }
 
+    [HttpGet]
+    [Route("all")]
+    public async Task<ActionResult<List<Collection>>> GetAllBooks()
+    {
+        return await _collectionsService.GetAll();
+    } 
+
     [HttpPost]
-    public IActionResult AddCollection(string name)
+    public IActionResult AddCollection([FromBody] string name)
     {
         if (name == null)
         {
@@ -24,7 +30,7 @@ public class CollectionsController : ControllerBase
         }
         try
         {
-            _collectionsService.AddCollection(name);
+            _collectionsService.AddCollection(char.ToUpper(name[0]) + name[1..]);
         }
         catch (Exception ex)
         {

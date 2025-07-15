@@ -6,7 +6,7 @@ using PersonalLibrary.Services;
 namespace PersonalLibrary.Controllers;
 
 [ApiController]
-[Route("/Books")]
+[Route("/books")]
 public class BooksController : ControllerBase
 {
     private readonly IBooksService _booksService;
@@ -19,8 +19,7 @@ public class BooksController : ControllerBase
     [Route("all")]
     public async Task<ActionResult<List<BookResponse>>> GetAllBooks()
     {
-        var allBooks = await _booksService.GetAllBooksResponse();
-        return allBooks;
+        return await _booksService.GetAllBooksResponse();
     }
 
     [HttpPost]

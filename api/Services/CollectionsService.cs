@@ -5,6 +5,7 @@ namespace PersonalLibrary.Services;
 
 public interface ICollectionsService
 {
+    Task<List<Collection>> GetAll();
     void AddCollection(string name);
 }
 
@@ -15,6 +16,11 @@ public class CollectionsService : ICollectionsService
     public CollectionsService(ICollectionsRepo collectionsRepo)
     {
         _collectionsRepo = collectionsRepo;
+    }
+
+    public async Task<List<Collection>> GetAll()
+    {
+        return await _collectionsRepo.GetAll();
     }
 
     public async void AddCollection(string name)
