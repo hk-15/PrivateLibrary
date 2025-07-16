@@ -1,4 +1,6 @@
-import AddBookButton from "../../components/AddBookButton/AddBookButton";
+import AddBookButton from "../../components/Buttons/AddBookButton/AddBookButton";
+import ManageCollectionsButton from "../../components/Buttons/ManageCollectionsButton/ManageCollectionsButton";
+import ViewCatalogueButton from "../../components/Buttons/ViewCatalogueButton/ViewCatalogueButton";
 import { Page } from "../Page/Page";
 
 export default function Home(){
@@ -6,7 +8,8 @@ export default function Home(){
         <Page>
             <h1>Home</h1>
             <AddBookButton/>
-
+            <ManageCollectionsButton/>
+            <ViewCatalogueButton/>
         </Page>
     )
 }
