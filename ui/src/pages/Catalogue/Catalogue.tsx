@@ -1,5 +1,6 @@
 import AddBookButton from "../../components/Buttons/AddBookButton/AddBookButton";
 import ManageCollectionsButton from "../../components/Buttons/ManageCollectionsButton/ManageCollectionsButton";
+import CatalogueTable from "../../components/CatalogueTable/CatalogueTable";
 import { Page } from "../Page/Page";
 
 export default function Catalogue() {
@@ -9,6 +10,7 @@ export default function Catalogue() {
             <h1>Catalogue</h1>
             <AddBookButton/>
             <ManageCollectionsButton/>
+            <CatalogueTable/>
         </Page>
     );
 }
