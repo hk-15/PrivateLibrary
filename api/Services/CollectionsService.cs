@@ -6,7 +6,7 @@ namespace PersonalLibrary.Services;
 public interface ICollectionsService
 {
     Task<List<Collection>> GetAll();
-    void AddCollection(string name);
+    Task AddCollection(string name);
 }
 
 public class CollectionsService : ICollectionsService
@@ -23,7 +23,7 @@ public class CollectionsService : ICollectionsService
         return await _collectionsRepo.GetAll();
     }
 
-    public async void AddCollection(string name)
+    public async Task AddCollection(string name)
     {
         var collection = await _collectionsRepo.GetCollectionByName(name);
         if (collection == null)
@@ -32,8 +32,7 @@ public class CollectionsService : ICollectionsService
             {
                 Name = name
             };
-            _collectionsRepo.Add(collection);
+            await _collectionsRepo.Add(collection);
         }
-        throw new Exception();
     }
 }

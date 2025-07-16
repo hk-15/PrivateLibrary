@@ -8,47 +8,38 @@ type FormStatus = "READY" | "SUBMITTING" | "ERROR" | "FINISHED";
 export default function AddBookForm() {
     const [status, setStatus] = useState<FormStatus>("READY");
     const [collections, setCollections] = useState<Collection[]>([]);
+    const [showMessage, setShowMessage] = useState(false);
+    const [fadeOut, setFadeOut] = useState(false);
     const currentYear: number = new Date().getFullYear();
 
     const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
     } = useForm({
         defaultValues: {
-            id: "",
+            isbn: "978",
             title: "",
             author: "",
             translator: "",
             language: "",
             originalLanguage: "",
-            collection: "",
+            collectionId: 0,
             publicationYear: currentYear,
             editionPublicationYear: currentYear,
-            read: false,
+            read: "false",
             notes: ""
         },
     });
 
     const formErrors = {
-        id: {
+        isbn: {
         required: "ISBN is required",
         pattern: {
             value: /^[0-9]{13}$/,
             message: "ISBN must be 13 characters long",
         },
-        },
-        title: {
-        required: "Title is required",
-        },
-        author: {
-        required: "Author is required",
-        },
-        language: {
-        required: "Language is required",
-        },
-        collection: {
-        required: "Collection is required",
         },
     };
 
@@ -60,68 +51,74 @@ export default function AddBookForm() {
     }, []);
 
     function submitForm(data: {
-        id: string,
+        isbn: string,
         title: string,
         author: string,
         translator?: string,
         language: string,
         originalLanguage?: string,
-        collection: string,
+        collectionId: number,
         publicationYear: number,
         editionPublicationYear: number,
-        read: boolean,
+        read: string,
         notes?: string
     }) {
+        const readBoolean = data.read === "true" ? true : false;
         const bookData = {
-        ...data,
-        };
+            ...data,
+            read: readBoolean
+        }
+        setStatus("SUBMITTING");
         addBook(bookData)
-            .then(() => setStatus("FINISHED"))
+            .then(() => {
+                setStatus("FINISHED")
+                reset()
+                setShowMessage(true)
+                setFadeOut(false)
+                setTimeout(() => {
+                    setFadeOut(true);
+                }, 3000);
+                setTimeout(() => {
+                    setShowMessage(false);
+                }, 4000);     
+            })
             .catch(() => setStatus("ERROR"));
     }
 
-    // if (status === "FINISHED") {
-    //     return (
-    //         //empty form and display success message that fades
-    //     );
-    // }
-
     return (
         <form onSubmit={handleSubmit(submitForm)}>
-            <label htmlFor="id">
-                ISBN <span className="required">*</span>
+            <label htmlFor="isbn">
+                ISBN<span className="required">*</span>
                 <input
-                id="id"
+                id="isbn"
                 type="number"
-                {...register("id", formErrors.id)}
+                {...register("isbn", formErrors.isbn)}
                 />
-                {errors.id && (<span className="error">{errors.id.message}</span>)}
+                {errors.isbn && (<span className="error">{errors.isbn.message}</span>)}
             </label>
 
             <label htmlFor="title">
-                Title <span className="required">*</span>
+                Title<span className="required">*</span>
                 <input
                 id="title"
                 type="text"
-                {...register("title", formErrors.title)}
+                {...register("title", {required: true})}
                 />
-                {errors.title && (<span className="error">{errors.title.message}</span>)}
             </label>
 
             <label htmlFor="author">
-                Author <span className="required">*</span>
+                Author<span className="required">*</span>
                 <input
                 id="author"
                 type="text"
-                {...register("author", formErrors.author)}
+                {...register("author", {required: true})}
                 />
-                {errors.author && (<span className="error">{errors.author.message}</span>)}
             </label>
 
-            <label htmlFor="collection">
-                Collection <span className="required">*</span>
+            <label htmlFor="collectionId">
+                Collection<span className="required">*</span>
                 <select
-                    {...register("collection", formErrors.collection)}>
+                    {...register("collectionId", {required: true, valueAsNumber: true})}>
                     <option value="">Select</option>
                     {collections.map((collection) => (
                     <option key={collection.id} value={collection.id}>
@@ -129,17 +126,15 @@ export default function AddBookForm() {
                     </option>
                     ))}
                 </select>
-                {errors.collection && (<span className="error">{errors.collection.message}</span>)}
             </label>
 
             <label htmlFor="language">
-                Language <span className="required">*</span>
+                Language<span className="required">*</span>
                 <input
                 id="language"
                 type="text"
-                {...register("language", formErrors.language)}
+                {...register("language", {required: true})}
                 />
-                {errors.language && (<span className="error">{errors.language.message}</span>)}
             </label>
 
             <label htmlFor="translator">
@@ -161,37 +156,37 @@ export default function AddBookForm() {
             </label>
 
             <label htmlFor="publicationYear">
-                Year of publication <span className="required">*</span>
+                Year of publication<span className="required">*</span>
                 <input
                 id="publicationYear"
                 type="number"
-                {...register("publicationYear")}
+                {...register("publicationYear", {required: true, valueAsNumber: true})}
                 />
             </label>
 
             <label htmlFor="editionPublicationYear">
-                Year of edition publication <span className="required">*</span>
+                Year of edition publication<span className="required">*</span>
                 <input
                 id="editionPublicationYear"
                 type="number"
-                {...register("editionPublicationYear")}
+                {...register("editionPublicationYear", {required: true, valueAsNumber: true})}
                 />
             </label>
 
             <label htmlFor="read">
-                Read? <span className="required">*</span>
+                Read?<span className="required">*</span>
                 <input
                 id="true"
                 type="radio"
                 value="true"
-                {...register("read")}
+                {...register("read", {required: true})}
                 />
                 <label htmlFor="true">Yes</label>
                 <input
                 id="false"
                 type="radio"
                 value="false"
-                {...register("read")}
+                {...register("read", {required: true})}
                 />
                 <label htmlFor="false">No</label>
             </label>
@@ -210,6 +205,7 @@ export default function AddBookForm() {
                 Add book
             </button>
             {status === "ERROR" && <p>Something went wrong. Please try again.</p>}
+            {status === "FINISHED" && showMessage && <p className={`message ${fadeOut ? 'fade-out' : ''}`}>Catalogue has been updated.</p>}
         </form>
     )
 }

@@ -7,7 +7,7 @@ namespace PersonalLibrary.Repositories;
 public interface IBooksRepo
 {
     Task<List<Book>> GetAll();
-    void Add(Book book);
+    Task Add(Book book);
 }
 
 public class BooksRepo : IBooksRepo
@@ -27,7 +27,7 @@ public class BooksRepo : IBooksRepo
             .ToListAsync();
     }
 
-    public async void Add(Book book)
+    public async Task Add(Book book)
     {
         await _context.Books.AddAsync(book);
         await _context.SaveChangesAsync();

@@ -22,7 +22,7 @@ public class CollectionsController : ControllerBase
     } 
 
     [HttpPost]
-    public IActionResult AddCollection([FromBody] string name)
+    public async Task<IActionResult> AddCollection([FromBody]string name)
     {
         if (name == null)
         {
@@ -30,7 +30,7 @@ public class CollectionsController : ControllerBase
         }
         try
         {
-            _collectionsService.AddCollection(char.ToUpper(name[0]) + name[1..]);
+            await _collectionsService.AddCollection(char.ToUpper(name[0]) + name[1..]);
         }
         catch (Exception ex)
         {

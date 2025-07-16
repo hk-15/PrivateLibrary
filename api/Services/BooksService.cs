@@ -8,7 +8,7 @@ namespace PersonalLibrary.Services;
 public interface IBooksService
 {
     Task<List<BookResponse>> GetAllBooksResponse();
-    void Add(BookRequest newBook);
+    Task Add(BookRequest newBook);
 }
 
 public class BooksService : IBooksService
@@ -43,35 +43,31 @@ public class BooksService : IBooksService
         })];
     }
 
-    public async void Add(BookRequest newBook)
+    public async Task Add(BookRequest newBook)
     {
         var author = await _authorsRepo.GetAuthorByName(newBook.Author);
-
         if (author == null)
         {
-            _authorsRepo.AddAuthor(newBook.Author);
+            await _authorsRepo.AddAuthor(newBook.Author);
         }
-
         author = await _authorsRepo.GetAuthorByName(newBook.Author);
-        var collection = await _collectionsRepo.GetCollectionByName(newBook.Collection);
-
-        if (author != null && collection != null)
+        if (author != null)
         {
-            Book book = new Book
+            Book book = new()
             {
                 Id = newBook.Isbn,
                 Title = newBook.Title,
-                AuthorId = author.Id,
+                Author = author,
                 Translator = newBook.Translator,
                 Language = newBook.Language,
                 OriginalLanguage = newBook.OriginalLanguage,
-                CollectionId = collection.Id,
+                CollectionId = newBook.CollectionId,
                 PublicationYear = newBook.PublicationYear,
                 EditionPublicationYear = newBook.EditionPublicationYear,
                 Read = newBook.Read,
                 Notes = newBook.Notes
             };
-            _booksRepo.Add(book);
+            await _booksRepo.Add(book);
         }
     }
 }

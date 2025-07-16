@@ -12,8 +12,8 @@ using PersonalLibrary.Database;
 namespace PersonalLibraryBackend.Migrations
 {
     [DbContext(typeof(PersonalLibraryDbContext))]
-    [Migration("20250715104422_AddIdentityTables")]
-    partial class AddIdentityTables
+    [Migration("20250716115737_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -241,7 +241,8 @@ namespace PersonalLibraryBackend.Migrations
             modelBuilder.Entity("PersonalLibrary.Models.Database.Book", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text");
+                        .HasMaxLength(13)
+                        .HasColumnType("character varying(13)");
 
                     b.Property<int>("AuthorId")
                         .HasColumnType("integer");
@@ -249,8 +250,8 @@ namespace PersonalLibraryBackend.Migrations
                     b.Property<int>("CollectionId")
                         .HasColumnType("integer");
 
-                    b.Property<DateOnly>("EditionPublicationYear")
-                        .HasColumnType("date");
+                    b.Property<int>("EditionPublicationYear")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Language")
                         .IsRequired()
@@ -262,8 +263,8 @@ namespace PersonalLibraryBackend.Migrations
                     b.Property<string>("OriginalLanguage")
                         .HasColumnType("text");
 
-                    b.Property<DateOnly>("PublicationYear")
-                        .HasColumnType("date");
+                    b.Property<int>("PublicationYear")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("Read")
                         .HasColumnType("boolean");

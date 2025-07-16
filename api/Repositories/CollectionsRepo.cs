@@ -8,7 +8,7 @@ public interface ICollectionsRepo
 {
     Task<List<Collection>> GetAll();
     Task<Collection?> GetCollectionByName(string name);
-    void Add(Collection collection);
+    Task Add(Collection collection);
 }
 
 public class CollectionsRepo : ICollectionsRepo
@@ -30,7 +30,7 @@ public class CollectionsRepo : ICollectionsRepo
         return await _context.Collections.FirstOrDefaultAsync(c => c.Name == name);
     }
 
-    public async void Add(Collection collection)
+    public async Task Add(Collection collection)
     {
         await _context.Collections.AddAsync(collection);
         await _context.SaveChangesAsync();

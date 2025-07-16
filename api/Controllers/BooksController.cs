@@ -23,7 +23,7 @@ public class BooksController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult AddBook([FromBody] BookRequest newBook)
+    public async Task<IActionResult> AddBook([FromBody] BookRequest newBook)
     {
         if (!ModelState.IsValid)
         {
@@ -31,7 +31,7 @@ public class BooksController : ControllerBase
         }
         try
         {
-            _booksService.Add(newBook);
+            await _booksService.Add(newBook);
         }
         catch (Exception ex)
         {

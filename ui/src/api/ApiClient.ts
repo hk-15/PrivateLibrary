@@ -12,6 +12,20 @@ export interface Book {
     notes?: string
 }
 
+export interface BookRequest {
+    isbn: string,
+    title: string,
+    author: string,
+    translator?: string,
+    language: string,
+    originalLanguage?: string,
+    collectionId: number,
+    publicationYear: number,
+    editionPublicationYear: number,
+    read: boolean,
+    notes?: string
+}
+
 export interface Collection {
     id: number,
     name: string
@@ -27,7 +41,7 @@ export async function getAllBooks(): Promise<Book[]> {
     return await response.json();
 }
 
-export async function addBook(book: Book) {
+export async function addBook(book: BookRequest) {
     const response = await fetch(`http://localhost:5108/books`, {
         method: "POST",
         credentials: "include",

@@ -7,7 +7,7 @@ namespace PersonalLibrary.Repositories;
 public interface IAuthorsRepo
 {
     Task<Author?> GetAuthorByName(string name);
-    void AddAuthor(string name);
+    Task AddAuthor(string name);
 }
 
 public class AuthorsRepo : IAuthorsRepo
@@ -24,7 +24,7 @@ public class AuthorsRepo : IAuthorsRepo
         return await _context.Authors.FirstOrDefaultAsync(a => a.Name == name);
     }
 
-    public async void AddAuthor(string name)
+    public async Task AddAuthor(string name)
     {
         var author = new Author
         {
