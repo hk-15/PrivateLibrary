@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { addCollection, getAllCollections, type Collection } from "../../api/ApiClient";
+import { addCollection, getAllCollections } from "../../api/ApiClient";
 
 type FormStatus = "READY" | "SUBMITTING" | "ERROR" | "DUPLICATE" | "FINISHED";
 
 export default function AddCollection() {
     const [status, setStatus] = useState<FormStatus>("READY");
-    const [collections, setCollections] = useState<Collection[]>([]);
+    const [collections, setCollections] = useState<string[]>([]);
     const [showForm, setShowForm] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
     const [fadeOut, setFadeOut] = useState(false);
@@ -31,7 +31,7 @@ export default function AddCollection() {
     useEffect(() => {
             getAllCollections()
                 .then((response) => {
-                    setCollections(response.sort())})
+                    setCollections(response.map(collection => collection.name))})
                 .catch((err) => console.error(err));
         }, []);
     
@@ -39,7 +39,7 @@ export default function AddCollection() {
         collection: string
     }) {
         setStatus("SUBMITTING");
-        if (data.collection in collections) {
+        if (collections.includes(data.collection)) {
             setStatus("DUPLICATE")
             return;
         }
