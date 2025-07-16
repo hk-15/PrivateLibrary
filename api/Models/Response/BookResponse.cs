@@ -4,8 +4,11 @@ public class BookResponse
 {
     public required string Id { get; set; }
     public required string Title { get; set; }
+    public string? SortTitle { get; set; }
     public required string Author { get; set; }
+    public string? SortAuthor { get; set; }
     public string? Translator { get; set; }
+    public string? SortTranslator { get; set; }
     public required string Language { get; set; }
     public string? OriginalLanguage { get; set; }
     public string? Collection { get; set; }

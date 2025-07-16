@@ -31,8 +31,11 @@ public class BooksService : IBooksService
         {
             Id = b.Id,
             Title = b.Title,
+            SortTitle = RemoveLeadingArticle(b.Title),
             Author = b.Author!.Name,
+            SortAuthor = b.Author.Name.Split(' ').Last(),
             Translator = b.Translator,
+            SortTranslator = b.Translator?.Split(' ').Last(),
             Language = b.Language,
             OriginalLanguage = b.OriginalLanguage,
             Collection = b.Collection?.Name,
@@ -69,5 +72,18 @@ public class BooksService : IBooksService
             };
             await _booksRepo.Add(book);
         }
+    }
+
+    public static string RemoveLeadingArticle(string title)
+    {
+        var articles = new[] { "The ", "A ", "An " };
+        foreach (var article in articles)
+        {
+            if (title.StartsWith(article, StringComparison.OrdinalIgnoreCase))
+            {
+                return title.Substring(article.Length);
+            }
+        }
+        return title;
     }
 }

@@ -32,7 +32,17 @@ export interface Collection {
 }
 
 export async function getAllBooks(): Promise<Book[]> {
-    const response = await fetch("http://localhost:5108/books/all", {
+    const response = await fetch("http://localhost:5108/books", {
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+    return await response.json();
+}
+
+export async function getBooks(pageNum: string, pageSize: string, sortBy: string, searchTerm: string): Promise<Book[]> {
+    const response = await fetch(`http://localhost:5108/books?PageNumber=${pageNum}&PageSize=${pageSize}&SortBy=${sortBy}&SearchTerm=${searchTerm}`, {
         credentials: "include",
         headers: {
             "Content-Type": "application/json"

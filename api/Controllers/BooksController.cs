@@ -7,7 +7,7 @@ namespace PersonalLibrary.Controllers;
 
 [ApiController]
 [Route("/books")]
-public class BooksController : ControllerBase
+public class BooksController : BaseApiController
 {
     private readonly IBooksService _booksService;
     public BooksController(IBooksService booksService)
@@ -16,10 +16,30 @@ public class BooksController : ControllerBase
     }
 
     [HttpGet]
-    [Route("all")]
-    public async Task<ActionResult<List<BookResponse>>> GetAllBooks()
+    public async Task<IActionResult> GetBooks([FromQuery] QueryParameters parameters)
     {
-        return await _booksService.GetAllBooksResponse();
+        var allBooks = await _booksService.GetAllBooksResponse();
+        var query = allBooks.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(parameters.SearchTerm))
+        {
+            var searchTerm = parameters.SearchTerm.Trim();
+            query = query.Where(b => b.Id.Contains(searchTerm) || b.Author.ToLower().Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) || b.Translator!.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) || b.Title.ToLower().Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase));
+        }
+
+        if (!string.IsNullOrWhiteSpace(parameters.SortBy))
+        {
+            query = SortQuery(parameters.SortBy, query);
+        }
+        else
+        {
+            query = query.OrderBy(b => b.SortTitle);
+        }
+
+        var skipAmount = (parameters.PageNumber - 1) * parameters.PageSize;
+        query = query.Skip(skipAmount).Take(parameters.PageSize);
+
+        return Ok(query.ToList());
     }
 
     [HttpPost]
@@ -38,5 +58,13 @@ public class BooksController : ControllerBase
             return StatusCode(500, ex.Message);
         }
         return Ok();
+    }
+
+    public static IQueryable<BookResponse> SortQuery(string sortByTerm, IQueryable<BookResponse> query)
+    {
+        if (sortByTerm == "Author") return query.OrderBy(b => b.SortAuthor);
+        else if (sortByTerm == "Translator") return query.OrderBy(b => b.SortTranslator);
+        else if (sortByTerm == "Publication") return query.OrderBy(b => b.PublicationYear);
+        else return query.OrderBy(b => b.SortTitle);
     }
 }
