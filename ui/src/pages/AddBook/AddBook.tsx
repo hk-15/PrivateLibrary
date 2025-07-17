@@ -5,7 +5,7 @@ export default function Catalogue() {
     
     return (
         <Page>
-            <h1>Add a book to the library</h1>
+            <h1>Shelve a book</h1>
             <AddBookForm/>
         </Page>
     );

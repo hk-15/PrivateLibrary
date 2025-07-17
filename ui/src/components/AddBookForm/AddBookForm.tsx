@@ -202,7 +202,7 @@ export default function AddBookForm() {
             <button
                 disabled={status === "SUBMITTING"}
                 type="submit">
-                Add book
+                Shelve book
             </button>
             {status === "ERROR" && <p>Something went wrong. Please try again.</p>}
             {status === "FINISHED" && showMessage && <p className={`message ${fadeOut ? 'fade-out' : ''}`}>Catalogue has been updated.</p>}

@@ -61,7 +61,7 @@ export default function CatalogueTable() {
                             <td>
                                 <button>Edit</button>
                                 <button>Mark as read</button>
-                                <button>Delete</button>
+                                <button>Remove</button>
                             </td>
                         )}
                         {!showActions && (
