@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react"
-import { getAllBooks, type Book } from "../../api/ApiClient";
+import { getBooks, type Book, type QueryParameters } from "../../api/ApiClient";
 import "./CatalogueTable.scss";
 
-export default function CatalogueTable() {
-    const [books, setBooks] = useState<Book[]>([]);
+export default function CatalogueTable(props:
+    {
+        params: QueryParameters,
+        searchTerm: string
+    }) {
     const [toggleButton, setToggleButton] = useState("Show details");
     const [showActions, setShowActions] = useState(true);
+    const [books, setBooks] = useState<Book[]>([]);
 
     useEffect(() => {
-        getAllBooks().then((response) => setBooks(response))
-    }, []);
-    
+        getBooks(props.params, props.searchTerm)
+            .then(response => setBooks(response))
+    }, [books]);
+
     return (
         <div>
             <button
@@ -28,54 +33,66 @@ export default function CatalogueTable() {
             </button>
             <table>
                 <thead>
-                    <tr>
-                        <th>ISBN</th>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Collection</th>
-                        <th>Publication year</th>
-                        {showActions && (
+                    {showActions && (
+                        <tr>
+                            <th>ISBN</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Collection</th>
+                            <th>Publication year</th>
                             <th>Actions</th>
-                        )}
-                        {!showActions && (
-                            <div>
-                                <th>Edition publication year</th>
-                                <th>Language</th>
-                                <th>Original language</th>
-                                <th>Translator</th>
-                                <th>Notes</th>
-                            </div>
-                        )}
-                    </tr>
+                        </tr>
+                    )}
+                    {!showActions && (
+                        <tr>
+                            <th>ISBN</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Collection</th>
+                            <th>Publication year</th>
+                            <th>Edition publication year</th>
+                            <th>Language</th>
+                            <th>Original language</th>
+                            <th>Translator</th>
+                            <th>Notes</th>
+                        </tr>
+                    )}
                 </thead>
                 <tbody>
                     {books.length > 0 ? (
-                        books.map(b => 
-                        <tr key={b.id} className={`${b.read ? 'marked-read' : ''}`}>
-                            <td>{b.id}</td>
-                            <td>{b.title}</td>
-                            <td>{b.author}</td>
-                            <td>{b.collection}</td>
-                            <td>{b.publicationYear}</td>
-                            {showActions && (
-                            <td>
-                                <button>Edit</button>
-                                <button>Mark as read</button>
-                                <button>Remove</button>
-                            </td>
-                        )}
-                        {!showActions && (
-                            <div>
+                        books.map(b =>
+                            {return showActions ? ( 
+                                <tr key={b.id} className={`${b.read ? 'marked-read' : ''}`}>
+                                    <td>{b.id}</td>
+                                    <td>{b.title}</td>
+                                    <td>{b.author}</td>
+                                    <td>{b.collection}</td>
+                                    <td>{b.publicationYear}</td>
+                                    <td>
+                                        <button>Edit</button>
+                                        <button>Mark as read</button>
+                                        <button>Remove</button>
+                                    </td>
+                                </tr>
+                        ) :
+                        (
+                            <tr key={b.id} className={`${b.read ? 'marked-read' : ''}`}>
+                                <td>{b.id}</td>
+                                <td>{b.title}</td>
+                                <td>{b.author}</td>
+                                <td>{b.collection}</td>
+                                <td>{b.publicationYear}</td>
                                 <td>{b.editionPublicationYear}</td>
                                 <td>{b.language}</td>
                                 <td>{b.originalLanguage}</td>
                                 <td>{b.translator}</td>
                                 <td>{b.notes}</td>
-                            </div>
-                        )}
-                        </tr>
-                        
-                    )) : (<p>No books in the library</p>)}
+                            </tr>
+                        )}                        
+                    )) :
+                    (<tr>
+                        <td colSpan={10}>No books in the library</td>
+                    </tr>)}
                 </tbody>
             </table>
         </div>
