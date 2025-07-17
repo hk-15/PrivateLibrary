@@ -5,18 +5,39 @@ import "./CatalogueTable.scss";
 export default function CatalogueTable(props:
     {
         pageSize: string,
-        pageNum: string,
         sortBy: string,
         searchTerm: string
     }) {
     const [toggleButton, setToggleButton] = useState("Show details");
     const [showActions, setShowActions] = useState(true);
     const [books, setBooks] = useState<Book[]>([]);
+    const [pageNum, setPageNum] = useState("1");
 
     useEffect(() => {
-        getBooks(props.pageNum, props.pageSize, props.sortBy, props.searchTerm)
+        getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
             .then(response => setBooks(response))
     }, [props]);
+
+    function prevPage(page: string) {
+        let pageNum = +page;
+        pageNum--;
+        return pageNum.toString();
+    }
+
+    function nextPage(page: string) {
+        let pageNum = +page;
+        pageNum++;
+        return pageNum.toString();
+    }
+
+    function checkMaxPage() {
+        const [books, setBooks] = useState<Book[]>([]);
+        useEffect(() => {
+            getBooks(nextPage(pageNum), props.pageSize, "Title", props.searchTerm)
+                .then(response => setBooks(response));
+        }, [props]);
+        return books.length === 0 ? true : false;
+    }
 
     return (
         <div>
@@ -97,6 +118,17 @@ export default function CatalogueTable(props:
                     </tr>)}
                 </tbody>
             </table>
+            <button
+                onClick={() => setPageNum(prevPage(pageNum))}
+                disabled={pageNum === "1"}
+                >
+                &lt;
+            </button>
+            {pageNum}
+            <button
+                onClick={() => setPageNum(nextPage(pageNum))}
+                disabled={checkMaxPage()}
+                > &gt; </button>
         </div>
     )
 }
