@@ -24,7 +24,8 @@ public class BooksController : BaseApiController
         if (!string.IsNullOrWhiteSpace(parameters.SearchTerm))
         {
             var searchTerm = parameters.SearchTerm.Trim();
-            query = query.Where(b => b.Id.Contains(searchTerm) || b.Author.ToLower().Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) || b.Translator!.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) || b.Title.ToLower().Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase));
+            query = query.Where(b => b.Id.Contains(searchTerm) || b.Author.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) || b.Translator!.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) || b.Title.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) || b.Language.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) || b.OriginalLanguage!.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)
+            );
         }
 
         if (!string.IsNullOrWhiteSpace(parameters.SortBy))
