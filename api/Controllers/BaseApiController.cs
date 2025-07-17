@@ -10,7 +10,7 @@ public abstract class BaseApiController : ControllerBase
 
     protected BaseApiController()
     {
-        DefaultPageSize = 10;
+        DefaultPageSize = 25;
         MaxPageSize = 50;
     }
 

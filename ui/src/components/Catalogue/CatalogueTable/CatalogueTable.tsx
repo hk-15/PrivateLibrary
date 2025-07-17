@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"
-import { getBooks, type Book, type QueryParameters } from "../../api/ApiClient";
+import { getBooks, type Book } from "../../../api/ApiClient";
 import "./CatalogueTable.scss";
 
 export default function CatalogueTable(props:
     {
-        params: QueryParameters,
+        pageSize: string,
+        pageNum: string,
+        sortBy: string,
         searchTerm: string
     }) {
     const [toggleButton, setToggleButton] = useState("Show details");
@@ -12,9 +14,9 @@ export default function CatalogueTable(props:
     const [books, setBooks] = useState<Book[]>([]);
 
     useEffect(() => {
-        getBooks(props.params, props.searchTerm)
+        getBooks(props.pageNum, props.pageSize, props.sortBy, props.searchTerm)
             .then(response => setBooks(response))
-    }, [books]);
+    }, [props]);
 
     return (
         <div>

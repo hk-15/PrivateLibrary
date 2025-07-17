@@ -1,17 +1,17 @@
 import { useState } from "react";
-import type { QueryParameters } from "../../api/ApiClient";
 import AddBookButton from "../../components/Buttons/AddBookButton/AddBookButton";
 import ManageCollectionsButton from "../../components/Buttons/ManageCollectionsButton/ManageCollectionsButton";
-import CatalogueTable from "../../components/CatalogueTable/CatalogueTable";
+import CatalogueTable from "../../components/Catalogue/CatalogueTable/CatalogueTable";
 import { Page } from "../Page/Page";
 import { SearchBar } from "../../components/SearchBar/SearchBar";
+import { CatalogueSort } from "../../components/Catalogue/CatalogueSort/CatalogueSort";
+import { CataloguePageSize } from "../../components/Catalogue/CataloguePageSize/CataloguePageSize";
+import { ResultsPagination } from "../../components/ResultsPagination/ResultsPagination";
 
 export default function Catalogue() {
-    const [params, setParams] = useState<QueryParameters>({
-        pageNum: "1",
-        pageSize: "25",
-        sortBy: "Title"
-    });
+    const [pageNum, setPageNum] = useState("1");
+    const [pageSize, setPageSize] = useState("10");
+    const [sortBy, setSortBy] = useState("Title");
     const [searchTerm, setSearchTerm] = useState("");
 
     return (
@@ -20,7 +20,10 @@ export default function Catalogue() {
             <AddBookButton/>
             <ManageCollectionsButton/>
             <SearchBar getSearchTerm={setSearchTerm}/>
-            <CatalogueTable params={params} searchTerm={searchTerm}/>
+            <CatalogueSort getSortBy={setSortBy}/>
+            <CataloguePageSize getPageSize={setPageSize}/>
+            <CatalogueTable pageNum={pageNum} pageSize={pageSize} sortBy={sortBy} searchTerm={searchTerm}/>
+            <ResultsPagination getPage={setPageNum} currentPage={pageNum} pageSize={pageSize} searchTerm={searchTerm}/>
         </Page>
     );
 }

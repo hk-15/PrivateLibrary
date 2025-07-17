@@ -6,6 +6,7 @@ export const SearchBar: React.FC<Props> = ({ getSearchTerm }) =>
 {
     return (
         <label htmlFor="searchBar">
+            Search
             <input
             id="searchBar"
             type="text"
