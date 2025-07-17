@@ -1,6 +1,7 @@
 export interface Book {
     id: string,
     title: string,
+    subtitle?: string,
     author: string,
     translator?: string,
     language: string,
@@ -15,6 +16,7 @@ export interface Book {
 export interface BookRequest {
     isbn: string,
     title: string,
+    subtitle?: string,
     author: string,
     translator?: string,
     language: string,

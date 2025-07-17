@@ -8,7 +8,7 @@ import { CatalogueSort } from "../../components/Catalogue/CatalogueSort/Catalogu
 import { CataloguePageSize } from "../../components/Catalogue/CataloguePageSize/CataloguePageSize";
 
 export default function Catalogue() {
-    const [pageSize, setPageSize] = useState("10");
+    const [pageSize, setPageSize] = useState("25");
     const [sortBy, setSortBy] = useState("Title");
     const [searchTerm, setSearchTerm] = useState("");
 

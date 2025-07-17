@@ -21,6 +21,7 @@ export default function AddBookForm() {
         defaultValues: {
             isbn: "978",
             title: "",
+            subtitle: "",
             author: "",
             translator: "",
             language: "",
@@ -37,8 +38,8 @@ export default function AddBookForm() {
         isbn: {
         required: "ISBN is required",
         pattern: {
-            value: /^[0-9]{13}$/,
-            message: "ISBN must be 13 characters long",
+            value: /^[0-9]{10,13}$/,
+            message: "ISBN must be between 10 and 13 characters long",
         },
         },
     };
@@ -53,6 +54,7 @@ export default function AddBookForm() {
     function submitForm(data: {
         isbn: string,
         title: string,
+        subtitle?: string,
         author: string,
         translator?: string,
         language: string,
@@ -103,6 +105,15 @@ export default function AddBookForm() {
                 id="title"
                 type="text"
                 {...register("title", {required: true})}
+                />
+            </label>
+
+            <label htmlFor="subtitle">
+                Title
+                <input
+                id="subtitle"
+                type="text"
+                {...register("subtitle")}
                 />
             </label>
 

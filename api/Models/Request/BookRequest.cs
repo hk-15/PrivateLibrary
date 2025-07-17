@@ -4,9 +4,10 @@ namespace PersonalLibrary.Models.Request;
 
 public class BookRequest
 {
-    [StringLength(13)]
+    [MinLength(10), MaxLength(13)]
     public required string Isbn { get; set; }
     public required string Title { get; set; }
+    public string? Subtitle { get; set; }
     public required string Author { get; set; }
     public string? Translator { get; set; }
     public required string Language { get; set; }

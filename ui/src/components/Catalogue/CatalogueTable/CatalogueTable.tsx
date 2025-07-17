@@ -16,7 +16,7 @@ export default function CatalogueTable(props:
     useEffect(() => {
         getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
             .then(response => setBooks(response))
-    }, [props]);
+    }, [props, pageNum]);
 
     function prevPage(page: string) {
         let pageNum = +page;
@@ -63,13 +63,13 @@ export default function CatalogueTable(props:
                             <th>Author</th>
                             <th>Collection</th>
                             <th>Publication year</th>
-                            <th>Actions</th>
                         </tr>
                     )}
                     {!showActions && (
                         <tr>
                             <th>ISBN</th>
                             <th>Title</th>
+                            <th>Subtitle</th>
                             <th>Author</th>
                             <th>Collection</th>
                             <th>Publication year</th>
@@ -102,6 +102,7 @@ export default function CatalogueTable(props:
                             <tr key={b.id} className={`${b.read ? 'marked-read' : ''}`}>
                                 <td>{b.id}</td>
                                 <td>{b.title}</td>
+                                <td>{b.subtitle}</td>
                                 <td>{b.author}</td>
                                 <td>{b.collection}</td>
                                 <td>{b.publicationYear}</td>
@@ -110,6 +111,9 @@ export default function CatalogueTable(props:
                                 <td>{b.originalLanguage}</td>
                                 <td>{b.translator}</td>
                                 <td>{b.notes}</td>
+                                <td>
+                                    <button>Edit</button>
+                                </td>
                             </tr>
                         )}                        
                     )) :

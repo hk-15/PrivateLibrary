@@ -4,9 +4,10 @@ namespace PersonalLibrary.Models.Database;
 
 public class Book
 {
-    [StringLength(13)]
+    [MinLength(10), MaxLength(13)]
     public required string Id { get; set; }
     public required string Title { get; set; }
+    public string? Subtitle { get; set; }
     public int AuthorId { get; set; }
     public Author? Author { get; set; }
     public string? Translator { get; set; }

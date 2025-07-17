@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using PersonalLibrary.Database;
+using PersonalLibrary.Helpers;
 using PersonalLibrary.Repositories;
 using PersonalLibrary.Services;
 
@@ -52,6 +53,12 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider;
+    await DatabaseSeeder.SeedDatabase(context);
+};
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
