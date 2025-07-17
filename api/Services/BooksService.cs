@@ -32,6 +32,7 @@ public class BooksService : IBooksService
             Id = b.Id,
             Title = b.Title,
             SortTitle = RemoveLeadingArticle(b.Title),
+            Subtitle = b.Subtitle,
             Author = b.Author!.Name,
             SortAuthor = b.Author.Name.Split(' ').Last(),
             Translator = b.Translator,

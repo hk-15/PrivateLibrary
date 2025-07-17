@@ -11,6 +11,7 @@ export default function CatalogueTable(props:
     const [toggleButton, setToggleButton] = useState("Show details");
     const [showActions, setShowActions] = useState(true);
     const [books, setBooks] = useState<Book[]>([]);
+    const [nextPageBooks, setNextPageBooks] = useState<Book[]>([]);
     const [pageNum, setPageNum] = useState("1");
 
     useEffect(() => {
@@ -31,12 +32,11 @@ export default function CatalogueTable(props:
     }
 
     function checkMaxPage() {
-        const [books, setBooks] = useState<Book[]>([]);
         useEffect(() => {
             getBooks(nextPage(pageNum), props.pageSize, "Title", props.searchTerm)
-                .then(response => setBooks(response));
-        }, [props]);
-        return books.length === 0 ? true : false;
+                .then(response => setNextPageBooks(response));
+        }, [props, pageNum]);
+        return nextPageBooks.length === 0 ? true : false;
     }
 
     return (

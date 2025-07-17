@@ -24,7 +24,14 @@ public class BooksController : BaseApiController
         if (!string.IsNullOrWhiteSpace(parameters.SearchTerm))
         {
             var searchTerm = parameters.SearchTerm.Trim();
-            query = query.Where(b => b.Id.Contains(searchTerm) || b.Author.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) || b.Translator!.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) || b.Title.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) || b.Language.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) || b.OriginalLanguage!.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)
+            query = query.Where(b =>
+            b.Id.Contains(searchTerm) ||
+            b.Author.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+            (b.Translator ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+            b.Title.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+            b.Language.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+            (b.OriginalLanguage ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+            (b.Notes ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)
             );
         }
 
@@ -64,7 +71,7 @@ public class BooksController : BaseApiController
     public static IQueryable<BookResponse> SortQuery(string sortByTerm, IQueryable<BookResponse> query)
     {
         if (sortByTerm == "Author") return query.OrderBy(b => b.SortAuthor);
-        else if (sortByTerm == "Translator") return query.OrderBy(b => b.SortTranslator);
+        else if (sortByTerm == "Translator") return query.OrderBy(b => b.SortTranslator == null).ThenBy(b => b.SortTranslator);
         else if (sortByTerm == "Publication") return query.OrderBy(b => b.PublicationYear);
         else return query.OrderBy(b => b.SortTitle);
     }
