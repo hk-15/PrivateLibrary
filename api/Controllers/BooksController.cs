@@ -7,7 +7,7 @@ namespace PersonalLibrary.Controllers;
 
 [ApiController]
 [Route("/books")]
-public class BooksController : BaseApiController
+public class BooksController : ControllerBase
 {
     private readonly IBooksService _booksService;
     public BooksController(IBooksService booksService)
