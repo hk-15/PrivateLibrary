@@ -58,6 +58,19 @@ export async function addBook(book: BookRequest) {
     }
 }
 
+export async function updateReadStatus(isbn: string) {
+    const response = await fetch(`http://localhost:5108/books/${isbn}`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+    });
+    if (!response.ok) {
+        throw new Error(await response.json());
+    }
+}
+
 export async function getAllCollections(): Promise<Collection[]> {
     const response = await fetch("http://localhost:5108/collections/all", {
         credentials: "include",

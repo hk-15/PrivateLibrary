@@ -9,19 +9,17 @@ public interface IBooksService
 {
     Task<List<BookResponse>> GetAllBooksResponse();
     Task Add(BookRequest newBook);
+    Task UpdateReadStatus(string isbn);
 }
 
 public class BooksService : IBooksService
 {
     private readonly IBooksRepo _booksRepo;
     private readonly IAuthorsRepo _authorsRepo;
-    private readonly ICollectionsRepo _collectionsRepo;
-
     public BooksService(IBooksRepo booksRepo, IAuthorsRepo authorsRepo, ICollectionsRepo collectionsRepo)
     {
         _booksRepo = booksRepo;
         _authorsRepo = authorsRepo;
-        _collectionsRepo = collectionsRepo;
     }
 
     public async Task<List<BookResponse>> GetAllBooksResponse()
@@ -73,6 +71,20 @@ public class BooksService : IBooksService
             };
             await _booksRepo.Add(book);
         }
+    }
+
+    public async Task UpdateReadStatus(string isbn)
+    {
+        var book = await _booksRepo.Get(isbn);
+        if (book.Read == true)
+        {
+            book.Read = false;
+        }
+        else
+        {
+            book.Read = true;
+        }
+        await _booksRepo.Update(book);
     }
 
     public static string RemoveLeadingArticle(string title)

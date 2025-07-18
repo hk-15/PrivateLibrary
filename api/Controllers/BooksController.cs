@@ -68,6 +68,25 @@ public class BooksController : ControllerBase
         return Ok();
     }
 
+    [HttpPatch]
+    [Route("{isbn}")]
+    public async Task<IActionResult> UpdateReadStatus(string isbn)
+    {
+        if (isbn == null)
+        {
+            return BadRequest();
+        }
+        try
+        {
+            await _booksService.UpdateReadStatus(isbn);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+        return Ok();
+    }
+
     public static IQueryable<BookResponse> SortQuery(string sortByTerm, IQueryable<BookResponse> query)
     {
         if (sortByTerm == "Author") return query.OrderBy(b => b.SortAuthor);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getBooks, type Book } from "../../../api/ApiClient";
+import { getBooks, updateReadStatus, type Book } from "../../../api/ApiClient";
 import "./CatalogueTable.scss";
 
 export default function CatalogueTable(props:
@@ -13,6 +13,7 @@ export default function CatalogueTable(props:
     const [books, setBooks] = useState<Book[]>([]);
     const [nextPageBooks, setNextPageBooks] = useState<Book[]>([]);
     const [pageNum, setPageNum] = useState("1");
+    const [changeReadStatus, setChangeReadStatus] = useState("");
 
     useEffect(() => {
         getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
@@ -39,6 +40,23 @@ export default function CatalogueTable(props:
         return nextPageBooks.length === 0 ? true : false;
     }
 
+    
+    useEffect(() => {
+        if(changeReadStatus) {
+            const doUpdate = async () => {
+                try {
+                    await updateReadStatus(changeReadStatus);
+                    await getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
+                        .then(response => setBooks(response));
+                } catch (err) {
+                    console.error("Failed to update or fetch books: ", err);
+                }
+            };
+        doUpdate();
+        setChangeReadStatus("");
+        }
+    }, [changeReadStatus]);
+    
     return (
         <div>
             <button
@@ -93,7 +111,10 @@ export default function CatalogueTable(props:
                                     <td>{b.publicationYear}</td>
                                     <td>
                                         <button>Edit</button>
-                                        <button>Mark as read</button>
+                                        <button
+                                            onClick={() => {
+                                                setChangeReadStatus(b.id)}}
+                                        >{`${b.read ? 'Mark as unread' : 'Mark as read'}`}</button>
                                         <button>Remove</button>
                                     </td>
                                 </tr>
