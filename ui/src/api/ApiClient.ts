@@ -87,6 +87,20 @@ export async function updateBookDetails(id: number, book: BookRequest) {
     }
 }
 
+export async function DeleteBook(id: number) {
+    const response = await fetch(`http://localhost:5108/books/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error(await response.json());
+    }
+}
+
 export async function getAllCollections(): Promise<Collection[]> {
     const response = await fetch("http://localhost:5108/collections/all", {
         credentials: "include",

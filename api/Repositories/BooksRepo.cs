@@ -11,6 +11,7 @@ public interface IBooksRepo
     Task<Book> Get(int id);
     Task Add(Book book);
     Task Update(Book book);
+    void Delete(Book book);
 }
 
 public class BooksRepo : IBooksRepo
@@ -48,5 +49,11 @@ public class BooksRepo : IBooksRepo
     {
         _context.Update(book);
         await _context.SaveChangesAsync();
+    }
+
+    public void Delete(Book book)
+    {
+        _context.Remove(book);
+        _context.SaveChanges();
     }
 }

@@ -102,6 +102,21 @@ public class BooksController : ControllerBase
         return Ok();
     }
 
+    [HttpDelete]
+    [Route("{id}")]
+    public async Task<IActionResult> DeleteBook(int id)
+    {
+        try
+        {
+            await _booksService.DeleteBook(id);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+        return Ok();
+    }
+
     public static IQueryable<BookResponse> SortQuery(string sortByTerm, IQueryable<BookResponse> query)
     {
         if (sortByTerm == "Author") return query.OrderBy(b => b.SortAuthor);

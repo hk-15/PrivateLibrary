@@ -11,6 +11,7 @@ public interface IBooksService
     Task Add(BookRequest newBook);
     Task UpdateReadStatus(int id);
     Task UpdateBook(int id, BookRequest book);
+    Task DeleteBook(int id);
 }
 
 public class BooksService : IBooksService
@@ -50,7 +51,7 @@ public class BooksService : IBooksService
     {
         var author = await _authorsRepo.GetByName(newBook.Author);
         author ??= await _authorsRepo.Add(newBook.Author);
- 
+
         Book book = new()
         {
             Isbn = newBook.Isbn,
@@ -109,6 +110,12 @@ public class BooksService : IBooksService
         {
             await _booksRepo.Update(oldBook);
         }
+    }
+
+    public async Task DeleteBook(int id)
+    {
+        var book = await _booksRepo.Get(id);
+        _booksRepo.Delete(book);
     }
 
     public static string RemoveLeadingArticle(string title)
