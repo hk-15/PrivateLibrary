@@ -109,7 +109,7 @@ export default function AddBookForm() {
             </label>
 
             <label htmlFor="subtitle">
-                Title
+                Subtitle
                 <input
                 id="subtitle"
                 type="text"

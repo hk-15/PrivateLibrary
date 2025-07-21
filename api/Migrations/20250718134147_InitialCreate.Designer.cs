@@ -12,8 +12,8 @@ using PersonalLibrary.Database;
 namespace PersonalLibraryBackend.Migrations
 {
     [DbContext(typeof(PersonalLibraryDbContext))]
-    [Migration("20250717132616_UpdateBookTable")]
-    partial class UpdateBookTable
+    [Migration("20250718134147_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -240,9 +240,11 @@ namespace PersonalLibraryBackend.Migrations
 
             modelBuilder.Entity("PersonalLibrary.Models.Database.Book", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasMaxLength(13)
-                        .HasColumnType("character varying(13)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AuthorId")
                         .HasColumnType("integer");
@@ -252,6 +254,11 @@ namespace PersonalLibraryBackend.Migrations
 
                     b.Property<int>("EditionPublicationYear")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Isbn")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("character varying(13)");
 
                     b.Property<string>("Language")
                         .IsRequired()

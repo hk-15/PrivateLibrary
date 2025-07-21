@@ -1,13 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using PersonalLibrary.Database;
+using PersonalLibrary.Exceptions;
 using PersonalLibrary.Models.Database;
 
 namespace PersonalLibrary.Repositories;
 
 public interface IAuthorsRepo
 {
-    Task<Author?> GetAuthorByName(string name);
-    Task AddAuthor(string name);
+    Task<Author?> GetByName(string name);
+    Task<IEnumerable<Book>?> GetBooks(int id);
+    Task<Author> Add(string name);
+    void Delete(Author author);
 }
 
 public class AuthorsRepo : IAuthorsRepo
@@ -19,12 +22,18 @@ public class AuthorsRepo : IAuthorsRepo
         _context = context;
     }
 
-    public async Task<Author?> GetAuthorByName(string name)
+    public async Task<Author?> GetByName(string name)
     {
         return await _context.Authors.FirstOrDefaultAsync(a => a.Name == name);
     }
 
-    public async Task AddAuthor(string name)
+    public async Task<IEnumerable<Book>?> GetBooks(int id)
+    {
+        var author = await _context.Authors.FirstOrDefaultAsync(a => a.Id == id) ?? throw new NotFoundException($"No author with ID ${id} found");
+        return author.Books;
+    }
+
+    public async Task<Author> Add(string name)
     {
         var author = new Author
         {
@@ -32,5 +41,12 @@ public class AuthorsRepo : IAuthorsRepo
         };
         await _context.AddAsync(author);
         await _context.SaveChangesAsync();
+        return author;
+    }
+
+    public void Delete(Author author)
+    {
+        _context.Remove(author);
+        _context.SaveChanges();
     }
 }

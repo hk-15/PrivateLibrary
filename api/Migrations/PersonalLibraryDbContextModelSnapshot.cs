@@ -232,14 +232,16 @@ namespace PersonalLibraryBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Authors");
+                    b.ToTable("Authors", (string)null);
                 });
 
             modelBuilder.Entity("PersonalLibrary.Models.Database.Book", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasMaxLength(13)
-                        .HasColumnType("character varying(13)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AuthorId")
                         .HasColumnType("integer");
@@ -249,6 +251,11 @@ namespace PersonalLibraryBackend.Migrations
 
                     b.Property<int>("EditionPublicationYear")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Isbn")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("character varying(13)");
 
                     b.Property<string>("Language")
                         .IsRequired()
@@ -282,7 +289,7 @@ namespace PersonalLibraryBackend.Migrations
 
                     b.HasIndex("CollectionId");
 
-                    b.ToTable("Books");
+                    b.ToTable("Books", (string)null);
                 });
 
             modelBuilder.Entity("PersonalLibrary.Models.Database.Collection", b =>
@@ -299,7 +306,7 @@ namespace PersonalLibraryBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Collections");
+                    b.ToTable("Collections", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

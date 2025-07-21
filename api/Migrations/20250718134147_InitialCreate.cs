@@ -187,8 +187,11 @@ namespace PersonalLibraryBackend.Migrations
                 name: "Books",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Isbn = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
+                    Subtitle = table.Column<string>(type: "text", nullable: true),
                     AuthorId = table.Column<int>(type: "integer", nullable: false),
                     Translator = table.Column<string>(type: "text", nullable: true),
                     Language = table.Column<string>(type: "text", nullable: false),

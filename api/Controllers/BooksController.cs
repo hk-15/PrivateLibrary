@@ -25,7 +25,7 @@ public class BooksController : ControllerBase
         {
             var searchTerm = parameters.SearchTerm.Trim();
             query = query.Where(b =>
-            b.Id.Contains(searchTerm) ||
+            b.Isbn.Contains(searchTerm) ||
             b.Author.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
             (b.Translator ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
             b.Title.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
@@ -69,16 +69,31 @@ public class BooksController : ControllerBase
     }
 
     [HttpPatch]
-    [Route("{isbn}")]
-    public async Task<IActionResult> UpdateReadStatus(string isbn)
+    [Route("edit/{id}")]
+    public async Task<IActionResult> UpdateBook(int id, [FromBody] BookRequest book)
     {
-        if (isbn == null)
+        if (!ModelState.IsValid)
         {
-            return BadRequest();
+            return BadRequest(ModelState);
         }
         try
         {
-            await _booksService.UpdateReadStatus(isbn);
+            await _booksService.UpdateBook(id, book);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+        return Ok();
+    }
+
+    [HttpPatch]
+    [Route("{id}")]
+    public async Task<IActionResult> UpdateReadStatus(int id)
+    {
+        try
+        {
+            await _booksService.UpdateReadStatus(id);
         }
         catch (Exception ex)
         {

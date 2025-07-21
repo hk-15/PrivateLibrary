@@ -2,7 +2,8 @@ namespace PersonalLibrary.Models.Response;
 
 public class BookResponse
 {
-    public required string Id { get; set; }
+    public required int Id { get; set; }
+    public required string Isbn { get; set; }
     public required string Title { get; set; }
     public string? SortTitle { get; set; }
     public string? Subtitle { get; set; }

@@ -1,5 +1,6 @@
 export interface Book {
-    id: string,
+    id: number,
+    isbn: string,
     title: string,
     subtitle?: string,
     author: string,
@@ -58,8 +59,8 @@ export async function addBook(book: BookRequest) {
     }
 }
 
-export async function updateReadStatus(isbn: string) {
-    const response = await fetch(`http://localhost:5108/books/${isbn}`, {
+export async function updateReadStatus(id: number) {
+    const response = await fetch(`http://localhost:5108/books/${id}`, {
         method: "PATCH",
         credentials: "include",
         headers: {

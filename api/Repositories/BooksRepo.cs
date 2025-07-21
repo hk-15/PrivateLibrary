@@ -8,7 +8,7 @@ namespace PersonalLibrary.Repositories;
 public interface IBooksRepo
 {
     Task<List<Book>> GetAll();
-    Task<Book> Get(string isbn);
+    Task<Book> Get(int id);
     Task Add(Book book);
     Task Update(Book book);
 }
@@ -30,10 +30,11 @@ public class BooksRepo : IBooksRepo
             .ToListAsync();
     }
 
-    public async Task<Book> Get(string isbn)
+    public async Task<Book> Get(int id)
     {
         var book = await _context.Books
-            .FirstOrDefaultAsync(b => b.Id == isbn) ?? throw new NotFoundException($"Book with {isbn} not found.");
+            .Include(b => b.Author)
+            .FirstOrDefaultAsync(b => b.Id == id) ?? throw new NotFoundException("Book not found.");
         return book;
     }
 

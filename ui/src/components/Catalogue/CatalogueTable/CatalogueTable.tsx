@@ -13,7 +13,7 @@ export default function CatalogueTable(props:
     const [books, setBooks] = useState<Book[]>([]);
     const [nextPageBooks, setNextPageBooks] = useState<Book[]>([]);
     const [pageNum, setPageNum] = useState("1");
-    const [changeReadStatus, setChangeReadStatus] = useState("");
+    const [changeReadStatus, setChangeReadStatus] = useState(0);
 
     useEffect(() => {
         getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
@@ -53,7 +53,7 @@ export default function CatalogueTable(props:
                 }
             };
         doUpdate();
-        setChangeReadStatus("");
+        setChangeReadStatus(0);
         }
     }, [changeReadStatus]);
     
@@ -104,7 +104,7 @@ export default function CatalogueTable(props:
                         books.map(b =>
                             {return showActions ? ( 
                                 <tr key={b.id} className={`${b.read ? 'marked-read' : ''}`}>
-                                    <td>{b.id}</td>
+                                    <td>{b.isbn}</td>
                                     <td>{b.title}</td>
                                     <td>{b.author}</td>
                                     <td>{b.collection}</td>
@@ -121,7 +121,7 @@ export default function CatalogueTable(props:
                         ) :
                         (
                             <tr key={b.id} className={`${b.read ? 'marked-read' : ''}`}>
-                                <td>{b.id}</td>
+                                <td>{b.isbn}</td>
                                 <td>{b.title}</td>
                                 <td>{b.subtitle}</td>
                                 <td>{b.author}</td>
