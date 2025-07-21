@@ -41,7 +41,6 @@ public class BooksService : IBooksService
             OriginalLanguage = b.OriginalLanguage,
             Collection = b.Collection?.Name,
             PublicationYear = b.PublicationYear,
-            EditionPublicationYear = b.EditionPublicationYear,
             Read = b.Read,
             Notes = b.Notes
         })];
@@ -62,7 +61,6 @@ public class BooksService : IBooksService
             OriginalLanguage = newBook.OriginalLanguage,
             CollectionId = newBook.CollectionId,
             PublicationYear = newBook.PublicationYear,
-            EditionPublicationYear = newBook.EditionPublicationYear,
             Read = newBook.Read,
             Notes = newBook.Notes
         };
@@ -131,7 +129,6 @@ public class BooksService : IBooksService
         book.Language = request.Language;
         book.OriginalLanguage = request.OriginalLanguage;
         book.PublicationYear = request.PublicationYear;
-        book.EditionPublicationYear = request.EditionPublicationYear;
         book.Read = request.Read;
         book.Notes = request.Notes;
         book.CollectionId = request.CollectionId;

@@ -17,7 +17,6 @@ public class Book
     public int CollectionId { get; set; }
     public Collection? Collection { get; set; }
     public int PublicationYear { get; set; }
-    public int EditionPublicationYear { get; set; }
     public bool Read { get; set; }
     public string? Notes { get; set; }
 }

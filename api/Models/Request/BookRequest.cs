@@ -14,7 +14,6 @@ public class BookRequest
     public string? OriginalLanguage { get; set; }
     public required int CollectionId { get; set; }
     public int PublicationYear { get; set; }
-    public int EditionPublicationYear { get; set; }
     public bool Read { get; set; }
     public string? Notes { get; set; }
 }
