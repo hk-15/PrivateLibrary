@@ -84,17 +84,17 @@ public class BooksService : IBooksService
     public async Task UpdateBook(int id, BookRequest request)
     {
         var oldBook = await _booksRepo.Get(id);
-        var updatedBook = UpdateBookFields(request, oldBook);
+        UpdateBookFields(request, oldBook);
 
         if (oldBook.Author?.Name != request.Author)
         {
             var oldAuthor = oldBook.Author != null ? await _authorsRepo.GetByName(oldBook.Author.Name) : null;
             var newAuthor = await _authorsRepo.GetByName(request.Author);
-            newAuthor ??= await _authorsRepo.Add(request.Author); 
+            newAuthor ??= await _authorsRepo.Add(request.Author);
 
             oldBook.AuthorId = newAuthor.Id;
 
-            await _booksRepo.Update(updatedBook);
+            await _booksRepo.Update(oldBook);
 
             if (oldAuthor != null)
             {
@@ -104,6 +104,10 @@ public class BooksService : IBooksService
                     _authorsRepo.Delete(oldAuthor);
                 }
             }
+        }
+        else
+        {
+            await _booksRepo.Update(oldBook);
         }
     }
 
@@ -120,7 +124,7 @@ public class BooksService : IBooksService
         return title;
     }
 
-    private static Book UpdateBookFields(BookRequest request, Book book)
+    private void UpdateBookFields(BookRequest request, Book book)
     {
         book.Isbn = request.Isbn;
         book.Title = request.Title;
@@ -129,9 +133,7 @@ public class BooksService : IBooksService
         book.Language = request.Language;
         book.OriginalLanguage = request.OriginalLanguage;
         book.PublicationYear = request.PublicationYear;
-        book.Read = request.Read;
         book.Notes = request.Notes;
         book.CollectionId = request.CollectionId;
-        return book;
     }
 }

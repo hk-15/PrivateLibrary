@@ -1,6 +1,20 @@
-import { useEffect, useState } from "react"
-import { getBooks, updateReadStatus, type Book } from "../../../api/ApiClient";
+import { useEffect, useState } from "react";
+import { getAllCollections, getBooks, updateBookDetails, updateReadStatus, type Book, type BookRequest, type Collection } from "../../../api/ApiClient";
 import "./CatalogueTable.scss";
+
+const emptyBook: Book = {
+    id: 0,
+    isbn: '',
+    title: '',
+    subtitle: '',
+    author: '',
+    translator: '',
+    language: '',
+    originalLanguage: '',
+    collection: '',
+    publicationYear: 0,
+    notes: ''
+};
 
 export default function CatalogueTable(props:
     {
@@ -8,17 +22,27 @@ export default function CatalogueTable(props:
         sortBy: string,
         searchTerm: string
     }) {
-    const [toggleButton, setToggleButton] = useState("Show details");
-    const [showActions, setShowActions] = useState(true);
+    const [showEdit, setShowEdit] = useState(false);
     const [books, setBooks] = useState<Book[]>([]);
+    const [collections, setCollections] = useState<Collection[]>([]);
     const [nextPageBooks, setNextPageBooks] = useState<Book[]>([]);
     const [pageNum, setPageNum] = useState("1");
-    const [changeReadStatus, setChangeReadStatus] = useState(0);
+    const [changeReadStatusId, setChangeReadStatusId] = useState(0);
+    const [editedBookData, setEditedBookData] = useState<Book>(emptyBook);
+    const [saveEdit, setSaveEdit] = useState(false);
 
     useEffect(() => {
         getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
             .then(response => setBooks(response))
+            .catch((err) => console.error(err));
     }, [props, pageNum]);
+
+    useEffect(() => {
+        getAllCollections()
+            .then((response) => {
+                setCollections(response.sort((a, b) => a.name.localeCompare(b.name)))})
+            .catch((err) => console.error(err));
+    }, [books]);
 
     function prevPage(page: string) {
         let pageNum = +page;
@@ -39,13 +63,12 @@ export default function CatalogueTable(props:
         }, [props, pageNum]);
         return nextPageBooks.length === 0 ? true : false;
     }
-
     
     useEffect(() => {
-        if(changeReadStatus) {
+        if(changeReadStatusId) {
             const doUpdate = async () => {
                 try {
-                    await updateReadStatus(changeReadStatus);
+                    await updateReadStatus(changeReadStatusId);
                     await getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
                         .then(response => setBooks(response));
                 } catch (err) {
@@ -53,28 +76,64 @@ export default function CatalogueTable(props:
                 }
             };
         doUpdate();
-        setChangeReadStatus(0);
+        setChangeReadStatusId(0);
         }
-    }, [changeReadStatus]);
+    }, [changeReadStatusId]);
+    
+    const handleInput = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setEditedBookData(prev => ({
+            ...prev,
+            [name]: name === "publicationYear" ? Number(value) : value
+        }));
+    }
+    
+    useEffect(() => {
+        if(saveEdit && editedBookData) {
+            const doUpdate = async () => {
+                try {
+                    const bookUpdate: BookRequest = {
+                        isbn: editedBookData.isbn,
+                        title: editedBookData.title,
+                        subtitle: editedBookData.subtitle ?? "",
+                        author: editedBookData.author,
+                        translator: editedBookData.translator ?? "",
+                        language: editedBookData.language,
+                        originalLanguage: editedBookData.originalLanguage ?? "",
+                        collectionId: collections.find(c => c.name === editedBookData.collection)?.id ?? 0,
+                        read: true,
+                        publicationYear: editedBookData.publicationYear,
+                        notes: editedBookData.notes ?? ""
+                    };
+                    await updateBookDetails(editedBookData.id, bookUpdate);
+                    await getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
+                        .then(response => setBooks(response));
+                } catch (err) {
+                    console.error("Failed to update or fetch books: ", err);
+                }
+            };
+            doUpdate();
+            setSaveEdit(false);
+            setEditedBookData(emptyBook);
+        }
+    }, [saveEdit])
     
     return (
         <div>
             <button
                 onClick={() => {
-                    if (toggleButton == "Show details") {
-                        setToggleButton("Show actions")
-                        setShowActions(false)
+                    if (!showEdit) {
+                        setShowEdit(true)
                     }
                     else {
-                        setToggleButton("Show details")
-                        setShowActions(true)
+                        setShowEdit(false)
                     }
                 }}>
-                {toggleButton}
+                {showEdit ? "Library view" : "Edit view"}
             </button>
             <table>
                 <thead>
-                    {showActions && (
+                    {!showEdit && (
                         <tr>
                             <th>ISBN</th>
                             <th>Title</th>
@@ -83,7 +142,7 @@ export default function CatalogueTable(props:
                             <th>Publication year</th>
                         </tr>
                     )}
-                    {!showActions && (
+                    {showEdit && (
                         <tr>
                             <th>ISBN</th>
                             <th>Title</th>
@@ -91,7 +150,6 @@ export default function CatalogueTable(props:
                             <th>Author</th>
                             <th>Collection</th>
                             <th>Publication year</th>
-                            <th>Edition publication year</th>
                             <th>Language</th>
                             <th>Original language</th>
                             <th>Translator</th>
@@ -100,9 +158,13 @@ export default function CatalogueTable(props:
                     )}
                 </thead>
                 <tbody>
-                    {books.length > 0 ? (
+                    {books.length === 0 ?
+                        (<tr>
+                            <td colSpan={10}>No books in the library</td>
+                        </tr>) :
+                        (
                         books.map(b =>
-                            {return showActions ? ( 
+                            {return !showEdit ? ( 
                                 <tr key={b.id} className={`${b.read ? 'marked-read' : ''}`}>
                                     <td>{b.isbn}</td>
                                     <td>{b.title}</td>
@@ -110,37 +172,141 @@ export default function CatalogueTable(props:
                                     <td>{b.collection}</td>
                                     <td>{b.publicationYear}</td>
                                     <td>
-                                        <button>Edit</button>
                                         <button
-                                            onClick={() => {
-                                                setChangeReadStatus(b.id)}}
+                                            onClick={() => setChangeReadStatusId(b.id)}
                                         >{`${b.read ? 'Mark as unread' : 'Mark as read'}`}</button>
                                         <button>Remove</button>
                                     </td>
                                 </tr>
-                        ) :
-                        (
-                            <tr key={b.id} className={`${b.read ? 'marked-read' : ''}`}>
-                                <td>{b.isbn}</td>
-                                <td>{b.title}</td>
-                                <td>{b.subtitle}</td>
-                                <td>{b.author}</td>
-                                <td>{b.collection}</td>
-                                <td>{b.publicationYear}</td>
-                                <td>{b.editionPublicationYear}</td>
-                                <td>{b.language}</td>
-                                <td>{b.originalLanguage}</td>
-                                <td>{b.translator}</td>
-                                <td>{b.notes}</td>
-                                <td>
-                                    <button>Edit</button>
-                                </td>
-                            </tr>
-                        )}                        
-                    )) :
-                    (<tr>
-                        <td colSpan={10}>No books in the library</td>
-                    </tr>)}
+                                ) :
+                                (                          editedBookData.id !== b.id ? (
+                                    <tr key={b.id} className={`${b.read ? 'marked-read' : ''}`}>
+                                    <td>{b.isbn}</td>
+                                    <td>{b.title}</td>
+                                    <td>{b.subtitle}</td>
+                                    <td>{b.author}</td>
+                                    <td>{b.collection}</td>
+                                    <td>{b.publicationYear}</td>
+                                    <td>{b.language}</td>
+                                    <td>{b.originalLanguage}</td>
+                                    <td>{b.translator}</td>
+                                    <td>{b.notes}</td>
+                                    <td>
+                                        <button
+                                            onClick={() => {
+                                                setEditedBookData(b);
+                                            }}
+                                        >Edit</button>
+                                    </td>
+                                </tr>  
+                                ) : (
+                                <tr key={b.id} className={`${b.read ? 'marked-read' : ''}`}>
+                                       <td>
+                                            <input
+                                                className="edit-book"
+                                                type="text"
+                                                name="isbn"
+                                                value={editedBookData.isbn}
+                                                onChange={handleInput}
+                                            />
+                                            </td>
+                                        <td>
+                                            <input
+                                                className="edit-book"
+                                                type="text"
+                                                name="title"
+                                                value={editedBookData.title}
+                                                onChange={handleInput}
+                                            />
+                                        </td>
+                                         <td>
+                                            <input
+                                                className="edit-book"
+                                                type="text"
+                                                name="subtitle"
+                                                value={editedBookData.subtitle ?? ""}
+                                                onChange={handleInput}
+                                            />
+                                        </td>
+                                         <td>
+                                            <input
+                                                className="edit-book"
+                                                type="text"
+                                                name="author"
+                                                value={editedBookData.author}
+                                                onChange={handleInput}
+                                            />
+                                        </td>
+                                         <td>
+                                            <select name="collection"
+                                            onChange={handleInput}>
+                                                {[...collections]
+                                                .sort((a, c) => (a.name === b.collection ? -1 : c.name === b.collection ? 1 : 0))
+                                                .map(collection => (
+                                                    <option key={collection.id} value={collection.name}>
+                                                    {collection.name}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input
+                                                className="edit-book"
+                                                type="number"
+                                                name="publicationYear"
+                                                value={editedBookData.publicationYear}
+                                                onChange={handleInput}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                className="edit-book"
+                                                type="text"
+                                                name="language"
+                                                value={editedBookData.language}
+                                                onChange={handleInput}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                className="edit-book"
+                                                type="text"
+                                                name="originalLanguage"
+                                                value={editedBookData.originalLanguage ?? ""}
+                                                onChange={handleInput}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                className="edit-book"
+                                                type="text"
+                                                name="translator"
+                                                value={editedBookData.translator ?? ""}
+                                                onChange={handleInput}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                className="edit-book"
+                                                type="text"
+                                                name="notes"
+                                                value={editedBookData.notes ?? ""}
+                                                onChange={handleInput}
+                                            />
+                                        </td>
+                                        <td>
+                                            <button
+                                                onClick={() => setSaveEdit(true)}
+                                            >Save</button>
+                                            <button
+                                                onClick={() => setEditedBookData(emptyBook)}>
+                                                Cancel
+                                            </button>
+                                        </td>
+                                    </tr>
+                            ))}                        
+                        ))
+                    }
                 </tbody>
             </table>
             <button

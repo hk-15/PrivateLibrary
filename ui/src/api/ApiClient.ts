@@ -9,8 +9,7 @@ export interface Book {
     originalLanguage?: string,
     collection: string,
     publicationYear: number,
-    editionPublicationYear: number,
-    read: boolean,
+    read?: boolean,
     notes?: string
 }
 
@@ -24,8 +23,7 @@ export interface BookRequest {
     originalLanguage?: string,
     collectionId: number,
     publicationYear: number,
-    editionPublicationYear: number,
-    read: boolean,
+    read?: boolean,
     notes?: string
 }
 
@@ -41,6 +39,7 @@ export async function getBooks(pageNum: string, pageSize: string, sortBy: string
             "Content-Type": "application/json"
         }
     });
+
     return await response.json();
 }
 
@@ -67,6 +66,22 @@ export async function updateReadStatus(id: number) {
             "Content-Type": "application/json"
         },
     });
+
+    if (!response.ok) {
+        throw new Error(await response.json());
+    }
+}
+
+export async function updateBookDetails(id: number, book: BookRequest) {
+    const response = await fetch(`http://localhost:5108/books/edit/${id}`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(book),
+    });
+
     if (!response.ok) {
         throw new Error(await response.json());
     }
@@ -79,6 +94,7 @@ export async function getAllCollections(): Promise<Collection[]> {
             "Content-Type": "application/json"
         }
     });
+
     return await response.json();
 }
 

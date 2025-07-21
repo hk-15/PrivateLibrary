@@ -28,7 +28,6 @@ export default function AddBookForm() {
             originalLanguage: "",
             collectionId: 0,
             publicationYear: currentYear,
-            editionPublicationYear: currentYear,
             read: "false",
             notes: ""
         },
@@ -47,7 +46,7 @@ export default function AddBookForm() {
     useEffect(() => {
         getAllCollections()
             .then((response) => {
-                setCollections(response.sort())})
+                setCollections(response.sort((a, b) => a.name.localeCompare(b.name)))})
             .catch((err) => console.error(err));
     }, []);
 
@@ -61,7 +60,6 @@ export default function AddBookForm() {
         originalLanguage?: string,
         collectionId: number,
         publicationYear: number,
-        editionPublicationYear: number,
         read: string,
         notes?: string
     }) {
@@ -93,7 +91,7 @@ export default function AddBookForm() {
                 ISBN<span className="required">*</span>
                 <input
                 id="isbn"
-                type="number"
+                type="string"
                 {...register("isbn", formErrors.isbn)}
                 />
                 {errors.isbn && (<span className="error">{errors.isbn.message}</span>)}
@@ -172,15 +170,6 @@ export default function AddBookForm() {
                 id="publicationYear"
                 type="number"
                 {...register("publicationYear", {required: true, valueAsNumber: true})}
-                />
-            </label>
-
-            <label htmlFor="editionPublicationYear">
-                Year of edition publication<span className="required">*</span>
-                <input
-                id="editionPublicationYear"
-                type="number"
-                {...register("editionPublicationYear", {required: true, valueAsNumber: true})}
                 />
             </label>
 
