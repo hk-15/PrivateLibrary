@@ -8,6 +8,7 @@ public class BookResponse
     public string? SortTitle { get; set; }
     public string? Subtitle { get; set; }
     public required string Author { get; set; }
+    public List<string> SecondaryAuthors { get; set; } = [];
     public string? SortAuthor { get; set; }
     public string? Translator { get; set; }
     public string? SortTranslator { get; set; }
@@ -17,4 +18,6 @@ public class BookResponse
     public int PublicationYear { get; set; }
     public bool Read { get; set; }
     public string? Notes { get; set; }
+    public List<string> Tags { get; set; } = [];
+    public string? Library { get; set; }
 }

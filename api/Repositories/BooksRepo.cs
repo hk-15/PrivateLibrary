@@ -26,7 +26,8 @@ public class BooksRepo : IBooksRepo
     public async Task<List<Book>> GetAll()
     {
         return await _context.Books
-            .Include(b => b.Author)
+            .Include(b => b.Authors)
+            .Include(b => b.Tags)
             .Include(b => b.Collection)
             .ToListAsync();
     }
@@ -34,7 +35,7 @@ public class BooksRepo : IBooksRepo
     public async Task<Book> Get(int id)
     {
         var book = await _context.Books
-            .Include(b => b.Author)
+            .Include(b => b.Authors)
             .FirstOrDefaultAsync(b => b.Id == id) ?? throw new NotFoundException("Book not found.");
         return book;
     }

@@ -78,6 +78,32 @@ namespace PersonalLibraryBackend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Libraries",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Libraries", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tags",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tags", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -192,29 +218,76 @@ namespace PersonalLibraryBackend.Migrations
                     Isbn = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
                     Subtitle = table.Column<string>(type: "text", nullable: true),
-                    AuthorId = table.Column<int>(type: "integer", nullable: false),
                     Translator = table.Column<string>(type: "text", nullable: true),
                     Language = table.Column<string>(type: "text", nullable: false),
                     OriginalLanguage = table.Column<string>(type: "text", nullable: true),
                     CollectionId = table.Column<int>(type: "integer", nullable: false),
                     PublicationYear = table.Column<int>(type: "integer", nullable: false),
-                    EditionPublicationYear = table.Column<int>(type: "integer", nullable: false),
                     Read = table.Column<bool>(type: "boolean", nullable: false),
-                    Notes = table.Column<string>(type: "text", nullable: true)
+                    Notes = table.Column<string>(type: "text", nullable: true),
+                    LibraryId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Books", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Books_Authors_AuthorId",
-                        column: x => x.AuthorId,
+                        name: "FK_Books_Collections_CollectionId",
+                        column: x => x.CollectionId,
+                        principalTable: "Collections",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Books_Libraries_LibraryId",
+                        column: x => x.LibraryId,
+                        principalTable: "Libraries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AuthorBook",
+                columns: table => new
+                {
+                    AuthorsId = table.Column<int>(type: "integer", nullable: false),
+                    BooksId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AuthorBook", x => new { x.AuthorsId, x.BooksId });
+                    table.ForeignKey(
+                        name: "FK_AuthorBook_Authors_AuthorsId",
+                        column: x => x.AuthorsId,
                         principalTable: "Authors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Books_Collections_CollectionId",
-                        column: x => x.CollectionId,
-                        principalTable: "Collections",
+                        name: "FK_AuthorBook_Books_BooksId",
+                        column: x => x.BooksId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookTag",
+                columns: table => new
+                {
+                    BooksId = table.Column<int>(type: "integer", nullable: false),
+                    TagsId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookTag", x => new { x.BooksId, x.TagsId });
+                    table.ForeignKey(
+                        name: "FK_BookTag_Books_BooksId",
+                        column: x => x.BooksId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookTag_Tags_TagsId",
+                        column: x => x.TagsId,
+                        principalTable: "Tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -257,14 +330,24 @@ namespace PersonalLibraryBackend.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_AuthorId",
-                table: "Books",
-                column: "AuthorId");
+                name: "IX_AuthorBook_BooksId",
+                table: "AuthorBook",
+                column: "BooksId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Books_CollectionId",
                 table: "Books",
                 column: "CollectionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Books_LibraryId",
+                table: "Books",
+                column: "LibraryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookTag_TagsId",
+                table: "BookTag",
+                column: "TagsId");
         }
 
         /// <inheritdoc />
@@ -286,7 +369,10 @@ namespace PersonalLibraryBackend.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Books");
+                name: "AuthorBook");
+
+            migrationBuilder.DropTable(
+                name: "BookTag");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -298,7 +384,16 @@ namespace PersonalLibraryBackend.Migrations
                 name: "Authors");
 
             migrationBuilder.DropTable(
+                name: "Books");
+
+            migrationBuilder.DropTable(
+                name: "Tags");
+
+            migrationBuilder.DropTable(
                 name: "Collections");
+
+            migrationBuilder.DropTable(
+                name: "Libraries");
         }
     }
 }
