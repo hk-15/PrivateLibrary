@@ -5,7 +5,7 @@ using PersonalLibrary.Services;
 namespace PersonalLibrary.Controllers;
 
 [ApiController]
-[Route("/collections")]
+[Route("/libraries")]
 public class LibrariesController : ControllerBase
 {
     private readonly ILibrariesService _librariesService;

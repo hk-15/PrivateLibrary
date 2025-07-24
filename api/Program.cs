@@ -27,9 +27,11 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IAuthorsRepo, AuthorsRepo>();
 builder.Services.AddScoped<IBooksRepo, BooksRepo>();
 builder.Services.AddScoped<ICollectionsRepo, CollectionsRepo>();
+builder.Services.AddScoped<ILibrariesRepo, LibrariesRepo>();
 builder.Services.AddScoped<ITagsRepo, TagsRepo>();
 builder.Services.AddScoped<IAuthorsService, AuthorsService>();
 builder.Services.AddScoped<IBooksService, BooksService>();
+builder.Services.AddScoped<ILibrariesService, LibrariesService>();
 builder.Services.AddScoped<ICollectionsService, CollectionsService>();
 builder.Services.AddScoped<ITagsService, TagsService>();
 

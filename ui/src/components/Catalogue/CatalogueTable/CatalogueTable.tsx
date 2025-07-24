@@ -8,12 +8,14 @@ const emptyBook: Book = {
     title: '',
     subtitle: '',
     author: '',
+    secondaryAuthors: [''],
     translator: '',
     language: '',
     originalLanguage: '',
     collection: '',
     publicationYear: 0,
-    notes: ''
+    notes: '',
+    tags: ['']
 };
 
 export default function CatalogueTable(props:
@@ -58,7 +60,7 @@ export default function CatalogueTable(props:
 
     function checkMaxPage() {
         useEffect(() => {
-            getBooks(nextPage(pageNum), props.pageSize, "Title", props.searchTerm)
+            getBooks(nextPage(pageNum), props.pageSize, props.sortBy, props.searchTerm)
                 .then(response => setNextPageBooks(response));
         }, [props, pageNum]);
         return nextPageBooks.length === 0 ? true : false;
@@ -84,7 +86,7 @@ export default function CatalogueTable(props:
         const { name, value } = e.target;
         setEditedBookData(prev => ({
             ...prev,
-            [name]: name === "publicationYear" ? Number(value) : value
+            [name]: name === "publicationYear" ? Number(value) : name === "tags" || name === "secondaryAuthors" ? value.split(', ') : value
         }));
     }
     
@@ -92,18 +94,21 @@ export default function CatalogueTable(props:
         if(saveEdit && editedBookData) {
             const doUpdate = async () => {
                 try {
+                    editedBookData.secondaryAuthors.unshift(editedBookData.author);
                     const bookUpdate: BookRequest = {
                         isbn: editedBookData.isbn,
                         title: editedBookData.title,
                         subtitle: editedBookData.subtitle ?? "",
-                        author: editedBookData.author,
+                        author: editedBookData.secondaryAuthors,
                         translator: editedBookData.translator ?? "",
                         language: editedBookData.language,
                         originalLanguage: editedBookData.originalLanguage ?? "",
                         collectionId: collections.find(c => c.name === editedBookData.collection)?.id ?? 0,
                         read: true,
                         publicationYear: editedBookData.publicationYear,
-                        notes: editedBookData.notes ?? ""
+                        notes: editedBookData.notes ?? "",
+                        tags: editedBookData.tags,
+                        libraryId: 1
                     };
                     await updateBookDetails(editedBookData.id, bookUpdate);
                     await getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
@@ -140,6 +145,7 @@ export default function CatalogueTable(props:
                             <th>Author</th>
                             <th>Collection</th>
                             <th>Publication year</th>
+                            <th>Tags</th>
                         </tr>
                     )}
                     {showEdit && (
@@ -154,6 +160,7 @@ export default function CatalogueTable(props:
                             <th>Original language</th>
                             <th>Translator</th>
                             <th>Notes</th>
+                            <th>Tags</th>
                         </tr>
                     )}
                 </thead>
@@ -168,9 +175,10 @@ export default function CatalogueTable(props:
                                 <tr key={b.id} className={`${b.read ? 'marked-read' : ''}`}>
                                     <td>{b.isbn}</td>
                                     <td>{b.title}</td>
-                                    <td>{b.author}</td>
+                                    <td>{b.author}{b.secondaryAuthors.length > 0 ? `,  ${b.secondaryAuthors.join(' ')}` : ''}</td>
                                     <td>{b.collection}</td>
                                     <td>{b.publicationYear}</td>
+                                    <td>{b.tags.join(', ')}</td>
                                     <td>
                                         <button
                                             onClick={() => setChangeReadStatusId(b.id)}
@@ -184,13 +192,14 @@ export default function CatalogueTable(props:
                                     <td>{b.isbn}</td>
                                     <td>{b.title}</td>
                                     <td>{b.subtitle}</td>
-                                    <td>{b.author}</td>
+                                    <td>{b.author}{b.secondaryAuthors.length > 0 ? `,  ${b.secondaryAuthors.join(' ')}` : ''}</td>
                                     <td>{b.collection}</td>
                                     <td>{b.publicationYear}</td>
                                     <td>{b.language}</td>
                                     <td>{b.originalLanguage}</td>
                                     <td>{b.translator}</td>
                                     <td>{b.notes}</td>
+                                    <td>{b.tags.join(', ')}</td>
                                     <td>
                                         <button
                                             onClick={() => {
@@ -236,6 +245,15 @@ export default function CatalogueTable(props:
                                                 value={editedBookData.author}
                                                 onChange={handleInput}
                                             />
+                                            {editedBookData.secondaryAuthors.length > 0 ? 
+                                            <input
+                                                className="edit-book"
+                                                type="text"
+                                                name="author"
+                                                value={editedBookData.secondaryAuthors}
+                                                onChange={handleInput}
+                                            />
+                                            : ''}
                                         </td>
                                          <td>
                                             <select name="collection"
@@ -291,6 +309,15 @@ export default function CatalogueTable(props:
                                                 type="text"
                                                 name="notes"
                                                 value={editedBookData.notes ?? ""}
+                                                onChange={handleInput}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                className="edit-book"
+                                                type="text"
+                                                name="tags"
+                                                value={editedBookData.tags ?? ""}
                                                 onChange={handleInput}
                                             />
                                         </td>

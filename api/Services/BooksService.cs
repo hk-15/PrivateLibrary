@@ -172,9 +172,8 @@ public class BooksService : IBooksService
 
     private static List<string> GetSecondaryAuthors(List<Author> authorsList)
     {
-        if (authorsList.Count == 0 || authorsList.Count == 1) return [];
-
-        var authors = authorsList.Slice(1, authorsList.Count);
+        if (authorsList.Count <= 1) return [];
+        var authors = authorsList.Skip(1);
         var authorNames = new List<string>();
         foreach (var author in authors)
         {

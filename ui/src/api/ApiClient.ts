@@ -4,6 +4,7 @@ export interface Book {
     title: string,
     subtitle?: string,
     author: string,
+    secondaryAuthors: [string],
     translator?: string,
     language: string,
     originalLanguage?: string,
@@ -12,7 +13,7 @@ export interface Book {
     read?: boolean,
     notes?: string,
     tags: [string],
-    library: string
+    library?: string
 }
 
 export interface BookRequest {
@@ -28,10 +29,15 @@ export interface BookRequest {
     read?: boolean,
     notes?: string,
     tags: [string],
-    libraryId: number
+    libraryId?: number
 }
 
 export interface Collection {
+    id: number,
+    name: string
+}
+
+export interface Library {
     id: number,
     name: string
 }
@@ -118,6 +124,32 @@ export async function getAllCollections(): Promise<Collection[]> {
 
 export async function addCollection(name: string) {
     const response = await fetch(`http://localhost:5108/collections`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(name), 
+    });
+    
+    if (!response.ok) {
+        throw new Error(await response.json());
+    }
+}
+
+export async function getAllLibraries(): Promise<Library[]> {
+    const response = await fetch("http://localhost:5108/libraries/all", {
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    return await response.json();
+}
+
+export async function addLibrary(name: string) {
+    const response = await fetch(`http://localhost:5108/libraries`, {
         method: "POST",
         credentials: "include",
         headers: {
