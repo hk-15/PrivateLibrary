@@ -10,21 +10,25 @@ export interface Book {
     collection: string,
     publicationYear: number,
     read?: boolean,
-    notes?: string
+    notes?: string,
+    tags: [string],
+    library: string
 }
 
 export interface BookRequest {
     isbn: string,
     title: string,
     subtitle?: string,
-    author: string,
+    author: [string],
     translator?: string,
     language: string,
     originalLanguage?: string,
     collectionId: number,
     publicationYear: number,
     read?: boolean,
-    notes?: string
+    notes?: string,
+    tags: [string],
+    libraryId: number
 }
 
 export interface Collection {

@@ -10,8 +10,8 @@ public interface IBooksService
     Task<List<BookResponse>> GetAllBooksResponse();
     Task Add(BookRequest newBook);
     Task UpdateReadStatus(int id);
-    Task UpdateBook(int id, BookRequest book);
-    Task DeleteBook(int id);
+    Task Update(int id, BookRequest book);
+    Task Delete(int id);
 }
 
 public class BooksService : IBooksService
@@ -56,7 +56,6 @@ public class BooksService : IBooksService
     {
         CleanData(newBook);
         var authors = await _authorsService.GetListFromRequest(newBook.Authors);
-        Console.WriteLine(authors.Count);
         var tags = await _tagsService.GetListFromRequest(newBook.Tags);
 
         Book book = new()
@@ -91,7 +90,7 @@ public class BooksService : IBooksService
         await _booksRepo.Update(book);
     }
 
-    public async Task UpdateBook(int id, BookRequest request)
+    public async Task Update(int id, BookRequest request)
     {
         CleanData(request);
         var oldBook = await _booksRepo.Get(id);
@@ -118,7 +117,7 @@ public class BooksService : IBooksService
         await _booksRepo.Update(oldBook);
     }
 
-    public async Task DeleteBook(int id)
+    public async Task Delete(int id)
     {
         var book = await _booksRepo.Get(id);
         _booksRepo.Delete(book);

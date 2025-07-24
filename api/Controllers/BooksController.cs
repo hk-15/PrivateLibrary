@@ -80,7 +80,7 @@ public class BooksController : ControllerBase
         }
         try
         {
-            await _booksService.UpdateBook(id, book);
+            await _booksService.Update(id, book);
         }
         catch (Exception ex)
         {
@@ -110,7 +110,7 @@ public class BooksController : ControllerBase
     {
         try
         {
-            await _booksService.DeleteBook(id);
+            await _booksService.Delete(id);
         }
         catch (Exception ex)
         {

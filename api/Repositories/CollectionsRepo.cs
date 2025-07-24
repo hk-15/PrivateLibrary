@@ -7,7 +7,7 @@ namespace PersonalLibrary.Repositories;
 public interface ICollectionsRepo
 {
     Task<List<Collection>> GetAll();
-    Task<Collection?> GetCollectionByName(string name);
+    Task<Collection?> GetByName(string name);
     Task Add(Collection collection);
 }
 
@@ -25,7 +25,7 @@ public class CollectionsRepo : ICollectionsRepo
         return await _context.Collections.ToListAsync();
     }
 
-    public async Task<Collection?> GetCollectionByName(string name)
+    public async Task<Collection?> GetByName(string name)
     {
         return await _context.Collections.FirstOrDefaultAsync(c => c.Name == name);
     }
