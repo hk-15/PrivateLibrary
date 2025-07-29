@@ -29,7 +29,7 @@ public class AuthorsRepo : IAuthorsRepo
 
     public async Task<IEnumerable<Book>?> GetBooks(int id)
     {
-        var author = await _context.Authors.FirstOrDefaultAsync(a => a.Id == id) ?? throw new NotFoundException($"No author with ID ${id} found");
+        var author = await _context.Authors.Include(a => a.Books).FirstOrDefaultAsync(a => a.Id == id) ?? throw new NotFoundException($"No author with ID ${id} found");
         return author.Books;
     }
 

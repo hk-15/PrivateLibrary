@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { DeleteBook, getAllCollections, getBooks, updateBookDetails, updateReadStatus, type Book, type BookRequest, type Collection } from "../../../api/ApiClient";
 import "./CatalogueTable.scss";
-import Popup from "reactjs-popup";
 
 const emptyBook: Book = {
     id: 0,
@@ -33,11 +32,15 @@ export default function CatalogueTable(props:
     const [collections, setCollections] = useState<Collection[]>([]);
     const [nextPageBooks, setNextPageBooks] = useState<Book[]>([]);
     const [pageNum, setPageNum] = useState("1");
-    const [changeReadStatusId, setChangeReadStatusId] = useState(0);
+    const [selectedBook, setSelectedBook] = useState({
+        id: 0,
+        changeReadStatus: false,
+        edit: false,
+        delete: false
+    });
     const [editedBookData, setEditedBookData] = useState<Book>(emptyBook);
     const [rawInputs, setRawInputs] = useState({"tags": "", "authors": ""});
-    const [saveEdit, setSaveEdit] = useState(false);
-    const [deleteId, setDeleteId] = useState(0);
+    const [popup, setPopup] = useState(false);
 
     useEffect(() => {
         getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
@@ -73,10 +76,10 @@ export default function CatalogueTable(props:
     }
     
     useEffect(() => {
-        if(changeReadStatusId) {
+        if(selectedBook.changeReadStatus) {
             const doUpdate = async () => {
                 try {
-                    await updateReadStatus(changeReadStatusId);
+                    await updateReadStatus(selectedBook.id);
                     await getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
                         .then(response => setBooks(response));
                 } catch (err) {
@@ -84,9 +87,14 @@ export default function CatalogueTable(props:
                 }
             };
         doUpdate();
-        setChangeReadStatusId(0);
+        setSelectedBook(prev => ({
+            ...prev,
+            changeReadStatus: false,
+            id: 0
+        })
+        );
         }
-    }, [changeReadStatusId]);
+    }, [selectedBook.changeReadStatus]);
     
     const handleInput = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -119,7 +127,7 @@ export default function CatalogueTable(props:
     };
     
     useEffect(() => {
-        if(saveEdit && editedBookData) {
+        if(selectedBook.edit && editedBookData) {
             const doUpdate = async () => {
                 try {
                     const bookUpdate: BookRequest = {
@@ -137,7 +145,6 @@ export default function CatalogueTable(props:
                         tags: editedBookData.tags,
                         libraryId: 1 //hard-coded for now, to be passed down from props
                     };
-                    console.log(bookUpdate);
                     await updateBookDetails(editedBookData.id, bookUpdate);
                     await getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
                         .then(response => setBooks(response));
@@ -146,16 +153,20 @@ export default function CatalogueTable(props:
                 }
             };
             doUpdate();
-            setSaveEdit(false);
+            setSelectedBook(prev => ({
+                ...prev,
+                edit: false,
+                id: 0
+            }));
             setEditedBookData(emptyBook);
         }
-    }, [saveEdit])
+    }, [selectedBook.edit])
     
     useEffect(() => {
-        if (deleteId) {
+        if (selectedBook.delete) {
             const doUpdate = async () => {
                 try {
-                    await DeleteBook(deleteId);
+                    await DeleteBook(selectedBook.id);
                     await getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
                         .then(response => setBooks(response));
                 } catch (err) {
@@ -163,9 +174,13 @@ export default function CatalogueTable(props:
                 }
             };
             doUpdate();
-            setDeleteId(0);
+            setSelectedBook(prev => ({
+                ...prev,
+                id: 0,
+                delete: false
+            }));
         }
-    }, [deleteId]);
+    }, [selectedBook.delete]);
 
     return (
         <div>
@@ -225,20 +240,11 @@ export default function CatalogueTable(props:
                                     <td>{b.tags.join(', ')}</td>
                                     <td>
                                         <button
-                                            onClick={() => setChangeReadStatusId(b.id)}
-                                        >{`${b.read ? 'Mark unread' : 'Mark read'}`}</button>
-                                        <Popup trigger={<button>Remove</button>} modal>
-                                        {(close: () => void) => (
-                                            <>
-                                        <div>
-                                            Are you sure you want to remove <i>{b.title}</i> from the library?
-                                        </div>
-                                        <button>Remove</button>
-                                        <button onClick={close}>Back to safety</button>
-                                        </>
-                                        )}
-                                        </Popup>
-                                        {/* <button>Remove</button> */}
+                                            onClick={() => setSelectedBook(prev => ({
+                                                ...prev,
+                                                changeReadStatus: true,
+                                                id: b.id
+                                            }))}                                        >{`${b.read ? 'Mark unread' : 'Mark read'}`}</button>
                                     </td>
                                 </tr>
                                 ) :
@@ -262,6 +268,37 @@ export default function CatalogueTable(props:
                                                 setRawInputs({"tags": b.tags.join(", "), "authors": b.authors.join(", ")});
                                             }}
                                         >Edit</button>
+                                        <button
+                                        onClick={() => {
+                                            setPopup(true)
+                                            setSelectedBook(prev => ({
+                                                ...prev,
+                                                id: b.id
+                                            }))
+                                        }}
+                                        >Remove</button>
+                                        {popup && selectedBook.id === b.id ?
+                                        <span>Are you sure?
+                                        <button
+                                        onClick={() => {
+                                            setSelectedBook(prev => ({
+                                                ...prev,
+                                                delete: true
+                                            }))
+                                            setPopup(false)}
+                                        }
+                                        >Yes</button>
+                                        <button
+                                        onClick={() => {
+                                            setPopup(false)
+                                            setSelectedBook(prev => ({
+                                                ...prev,
+                                                id: 0
+                                            }))
+                                        }}
+                                        >Cancel</button>
+                                        </span>
+                                        : ""}
                                     </td>
                                 </tr>  
                                 ) : (
@@ -380,7 +417,11 @@ export default function CatalogueTable(props:
                                         </td>
                                         <td>
                                             <button
-                                                onClick={() => setSaveEdit(true)}
+                                                onClick={() => setSelectedBook(prev => ({
+                                                    ...prev,
+                                                    id: b.id,
+                                                    edit: true
+                                                }))}
                                             >Save</button>
                                             <button
                                                 onClick={() => setEditedBookData(emptyBook)}>
