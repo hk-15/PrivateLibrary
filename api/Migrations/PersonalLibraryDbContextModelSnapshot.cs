@@ -22,6 +22,36 @@ namespace PersonalLibraryBackend.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("AuthorBook", b =>
+                {
+                    b.Property<int>("AuthorsId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("BooksId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("AuthorsId", "BooksId");
+
+                    b.HasIndex("BooksId");
+
+                    b.ToTable("AuthorBook");
+                });
+
+            modelBuilder.Entity("BookTag", b =>
+                {
+                    b.Property<int>("BooksId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TagsId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("BooksId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("BookTag");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -243,9 +273,6 @@ namespace PersonalLibraryBackend.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("CollectionId")
                         .HasColumnType("integer");
 
@@ -257,6 +284,9 @@ namespace PersonalLibraryBackend.Migrations
                     b.Property<string>("Language")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("LibraryId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Notes")
                         .HasColumnType("text");
@@ -282,9 +312,9 @@ namespace PersonalLibraryBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId");
-
                     b.HasIndex("CollectionId");
+
+                    b.HasIndex("LibraryId");
 
                     b.ToTable("Books");
                 });
@@ -304,6 +334,70 @@ namespace PersonalLibraryBackend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Collections");
+                });
+
+            modelBuilder.Entity("PersonalLibrary.Models.Database.Library", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Libraries");
+                });
+
+            modelBuilder.Entity("PersonalLibrary.Models.Database.Tag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tags");
+                });
+
+            modelBuilder.Entity("AuthorBook", b =>
+                {
+                    b.HasOne("PersonalLibrary.Models.Database.Author", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PersonalLibrary.Models.Database.Book", null)
+                        .WithMany()
+                        .HasForeignKey("BooksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BookTag", b =>
+                {
+                    b.HasOne("PersonalLibrary.Models.Database.Book", null)
+                        .WithMany()
+                        .HasForeignKey("BooksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PersonalLibrary.Models.Database.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -359,26 +453,21 @@ namespace PersonalLibraryBackend.Migrations
 
             modelBuilder.Entity("PersonalLibrary.Models.Database.Book", b =>
                 {
-                    b.HasOne("PersonalLibrary.Models.Database.Author", "Author")
-                        .WithMany("Books")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("PersonalLibrary.Models.Database.Collection", "Collection")
                         .WithMany()
                         .HasForeignKey("CollectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Author");
+                    b.HasOne("PersonalLibrary.Models.Database.Library", "Library")
+                        .WithMany()
+                        .HasForeignKey("LibraryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Collection");
-                });
 
-            modelBuilder.Entity("PersonalLibrary.Models.Database.Author", b =>
-                {
-                    b.Navigation("Books");
+                    b.Navigation("Library");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,7 +8,7 @@ public class BookRequest
     public required string Isbn { get; set; }
     public required string Title { get; set; }
     public string? Subtitle { get; set; }
-    public required string Author { get; set; }
+    public List<string> Authors { get; set; } = [];
     public string? Translator { get; set; }
     public required string Language { get; set; }
     public string? OriginalLanguage { get; set; }
@@ -16,4 +16,6 @@ public class BookRequest
     public int PublicationYear { get; set; }
     public bool Read { get; set; }
     public string? Notes { get; set; }
+    public List<string> Tags { get; set; } = [];
+    public required int LibraryId { get; set; }
 }

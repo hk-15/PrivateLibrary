@@ -7,14 +7,19 @@ const emptyBook: Book = {
     isbn: '',
     title: '',
     subtitle: '',
-    author: '',
+    authors: [''],
     translator: '',
     language: '',
     originalLanguage: '',
     collection: '',
     publicationYear: 0,
-    notes: ''
+    notes: '',
+    tags: [''],
+    read: false,
+    library: ''
 };
+
+type CommaSeparatedField = 'tags' | 'authors';
 
 export default function CatalogueTable(props:
     {
@@ -29,6 +34,7 @@ export default function CatalogueTable(props:
     const [pageNum, setPageNum] = useState("1");
     const [changeReadStatusId, setChangeReadStatusId] = useState(0);
     const [editedBookData, setEditedBookData] = useState<Book>(emptyBook);
+    const [rawInputs, setRawInputs] = useState({"tags": "", "authors": ""});
     const [saveEdit, setSaveEdit] = useState(false);
 
     useEffect(() => {
@@ -58,7 +64,7 @@ export default function CatalogueTable(props:
 
     function checkMaxPage() {
         useEffect(() => {
-            getBooks(nextPage(pageNum), props.pageSize, "Title", props.searchTerm)
+            getBooks(nextPage(pageNum), props.pageSize, props.sortBy, props.searchTerm)
                 .then(response => setNextPageBooks(response));
         }, [props, pageNum]);
         return nextPageBooks.length === 0 ? true : false;
@@ -86,7 +92,29 @@ export default function CatalogueTable(props:
             ...prev,
             [name]: name === "publicationYear" ? Number(value) : value
         }));
-    }
+    };
+
+    const handleCommaSeparatedInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        if (!["tags", "authors"].includes(name)) return;
+
+        const fieldName = name as CommaSeparatedField;
+
+        setRawInputs(prev => ({
+            ...prev,
+            [fieldName]: value,
+        }));
+
+        const parsed = value
+            .split(',')
+            .map(item => item.trim())
+            .filter(item => item.length > 0);
+
+        setEditedBookData(prev => ({
+            ...prev,
+            [fieldName]: parsed,
+        }));
+    };
     
     useEffect(() => {
         if(saveEdit && editedBookData) {
@@ -96,15 +124,18 @@ export default function CatalogueTable(props:
                         isbn: editedBookData.isbn,
                         title: editedBookData.title,
                         subtitle: editedBookData.subtitle ?? "",
-                        author: editedBookData.author,
+                        authors: editedBookData.authors,
                         translator: editedBookData.translator ?? "",
                         language: editedBookData.language,
                         originalLanguage: editedBookData.originalLanguage ?? "",
                         collectionId: collections.find(c => c.name === editedBookData.collection)?.id ?? 0,
-                        read: true,
+                        read: editedBookData.read,
                         publicationYear: editedBookData.publicationYear,
-                        notes: editedBookData.notes ?? ""
+                        notes: editedBookData.notes ?? "",
+                        tags: editedBookData.tags,
+                        libraryId: 1 //hard-coded for now, to be passed down from props
                     };
+                    console.log(bookUpdate);
                     await updateBookDetails(editedBookData.id, bookUpdate);
                     await getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
                         .then(response => setBooks(response));
@@ -140,6 +171,7 @@ export default function CatalogueTable(props:
                             <th>Author</th>
                             <th>Collection</th>
                             <th>Publication year</th>
+                            <th>Tags</th>
                         </tr>
                     )}
                     {showEdit && (
@@ -154,6 +186,7 @@ export default function CatalogueTable(props:
                             <th>Original language</th>
                             <th>Translator</th>
                             <th>Notes</th>
+                            <th>Tags</th>
                         </tr>
                     )}
                 </thead>
@@ -168,9 +201,10 @@ export default function CatalogueTable(props:
                                 <tr key={b.id} className={`${b.read ? 'marked-read' : ''}`}>
                                     <td>{b.isbn}</td>
                                     <td>{b.title}</td>
-                                    <td>{b.author}</td>
+                                    <td>{b.authors.length > 1 ? `${b.authors.join(', ')}` : b.authors}</td>
                                     <td>{b.collection}</td>
                                     <td>{b.publicationYear}</td>
+                                    <td>{b.tags.join(', ')}</td>
                                     <td>
                                         <button
                                             onClick={() => setChangeReadStatusId(b.id)}
@@ -179,22 +213,24 @@ export default function CatalogueTable(props:
                                     </td>
                                 </tr>
                                 ) :
-                                (                          editedBookData.id !== b.id ? (
+                                (editedBookData.id !== b.id ? (
                                     <tr key={b.id} className={`${b.read ? 'marked-read' : ''}`}>
                                     <td>{b.isbn}</td>
                                     <td>{b.title}</td>
                                     <td>{b.subtitle}</td>
-                                    <td>{b.author}</td>
+                                    <td>{b.authors.length > 1 ? `${b.authors.join(', ')}` : b.authors}</td>
                                     <td>{b.collection}</td>
                                     <td>{b.publicationYear}</td>
                                     <td>{b.language}</td>
                                     <td>{b.originalLanguage}</td>
                                     <td>{b.translator}</td>
                                     <td>{b.notes}</td>
+                                    <td>{b.tags.join(', ')}</td>
                                     <td>
                                         <button
                                             onClick={() => {
                                                 setEditedBookData(b);
+                                                setRawInputs({"tags": b.tags.join(", "), "authors": b.authors.join(", ")});
                                             }}
                                         >Edit</button>
                                     </td>
@@ -203,6 +239,7 @@ export default function CatalogueTable(props:
                                 <tr key={b.id} className={`${b.read ? 'marked-read' : ''}`}>
                                        <td>
                                             <input
+                                                key={b.id}
                                                 className="edit-book"
                                                 type="text"
                                                 name="isbn"
@@ -212,6 +249,7 @@ export default function CatalogueTable(props:
                                             </td>
                                         <td>
                                             <input
+                                                key={b.id}
                                                 className="edit-book"
                                                 type="text"
                                                 name="title"
@@ -221,6 +259,7 @@ export default function CatalogueTable(props:
                                         </td>
                                          <td>
                                             <input
+                                                key={b.id}
                                                 className="edit-book"
                                                 type="text"
                                                 name="subtitle"
@@ -230,11 +269,12 @@ export default function CatalogueTable(props:
                                         </td>
                                          <td>
                                             <input
+                                                key={b.id}
                                                 className="edit-book"
                                                 type="text"
-                                                name="author"
-                                                value={editedBookData.author}
-                                                onChange={handleInput}
+                                                name="authors"
+                                                value={rawInputs.authors}
+                                                onChange={handleCommaSeparatedInput}
                                             />
                                         </td>
                                          <td>
@@ -251,6 +291,7 @@ export default function CatalogueTable(props:
                                         </td>
                                         <td>
                                             <input
+                                                key={b.id}
                                                 className="edit-book"
                                                 type="number"
                                                 name="publicationYear"
@@ -260,6 +301,7 @@ export default function CatalogueTable(props:
                                         </td>
                                         <td>
                                             <input
+                                                key={b.id}
                                                 className="edit-book"
                                                 type="text"
                                                 name="language"
@@ -269,6 +311,7 @@ export default function CatalogueTable(props:
                                         </td>
                                         <td>
                                             <input
+                                                key={b.id}
                                                 className="edit-book"
                                                 type="text"
                                                 name="originalLanguage"
@@ -278,6 +321,7 @@ export default function CatalogueTable(props:
                                         </td>
                                         <td>
                                             <input
+                                                key={b.id}
                                                 className="edit-book"
                                                 type="text"
                                                 name="translator"
@@ -287,11 +331,22 @@ export default function CatalogueTable(props:
                                         </td>
                                         <td>
                                             <input
+                                                key={b.id}
                                                 className="edit-book"
                                                 type="text"
                                                 name="notes"
                                                 value={editedBookData.notes ?? ""}
                                                 onChange={handleInput}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                key={b.id}
+                                                className="edit-book"
+                                                type="text"
+                                                name="tags"
+                                                value={rawInputs.tags}
+                                                onChange={handleCommaSeparatedInput}
                                             />
                                         </td>
                                         <td>

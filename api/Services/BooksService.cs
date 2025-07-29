@@ -10,18 +10,20 @@ public interface IBooksService
     Task<List<BookResponse>> GetAllBooksResponse();
     Task Add(BookRequest newBook);
     Task UpdateReadStatus(int id);
-    Task UpdateBook(int id, BookRequest book);
-    Task DeleteBook(int id);
+    Task Update(int id, BookRequest book);
+    Task Delete(int id);
 }
 
 public class BooksService : IBooksService
 {
     private readonly IBooksRepo _booksRepo;
-    private readonly IAuthorsRepo _authorsRepo;
-    public BooksService(IBooksRepo booksRepo, IAuthorsRepo authorsRepo)
+    private readonly IAuthorsService _authorsService;
+    private readonly ITagsService _tagsService;
+    public BooksService(IBooksRepo booksRepo, IAuthorsService authorsService, ITagsService tagsService)
     {
         _booksRepo = booksRepo;
-        _authorsRepo = authorsRepo;
+        _authorsService = authorsService;
+        _tagsService = tagsService;
     }
 
     public async Task<List<BookResponse>> GetAllBooksResponse()
@@ -34,8 +36,10 @@ public class BooksService : IBooksService
             Title = b.Title,
             SortTitle = RemoveLeadingArticle(b.Title),
             Subtitle = b.Subtitle,
-            Author = b.Author!.Name,
-            SortAuthor = b.Author.Name.Split(' ').Last(),
+            Authors = GetAuthorNames(b.Authors),
+            SortAuthor = b.Authors.Count > 0 
+                ? b.Authors[0].Name.Split(' ').Last() 
+                : "",
             Translator = b.Translator,
             SortTranslator = b.Translator?.Split(' ').Last(),
             Language = b.Language,
@@ -43,27 +47,32 @@ public class BooksService : IBooksService
             Collection = b.Collection?.Name,
             PublicationYear = b.PublicationYear,
             Read = b.Read,
-            Notes = b.Notes
+            Notes = b.Notes,
+            Tags = GetBookTags(b.Tags),
+            Library = b.Library?.Name
         })];
     }
 
     public async Task Add(BookRequest newBook)
     {
-        var author = await _authorsRepo.GetByName(newBook.Author);
-        author ??= await _authorsRepo.Add(newBook.Author);
+        CleanData(newBook);
+        var authors = await _authorsService.GetListFromRequest(newBook.Authors);
+        var tags = await _tagsService.GetListFromRequest(newBook.Tags);
 
         Book book = new()
         {
             Isbn = newBook.Isbn,
             Title = newBook.Title,
-            Author = author,
+            Authors = authors,
             Translator = newBook.Translator,
             Language = newBook.Language,
             OriginalLanguage = newBook.OriginalLanguage,
             CollectionId = newBook.CollectionId,
             PublicationYear = newBook.PublicationYear,
             Read = newBook.Read,
-            Notes = newBook.Notes
+            Notes = newBook.Notes,
+            Tags = tags,
+            LibraryId = newBook.LibraryId
         };
         await _booksRepo.Add(book);
     }
@@ -82,37 +91,34 @@ public class BooksService : IBooksService
         await _booksRepo.Update(book);
     }
 
-    public async Task UpdateBook(int id, BookRequest request)
+    public async Task Update(int id, BookRequest request)
     {
+        CleanData(request);
         var oldBook = await _booksRepo.Get(id);
         UpdateBookFields(request, oldBook);
 
-        if (oldBook.Author?.Name != request.Author)
+        if (!oldBook.Authors.Select(a => a.Name).SequenceEqual(request.Authors))
         {
-            var oldAuthor = oldBook.Author != null ? await _authorsRepo.GetByName(oldBook.Author.Name) : null;
-            var newAuthor = await _authorsRepo.GetByName(request.Author);
-            newAuthor ??= await _authorsRepo.Add(request.Author);
-
-            oldBook.AuthorId = newAuthor.Id;
+            var oldAuthors = oldBook.Authors;
+            var newAuthors = await _authorsService.GetListFromRequest(request.Authors);
+            oldBook.Authors = newAuthors;
 
             await _booksRepo.Update(oldBook);
+            await _authorsService.DeleteUnnecessaryAuthors(oldAuthors);
+        }        
 
-            if (oldAuthor != null)
-            {
-                var remainingBooks = await _authorsRepo.GetBooks(oldAuthor.Id);
-                if (remainingBooks != null && !remainingBooks.Any())
-                {
-                    _authorsRepo.Delete(oldAuthor);
-                }
-            }
-        }
-        else
+        if (!oldBook.Tags.Select(t => t.Name).SequenceEqual(request.Tags))
         {
+            var oldTags = oldBook.Tags;
+            var newTags = await _tagsService.GetListFromRequest(request.Tags);
+            oldBook.Tags = newTags;
             await _booksRepo.Update(oldBook);
+            await _tagsService.DeleteUnnecessaryTags(oldTags);
         }
+        await _booksRepo.Update(oldBook);
     }
 
-    public async Task DeleteBook(int id)
+    public async Task Delete(int id)
     {
         var book = await _booksRepo.Get(id);
         _booksRepo.Delete(book);
@@ -131,7 +137,7 @@ public class BooksService : IBooksService
         return title;
     }
 
-    private void UpdateBookFields(BookRequest request, Book book)
+    private static void UpdateBookFields(BookRequest request, Book book)
     {
         book.Isbn = request.Isbn;
         book.Title = request.Title;
@@ -142,5 +148,49 @@ public class BooksService : IBooksService
         book.PublicationYear = request.PublicationYear;
         book.Notes = request.Notes;
         book.CollectionId = request.CollectionId;
+        book.LibraryId = request.LibraryId;
+    }
+
+    private static string CapitaliseString(string input)
+    {
+        List<string> capitalised = [];
+        foreach (var word in input.Trim().Split(' '))
+        {
+            capitalised.Add(char.ToUpper(word[0]) + word[1..]);
+        }
+        return string.Join(' ', capitalised);
+    }
+
+    private static void CleanData(BookRequest request)
+    {
+        request.Isbn = request.Isbn.Trim();
+        request.Title = request.Title.Trim();
+        if (request.Subtitle != null && request.Subtitle != "") request.Subtitle = request.Subtitle.Trim();
+        if (request.Translator != null && request.Translator != "") request.Translator = request.Translator.Trim();
+        request.Language = CapitaliseString(request.Language);
+        if (request.OriginalLanguage != null && request.OriginalLanguage != "") request.OriginalLanguage = CapitaliseString(request.OriginalLanguage);
+    }
+
+    private static List<string> GetAuthorNames(List<Author> authorsList)
+    {
+        if (authorsList.Count < 1) return [];
+        var authorNames = new List<string>();
+        foreach (var author in authorsList)
+        {
+            authorNames.Add(author.Name);
+        }
+        return authorNames;
+    }
+
+    private static List<string> GetBookTags(List<Tag> tagsList)
+    {
+        if (tagsList.Count == 0) return [];
+
+        var tags = new List<string>();
+        foreach (var tag in tagsList)
+        {
+            tags.Add(tag.Name);
+        }
+        return tags;
     }
 }

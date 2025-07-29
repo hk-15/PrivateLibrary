@@ -16,7 +16,7 @@ public class CollectionsController : ControllerBase
 
     [HttpGet]
     [Route("all")]
-    public async Task<ActionResult<List<Collection>>> GetAllBooks()
+    public async Task<ActionResult<List<Collection>>> GetAllCollections()
     {
         return await _collectionsService.GetAll();
     } 
@@ -30,7 +30,7 @@ public class CollectionsController : ControllerBase
         }
         try
         {
-            await _collectionsService.AddCollection(char.ToUpper(name[0]) + name[1..]);
+            await _collectionsService.Add(char.ToUpper(name[0]) + name[1..]);
         }
         catch (Exception ex)
         {

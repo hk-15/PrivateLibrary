@@ -26,12 +26,13 @@ public class BooksController : ControllerBase
             var searchTerm = parameters.SearchTerm.Trim();
             query = query.Where(b =>
             b.Isbn.Contains(searchTerm) ||
-            b.Author.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+            b.Authors.Any(a => a.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)) ||
             (b.Translator ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
             b.Title.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
             b.Language.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
             (b.OriginalLanguage ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
-            (b.Notes ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)
+            (b.Notes ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+            b.Tags.Any(t => t.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase))
             );
         }
 
@@ -78,7 +79,7 @@ public class BooksController : ControllerBase
         }
         try
         {
-            await _booksService.UpdateBook(id, book);
+            await _booksService.Update(id, book);
         }
         catch (Exception ex)
         {
@@ -108,7 +109,7 @@ public class BooksController : ControllerBase
     {
         try
         {
-            await _booksService.DeleteBook(id);
+            await _booksService.Delete(id);
         }
         catch (Exception ex)
         {
