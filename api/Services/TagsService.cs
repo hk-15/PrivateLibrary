@@ -24,8 +24,8 @@ public class TagsService : ITagsService
         {
             foreach (var tag in request)
             {
-                var tagRecord = await _tagsRepo.GetByName(tag.ToLower());
-                tagRecord ??= await _tagsRepo.Add(tag.ToLower());
+                var tagRecord = await _tagsRepo.GetByName(tag);
+                tagRecord ??= await _tagsRepo.Add(tag);
                 tags.Add(tagRecord);
             }
         }

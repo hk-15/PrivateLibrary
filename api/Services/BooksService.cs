@@ -36,9 +36,10 @@ public class BooksService : IBooksService
             Title = b.Title,
             SortTitle = RemoveLeadingArticle(b.Title),
             Subtitle = b.Subtitle,
-            Author = b.Authors[0].Name,
-            SortAuthor = b.Authors[0].Name.Split(' ').Last(),
-            SecondaryAuthors = GetSecondaryAuthors(b.Authors),
+            Authors = GetAuthorNames(b.Authors),
+            SortAuthor = b.Authors.Count > 0 
+                ? b.Authors[0].Name.Split(' ').Last() 
+                : "",
             Translator = b.Translator,
             SortTranslator = b.Translator?.Split(' ').Last(),
             Language = b.Language,
@@ -96,7 +97,7 @@ public class BooksService : IBooksService
         var oldBook = await _booksRepo.Get(id);
         UpdateBookFields(request, oldBook);
 
-        if (!request.Authors.Equals(oldBook.Authors))
+        if (!oldBook.Authors.Select(a => a.Name).SequenceEqual(request.Authors))
         {
             var oldAuthors = oldBook.Authors;
             var newAuthors = await _authorsService.GetListFromRequest(request.Authors);
@@ -104,13 +105,13 @@ public class BooksService : IBooksService
 
             await _booksRepo.Update(oldBook);
             await _authorsService.DeleteUnnecessaryAuthors(oldAuthors);
-        }
-        if (!request.Tags.Equals(oldBook.Tags))
+        }        
+
+        if (!oldBook.Tags.Select(t => t.Name).SequenceEqual(request.Tags))
         {
             var oldTags = oldBook.Tags;
             var newTags = await _tagsService.GetListFromRequest(request.Tags);
             oldBook.Tags = newTags;
-
             await _booksRepo.Update(oldBook);
             await _tagsService.DeleteUnnecessaryTags(oldTags);
         }
@@ -170,12 +171,11 @@ public class BooksService : IBooksService
         if (request.OriginalLanguage != null && request.OriginalLanguage != "") request.OriginalLanguage = CapitaliseString(request.OriginalLanguage);
     }
 
-    private static List<string> GetSecondaryAuthors(List<Author> authorsList)
+    private static List<string> GetAuthorNames(List<Author> authorsList)
     {
-        if (authorsList.Count <= 1) return [];
-        var authors = authorsList.Skip(1);
+        if (authorsList.Count < 1) return [];
         var authorNames = new List<string>();
-        foreach (var author in authors)
+        foreach (var author in authorsList)
         {
             authorNames.Add(author.Name);
         }

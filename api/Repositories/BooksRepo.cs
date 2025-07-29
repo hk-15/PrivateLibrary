@@ -36,6 +36,7 @@ public class BooksRepo : IBooksRepo
     {
         var book = await _context.Books
             .Include(b => b.Authors)
+            .Include(b => b.Tags)
             .FirstOrDefaultAsync(b => b.Id == id) ?? throw new NotFoundException("Book not found.");
         return book;
     }
