@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { getAllCollections, getBooks, updateBookDetails, updateReadStatus, type Book, type BookRequest, type Collection } from "../../../api/ApiClient";
+import { DeleteBook, getAllCollections, getBooks, updateBookDetails, updateReadStatus, type Book, type BookRequest, type Collection } from "../../../api/ApiClient";
 import "./CatalogueTable.scss";
+import Popup from "reactjs-popup";
 
 const emptyBook: Book = {
     id: 0,
@@ -36,6 +37,7 @@ export default function CatalogueTable(props:
     const [editedBookData, setEditedBookData] = useState<Book>(emptyBook);
     const [rawInputs, setRawInputs] = useState({"tags": "", "authors": ""});
     const [saveEdit, setSaveEdit] = useState(false);
+    const [deleteId, setDeleteId] = useState(0);
 
     useEffect(() => {
         getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
@@ -149,6 +151,22 @@ export default function CatalogueTable(props:
         }
     }, [saveEdit])
     
+    useEffect(() => {
+        if (deleteId) {
+            const doUpdate = async () => {
+                try {
+                    await DeleteBook(deleteId);
+                    await getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
+                        .then(response => setBooks(response));
+                } catch (err) {
+                    console.error("Failed to delete book: ", err);
+                }
+            };
+            doUpdate();
+            setDeleteId(0);
+        }
+    }, [deleteId]);
+
     return (
         <div>
             <button
@@ -208,8 +226,19 @@ export default function CatalogueTable(props:
                                     <td>
                                         <button
                                             onClick={() => setChangeReadStatusId(b.id)}
-                                        >{`${b.read ? 'Mark as unread' : 'Mark as read'}`}</button>
+                                        >{`${b.read ? 'Mark unread' : 'Mark read'}`}</button>
+                                        <Popup trigger={<button>Remove</button>} modal>
+                                        {(close: () => void) => (
+                                            <>
+                                        <div>
+                                            Are you sure you want to remove <i>{b.title}</i> from the library?
+                                        </div>
                                         <button>Remove</button>
+                                        <button onClick={close}>Back to safety</button>
+                                        </>
+                                        )}
+                                        </Popup>
+                                        {/* <button>Remove</button> */}
                                     </td>
                                 </tr>
                                 ) :

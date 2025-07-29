@@ -121,7 +121,11 @@ public class BooksService : IBooksService
     public async Task Delete(int id)
     {
         var book = await _booksRepo.Get(id);
+        var authors = book.Authors;
+        var tags = book.Tags;
         _booksRepo.Delete(book);
+        await _authorsService.DeleteUnnecessaryAuthors(authors);
+        await _tagsService.DeleteUnnecessaryTags(tags);
     }
 
     public static string RemoveLeadingArticle(string title)
