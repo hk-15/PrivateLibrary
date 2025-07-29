@@ -18,30 +18,23 @@ export default function AddBookForm() {
     reset,
     formState: { errors },
     } = useForm({
+        mode: "onChange",
         defaultValues: {
             isbn: "978",
             title: "",
             subtitle: "",
-            author: "",
+            authors: "",
             translator: "",
             language: "",
             originalLanguage: "",
             collectionId: 0,
             publicationYear: currentYear,
             read: "false",
-            notes: ""
+            notes: "",
+            tags: "",
+            libraryId: 0
         },
     });
-
-    const formErrors = {
-        isbn: {
-        required: "ISBN is required",
-        pattern: {
-            value: /^[0-9]{10,13}$/,
-            message: "ISBN must be between 10 and 13 characters long",
-        },
-        },
-    };
 
     useEffect(() => {
         getAllCollections()
@@ -50,23 +43,35 @@ export default function AddBookForm() {
             .catch((err) => console.error(err));
     }, []);
 
+    function createList (input: string) {
+        return input
+            .split(',')
+            .map(item => item.trim())
+            .filter(item => item.length > 0);
+    };
+
     function submitForm(data: {
         isbn: string,
         title: string,
         subtitle?: string,
-        author: string,
+        authors: string,
         translator?: string,
         language: string,
         originalLanguage?: string,
         collectionId: number,
         publicationYear: number,
         read: string,
-        notes?: string
+        notes?: string,
+        tags: string,
+        libraryId: number
     }) {
         const readBoolean = data.read === "true" ? true : false;
         const bookData = {
             ...data,
-            read: readBoolean
+            authors: createList(data.authors),
+            tags: createList(data.tags),
+            read: readBoolean,
+            libraryId: 1 //hard-coded for now
         }
         setStatus("SUBMITTING");
         addBook(bookData)
@@ -92,7 +97,7 @@ export default function AddBookForm() {
                 <input
                 id="isbn"
                 type="string"
-                {...register("isbn", formErrors.isbn)}
+                {...register("isbn", {required: true, pattern: {value: /^[0-9]{10,13}$/, message: "ISBN must be between 10 and 13 characters long and contain only numbers"}})}
                 />
                 {errors.isbn && (<span className="error">{errors.isbn.message}</span>)}
             </label>
@@ -116,11 +121,11 @@ export default function AddBookForm() {
             </label>
 
             <label htmlFor="author">
-                Author<span className="required">*</span>
+                Author(s)<span className="required">*</span>
                 <input
                 id="author"
                 type="text"
-                {...register("author", {required: true})}
+                {...register("authors", {required: true})}
                 />
             </label>
 
@@ -137,21 +142,22 @@ export default function AddBookForm() {
                 </select>
             </label>
 
+            <label htmlFor="publicationYear">
+                Year of publication<span className="required">*</span>
+                <input
+                id="publicationYear"
+                type="number"
+                {...register("publicationYear", {required: true, valueAsNumber: true, max: {value: currentYear + 1, message: "Please enter a valid year"}, min: {value: 1900, message: "Please enter a valid year"}})}
+                />
+                {errors.publicationYear && (<span className="error">{errors.publicationYear.message}</span>)}
+            </label>
+
             <label htmlFor="language">
                 Language<span className="required">*</span>
                 <input
                 id="language"
                 type="text"
                 {...register("language", {required: true})}
-                />
-            </label>
-
-            <label htmlFor="translator">
-                Translator
-                <input
-                id="translator"
-                type="text"
-                {...register("translator")}
                 />
             </label>
 
@@ -164,12 +170,30 @@ export default function AddBookForm() {
                 />
             </label>
 
-            <label htmlFor="publicationYear">
-                Year of publication<span className="required">*</span>
+            <label htmlFor="translator">
+                Translator
                 <input
-                id="publicationYear"
-                type="number"
-                {...register("publicationYear", {required: true, valueAsNumber: true})}
+                id="translator"
+                type="text"
+                {...register("translator")}
+                />
+            </label>
+
+            <label htmlFor="notes">
+                Notes
+                <input
+                id="notes"
+                type="text"
+                {...register("notes")}
+                />
+            </label>
+
+            <label htmlFor="tags">
+                Tags
+                <input
+                id="tags"
+                type="text"
+                {...register("tags")}
                 />
             </label>
 
@@ -191,14 +215,6 @@ export default function AddBookForm() {
                 <label htmlFor="false">No</label>
             </label>
 
-            <label htmlFor="notes">
-                Notes
-                <input
-                id="notes"
-                type="text"
-                {...register("notes")}
-                />
-            </label>
             <button
                 disabled={status === "SUBMITTING"}
                 type="submit">

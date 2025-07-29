@@ -3,7 +3,7 @@ export interface Book {
     isbn: string,
     title: string,
     subtitle?: string,
-    authors: [string],
+    authors: string[],
     translator?: string,
     language: string,
     originalLanguage?: string,
@@ -11,7 +11,7 @@ export interface Book {
     publicationYear: number,
     read?: boolean,
     notes?: string,
-    tags: [string],
+    tags: string[],
     library?: string
 }
 
@@ -19,7 +19,7 @@ export interface BookRequest {
     isbn: string,
     title: string,
     subtitle?: string,
-    authors: [string],
+    authors: string[],
     translator?: string,
     language: string,
     originalLanguage?: string,
@@ -27,7 +27,7 @@ export interface BookRequest {
     publicationYear: number,
     read?: boolean,
     notes?: string,
-    tags: [string],
+    tags: string[],
     libraryId?: number
 }
 
