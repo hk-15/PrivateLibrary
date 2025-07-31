@@ -1,7 +1,7 @@
 import { useState } from "react";
 import AddBookButton from "../../components/Buttons/AddBookButton/AddBookButton";
 import ManageCollectionsButton from "../../components/Buttons/ManageCollectionsButton/ManageCollectionsButton";
-import CatalogueTable from "../../components/Catalogue/CatalogueTable/CatalogueTable";
+import CatalogueTable from "../../components/Catalogue/CatalogueTable/Table/CatalogueTable";
 import { Page } from "../Page/Page";
 import { SearchBar } from "../../components/SearchBar/SearchBar";
 import { CatalogueSort } from "../../components/Catalogue/CatalogueSort/CatalogueSort";
