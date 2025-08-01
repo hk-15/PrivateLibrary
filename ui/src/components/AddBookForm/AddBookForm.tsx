@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { addBook, getAllCollections, type Collection } from "../../api/ApiClient";
 import "./AddBookForm.scss";
 
-type FormStatus = "READY" | "SUBMITTING" | "ERROR" | "FINISHED";
+export type FormStatus = "READY" | "SUBMITTING" | "ERROR" | "FINISHED";
 
 export default function AddBookForm() {
     const [status, setStatus] = useState<FormStatus>("READY");
@@ -96,7 +96,7 @@ export default function AddBookForm() {
                 ISBN<span className="required">*</span>
                 <input
                 id="isbn"
-                type="string"
+                type="text"
                 {...register("isbn", {required: true, pattern: {value: /^[0-9]{10,13}$/, message: "ISBN must be between 10 and 13 characters long and contain only numbers"}})}
                 />
                 {errors.isbn && (<span className="error">{errors.isbn.message}</span>)}

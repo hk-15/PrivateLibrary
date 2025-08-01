@@ -146,7 +146,7 @@ export default function CatalogueTable(props:
                 {showEdit ? "Library view" : "Edit view"}
             </button>
 
-            {!showEdit && <LibraryView books={books} getSelectedId={setChangeReadStatusId} />}
+            {!showEdit && <LibraryView books={books} getSelectedId={setChangeReadStatusId}/>}
 
             {showEdit && <EditView books={books} collections={collections} getEditedBook={setEditedBook} getDeleteId={setDeleteId}/>}
 

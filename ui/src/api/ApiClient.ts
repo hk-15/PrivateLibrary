@@ -41,6 +41,11 @@ export interface Library {
     name: string
 }
 
+export interface User {
+    email: string,
+    password: string
+}
+
 export async function getBooks(pageNum: string, pageSize: string, sortBy: string, searchTerm: string): Promise<Book[]> {
     const response = await fetch(`http://localhost:5108/books?PageNumber=${pageNum}&PageSize=${pageSize}&SortBy=${sortBy}&SearchTerm=${searchTerm}`, {
         credentials: "include",
@@ -159,5 +164,27 @@ export async function addLibrary(name: string) {
     
     if (!response.ok) {
         throw new Error(await response.json());
+    }
+}
+
+export async function logIn(user: User) {
+    const response = await fetch('http://localhost:5108/accounts/login', {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user),
+    });
+
+    if (!response.ok) {
+        let errorMessage = "";
+        try {
+            const error = await response.json();
+            errorMessage = error.message || errorMessage;
+            throw new Error(errorMessage);
+        } finally {
+            throw new Error(errorMessage);
+        }
     }
 }

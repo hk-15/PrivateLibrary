@@ -2,7 +2,7 @@ import type { Book } from "../../../../api/ApiClient"
 
 type Props = {
     books: Book[]
-    getSelectedId: (id: number) => void;
+    getSelectedId: (id: number) => void
 };
 
 export const LibraryView: React.FC<Props> = ({ books, getSelectedId }) =>

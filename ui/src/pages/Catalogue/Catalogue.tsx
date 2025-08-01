@@ -15,12 +15,12 @@ export default function Catalogue() {
     return (
         <Page>
             <h1>Catalogue</h1>
-            <AddBookButton/>
-            <ManageCollectionsButton/>
             <SearchBar getSearchTerm={setSearchTerm}/>
             <CatalogueSort getSortBy={setSortBy}/>
             <CataloguePageSize getPageSize={setPageSize}/>
             <CatalogueTable pageSize={pageSize} sortBy={sortBy} searchTerm={searchTerm}/>
+            <AddBookButton/>
+            <ManageCollectionsButton/>
         </Page>
     );
 }
