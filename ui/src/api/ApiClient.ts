@@ -46,6 +46,12 @@ export interface User {
     password: string
 }
 
+export interface NewUser {
+    username: string,
+    email: string,
+    password: string
+}
+
 export async function getBooks(pageNum: string, pageSize: string, sortBy: string, searchTerm: string): Promise<Book[]> {
     const response = await fetch(`http://localhost:5108/books?PageNumber=${pageNum}&PageSize=${pageSize}&SortBy=${sortBy}&SearchTerm=${searchTerm}`, {
         credentials: "include",
@@ -101,7 +107,7 @@ export async function updateBookDetails(id: number, book: BookRequest) {
     }
 }
 
-export async function DeleteBook(id: number) {
+export async function deleteBook(id: number) {
     const response = await fetch(`http://localhost:5108/books/${id}`, {
         method: "DELETE",
         credentials: "include",
@@ -167,7 +173,7 @@ export async function addLibrary(name: string) {
     }
 }
 
-export async function logIn(user: User) {
+export async function logIn (user: User) {
     const response = await fetch('http://localhost:5108/accounts/login', {
         method: "POST",
         credentials: "include",
@@ -182,9 +188,29 @@ export async function logIn(user: User) {
         try {
             const error = await response.json();
             errorMessage = error.message || errorMessage;
-            throw new Error(errorMessage);
         } finally {
             throw new Error(errorMessage);
         }
-    }
+    };
+}
+
+export async function signUp (newUser: NewUser) {
+    const response = await fetch('http://localhost:5108/accounts', {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newUser),
+    });
+
+    if (!response.ok) {
+        let errorMessage = "";
+        try {
+            const error = await response.json();
+            errorMessage = error.message || errorMessage;
+        } finally {
+            throw new Error(errorMessage);
+        }
+    };
 }

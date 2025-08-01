@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { DeleteBook, getAllCollections, getBooks, updateBookDetails, updateReadStatus, type Book, type BookRequest, type Collection } from "../../../../api/ApiClient";
+import { deleteBook, getAllCollections, getBooks, updateBookDetails, updateReadStatus, type Book, type BookRequest, type Collection } from "../../../../api/ApiClient";
 import "./CatalogueTable.scss";
 import { LibraryView } from "../LibraryView/LibraryView";
 import { EditView } from "../EditView/EditView";
@@ -120,7 +120,7 @@ export default function CatalogueTable(props:
         if (deleteId) {
             const doUpdate = async () => {
                 try {
-                    await DeleteBook(deleteId);
+                    await deleteBook(deleteId);
                     await getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
                         .then(response => setBooks(response));
                 } catch (err) {

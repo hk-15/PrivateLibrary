@@ -5,7 +5,7 @@ import AddBook from './pages/AddBook/AddBook'
 import Collections from './pages/Collections/Collections'
 import Home from './pages/Home/Home'
 import { Navbar } from './components/Navbar/Navbar'
-import { LoginForm } from './components/LoginForm/LoginForm'
+import Login from './pages/Login/Login'
 
 export default function App() {
 
@@ -17,7 +17,7 @@ export default function App() {
         <Route path="/catalogue" element={<Catalogue/>}/>
         <Route path="/collections" element={<Collections/>}/>
         <Route path="/add-book" element={<AddBook/>}/>
-        <Route path="/login" element={<LoginForm/>}/>
+        <Route path="/login" element={<Login/>}/>
       </Routes>
     </BrowserRouter>
   )

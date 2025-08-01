@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using PersonalLibrary.Models.Request;
 
 namespace PersonalLibrary.Controllers;
 
@@ -17,7 +18,7 @@ public class AccountsController : ControllerBase
     {
         _signInManager = signInManager;
         _userManager = userManager;
-       // _roleManager = roleManager;
+        // _roleManager = roleManager;
     }
 
     [HttpPost("login")]
@@ -37,7 +38,7 @@ public class AccountsController : ControllerBase
         );
         if (!result.Succeeded)
         {
-            return Unauthorized( new { message = "Invalid password" });
+            return Unauthorized(new { message = "Invalid password" });
         }
         bool isAdmin = false;
         var roles = await _userManager.GetRolesAsync(user);
@@ -53,6 +54,44 @@ public class AccountsController : ControllerBase
     public async Task<IActionResult> Logout()
     {
         await _signInManager.SignOutAsync();
+        return Ok();
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> Create([FromBody] CreateAccountRequest newUser)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var user = new IdentityUser { UserName = newUser.UserName, Email = newUser.Email };
+
+            if (await _userManager.FindByNameAsync(newUser.UserName) != null)
+            {
+                return BadRequest(new { message = "Sorry, that username is unavailable. Please choose another." });
+            }
+            else if (await _userManager.FindByEmailAsync(newUser.Email!) != null)
+            {
+                return BadRequest(new { message = "Sorry, there is already an account associated with that email. Please try logging in." } );
+            }
+
+            var result = await _userManager.CreateAsync(user, newUser.Password);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(new { message = "Sorry, cannot create account right now. Please try again later." });
+            }
+
+            await _userManager.AddToRoleAsync(user, "User");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+
         return Ok();
     }
 }
