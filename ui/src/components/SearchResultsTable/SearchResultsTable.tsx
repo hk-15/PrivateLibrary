@@ -1,11 +1,18 @@
-import type { Book } from "../../../../api/ApiClient"
+import { useEffect, useState } from "react";
+import { getAllBooks, type Book } from "../../api/ApiClient";
 
-type Props = {
-    books: Book[]
-    getSelectedId: (id: number) => void
-};
+export default function SearchResultsTable(props:
+    {
+        searchTerm: string
+    }) {
+    const [books, setBooks] = useState<Book[]>([]);
 
-export const LibraryView: React.FC<Props> = ({ books, getSelectedId }) => {
+    useEffect(() => {
+        getAllBooks(props.searchTerm)
+            .then(response => setBooks(response))
+            .catch((err) => console.error(err));
+    }, [props]);
+
     return (
         <table>
             <thead>
@@ -13,8 +20,9 @@ export const LibraryView: React.FC<Props> = ({ books, getSelectedId }) => {
                     <th>ISBN</th>
                     <th>Title</th>
                     <th>Author</th>
-                    <th>Publication year</th>
+                    <th>Publication Year</th>
                     <th>Collection</th>
+                    <th>Owner</th>
                     <th>Tags</th>
                 </tr>
             </thead>
@@ -27,15 +35,11 @@ export const LibraryView: React.FC<Props> = ({ books, getSelectedId }) => {
                             <td>{b.authors.length > 1 ? `${b.authors.join(', ')}` : b.authors}</td>
                             <td>{b.publicationYear}</td>
                             <td>{b.collection}</td>
+                            <td>{b.owner}</td>
                             <td>{b.tags.join(', ')}</td>
-                            <td>
-                                <button
-                                    onClick={() => getSelectedId(b.id)}
-                                >{`${b.read ? 'Mark unread' : 'Mark read'}`}</button>
-                            </td>
                         </tr>
                     )}
             </tbody>
         </table>
     )
-};
+}

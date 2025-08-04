@@ -12,7 +12,7 @@ export interface Book {
     read?: boolean,
     notes?: string,
     tags: string[],
-    library?: string
+    owner: string
 }
 
 export interface BookRequest {
@@ -27,16 +27,10 @@ export interface BookRequest {
     publicationYear: number,
     read?: boolean,
     notes?: string,
-    tags: string[],
-    libraryId?: number
+    tags: string[]
 }
 
 export interface Collection {
-    id: number,
-    name: string
-}
-
-export interface Library {
     id: number,
     name: string
 }
@@ -54,7 +48,18 @@ export interface NewUser {
 }
 
 export async function getBooks(pageNum: string, pageSize: string, sortBy: string, searchTerm: string): Promise<Book[]> {
-    const response = await fetch(`http://localhost:5108/books?PageNumber=${pageNum}&PageSize=${pageSize}&SortBy=${sortBy}&SearchTerm=${searchTerm}`, {
+    const response = await fetch(`http://localhost:5108/books/current-user?PageNumber=${pageNum}&PageSize=${pageSize}&SortBy=${sortBy}&SearchTerm=${searchTerm}`, {
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    return await response.json();
+}
+
+export async function getAllBooks(searchTerm: string): Promise<Book[]> {
+    const response = await fetch(`http://localhost:5108/books/all-users?SearchTerm=${searchTerm}`, {
         credentials: "include",
         headers: {
             "Content-Type": "application/json"
@@ -135,32 +140,6 @@ export async function getAllCollections(): Promise<Collection[]> {
 
 export async function addCollection(name: string) {
     const response = await fetch(`http://localhost:5108/collections`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(name), 
-    });
-    
-    if (!response.ok) {
-        throw new Error(await response.json());
-    }
-}
-
-export async function getAllLibraries(): Promise<Library[]> {
-    const response = await fetch("http://localhost:5108/libraries/all", {
-        credentials: "include",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    });
-
-    return await response.json();
-}
-
-export async function addLibrary(name: string) {
-    const response = await fetch(`http://localhost:5108/libraries`, {
         method: "POST",
         credentials: "include",
         headers: {

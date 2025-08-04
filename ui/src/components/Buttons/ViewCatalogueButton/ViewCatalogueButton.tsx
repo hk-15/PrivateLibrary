@@ -2,7 +2,7 @@ export default function ViewCatalogueButton(){
     return (
         <button>
             <a href="/catalogue">
-            View the catalogue
+            View my catalogue
             </a>
         </button>
     )

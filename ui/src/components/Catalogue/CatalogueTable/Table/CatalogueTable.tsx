@@ -18,7 +18,7 @@ export const emptyBook: Book = {
     notes: '',
     tags: [''],
     read: false,
-    library: ''
+    owner: ''
 };
 
 export default function CatalogueTable(props:
@@ -101,8 +101,7 @@ export default function CatalogueTable(props:
                         read: editedBook.read,
                         publicationYear: editedBook.publicationYear,
                         notes: editedBook.notes ?? "",
-                        tags: editedBook.tags,
-                        libraryId: 1 //hard-coded for now, to be passed down from props
+                        tags: editedBook.tags
                     };
                     await updateBookDetails(editedBook.id, bookUpdate);
                     await getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)

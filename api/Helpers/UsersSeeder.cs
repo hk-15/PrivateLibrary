@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using PersonalLibrary.Models.Database;
 
 namespace PersonalLibrary.Helpers;
 
@@ -29,8 +30,9 @@ public static class UsersSeeder
 
         if (adminExists == null)
         {
-            var adminUser = new IdentityUser
+            var adminUser = new User
             {
+                Name = "Admin",
                 UserName = adminEmail,
                 Email = adminEmail,
                 EmailConfirmed = true
@@ -49,8 +51,9 @@ public static class UsersSeeder
         
         if (userExists == null)
         {
-            var user = new IdentityUser
+            var user = new User
             {
+                Name = "User",
                 UserName = userEmail,
                 Email = userEmail,
                 EmailConfirmed = true
@@ -64,7 +67,7 @@ public static class UsersSeeder
             }
             else
             {
-                throw new Exception("Failed to create the admin user: " + string.Join(", ", userCreation.Errors));
+                throw new Exception("Failed to create the user: " + string.Join(", ", userCreation.Errors));
             }
         }
     }

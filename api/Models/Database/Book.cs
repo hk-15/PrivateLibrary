@@ -20,5 +20,5 @@ public class Book
     public string? Notes { get; set; }
     public List<Tag> Tags { get; set; } = [];
     public required string UserId { get; set; }
-    public User? Owner { get; set; }
+    public User? User { get; set; }
 }

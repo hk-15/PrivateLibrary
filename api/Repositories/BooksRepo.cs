@@ -30,6 +30,7 @@ public class BooksRepo : IBooksRepo
             .Include(b => b.Authors)
             .Include(b => b.Tags)
             .Include(b => b.Collection)
+            .Include(b => b.User)
             .ToListAsync();
     }
 
@@ -39,6 +40,7 @@ public class BooksRepo : IBooksRepo
             .Include(b => b.Authors)
             .Include(b => b.Tags)
             .Include(b => b.Collection)
+            .Include(b => b.User)
             .Where(b => b.UserId == userId)
             .ToListAsync();
         if (books.Count == 0)

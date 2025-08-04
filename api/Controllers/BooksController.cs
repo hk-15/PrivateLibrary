@@ -20,15 +20,34 @@ public class BooksController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/all")]
-    public async Task<ActionResult<List<BookResponse>>> GetAllBooks()
+    [Route("all-users")]
+    public async Task<ActionResult<List<BookResponse>>> GetBooks([FromQuery] QueryParameters parameters)
     {
-        return await _booksService.GetAllBooksResponse();
+        var books = await _booksService.GetAllBooksResponse();
+        var query = books.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(parameters.SearchTerm))
+        {
+            var searchTerm = parameters.SearchTerm.Trim();
+            query = query.Where(b =>
+            b.Isbn.Contains(searchTerm) ||
+            b.Authors.Any(a => a.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)) ||
+            (b.Translator ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+            b.Title.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+            b.Language.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+            (b.OriginalLanguage ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+            (b.Notes ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+            b.Tags.Any(t => t.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase))
+            );
+        };
+        query = query.OrderBy(b => b.SortTitle);
+        return Ok(query.ToList());
     }
 
     [HttpGet]
+    [Route("current-user")]
     [Authorize]
-    public async Task<IActionResult> GetBooks([FromQuery] QueryParameters parameters)
+    public async Task<IActionResult> GetUserBooks([FromQuery] QueryParameters parameters)
     {
         var currentUserId = _userManager.GetUserId(User);
         if (string.IsNullOrEmpty(currentUserId))
@@ -70,6 +89,7 @@ public class BooksController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> AddBook([FromBody] BookRequest newBook)
     {
         var currentUserId = _userManager.GetUserId(User);
@@ -95,6 +115,7 @@ public class BooksController : ControllerBase
 
     [HttpPatch]
     [Route("edit/{id}")]
+    [Authorize]
     public async Task<IActionResult> UpdateBook(int id, [FromBody] BookRequest book)
     {
         if (!ModelState.IsValid)
@@ -114,6 +135,7 @@ public class BooksController : ControllerBase
 
     [HttpPatch]
     [Route("{id}")]
+    [Authorize]
     public async Task<IActionResult> UpdateReadStatus(int id)
     {
         try
@@ -129,6 +151,7 @@ public class BooksController : ControllerBase
 
     [HttpDelete]
     [Route("{id}")]
+    [Authorize]
     public async Task<IActionResult> DeleteBook(int id)
     {
         try

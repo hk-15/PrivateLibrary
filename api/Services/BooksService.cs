@@ -30,53 +30,13 @@ public class BooksService : IBooksService
     public async Task<List<BookResponse>> GetAllBooksResponse()
     {
         var allBooks = await _booksRepo.GetAll();
-        return [.. allBooks.Select(b => new BookResponse
-        {
-            Id = b.Id,
-            Isbn = b.Isbn,
-            Title = b.Title,
-            SortTitle = RemoveLeadingArticle(b.Title),
-            Subtitle = b.Subtitle,
-            Authors = GetAuthorNames(b.Authors),
-            SortAuthor = b.Authors.Count > 0 
-                ? b.Authors[0].Name.Split(' ').Last() 
-                : "",
-            Translator = b.Translator,
-            SortTranslator = b.Translator?.Split(' ').Last(),
-            Language = b.Language,
-            OriginalLanguage = b.OriginalLanguage,
-            Collection = b.Collection?.Name,
-            PublicationYear = b.PublicationYear,
-            Read = b.Read,
-            Notes = b.Notes,
-            Tags = GetBookTags(b.Tags),
-        })];
+        return MapResponse(allBooks);
     }
 
     public async Task<List<BookResponse>> GetBooksByUser(string userId)
     {
         var books = await _booksRepo.GetByUserId(userId);
-        return [.. books.Select(b => new BookResponse
-        {
-            Id = b.Id,
-            Isbn = b.Isbn,
-            Title = b.Title,
-            SortTitle = RemoveLeadingArticle(b.Title),
-            Subtitle = b.Subtitle,
-            Authors = GetAuthorNames(b.Authors),
-            SortAuthor = b.Authors.Count > 0 
-                ? b.Authors[0].Name.Split(' ').Last() 
-                : "",
-            Translator = b.Translator,
-            SortTranslator = b.Translator?.Split(' ').Last(),
-            Language = b.Language,
-            OriginalLanguage = b.OriginalLanguage,
-            Collection = b.Collection?.Name,
-            PublicationYear = b.PublicationYear,
-            Read = b.Read,
-            Notes = b.Notes,
-            Tags = GetBookTags(b.Tags),
-        })];
+        return MapResponse(books);
     }
 
     public async Task Add(BookRequest newBook, string userId)
@@ -131,7 +91,7 @@ public class BooksService : IBooksService
 
             await _booksRepo.Update(oldBook);
             await _authorsService.DeleteUnnecessaryAuthors(oldAuthors);
-        }        
+        }
 
         if (!oldBook.Tags.Select(t => t.Name).SequenceEqual(request.Tags))
         {
@@ -194,10 +154,10 @@ public class BooksService : IBooksService
     {
         request.Isbn = request.Isbn.Trim();
         request.Title = request.Title.Trim();
-        if (request.Subtitle != null && request.Subtitle != "") request.Subtitle = request.Subtitle.Trim();
-        if (request.Translator != null && request.Translator != "") request.Translator = request.Translator.Trim();
+        if (!string.IsNullOrEmpty(request.Subtitle)) request.Subtitle = request.Subtitle.Trim();
+        if (!string.IsNullOrEmpty(request.Translator)) request.Translator = request.Translator.Trim();
         request.Language = CapitaliseString(request.Language);
-        if (request.OriginalLanguage != null && request.OriginalLanguage != "") request.OriginalLanguage = CapitaliseString(request.OriginalLanguage);
+        if (!string.IsNullOrEmpty(request.OriginalLanguage)) request.OriginalLanguage = CapitaliseString(request.OriginalLanguage);
     }
 
     private static List<string> GetAuthorNames(List<Author> authorsList)
@@ -221,5 +181,33 @@ public class BooksService : IBooksService
             tags.Add(tag.Name);
         }
         return tags;
+    }
+
+    private static List<BookResponse> MapResponse(List<Book> books)
+    {
+        return [.. books.Select(b => new BookResponse
+        {
+            Id = b.Id,
+            Isbn = b.Isbn,
+            Title = b.Title,
+            SortTitle = RemoveLeadingArticle(b.Title),
+            Subtitle = b.Subtitle,
+            Authors = GetAuthorNames(b.Authors),
+            SortAuthor = b.Authors.Count > 0
+                ? b.Authors[0].Name.Split(' ').Last()
+                : "",
+            Translator = b.Translator,
+            SortTranslator = b.Translator?.Split(' ').Last(),
+            Language = b.Language,
+            OriginalLanguage = b.OriginalLanguage,
+            Collection = b.Collection?.Name,
+            PublicationYear = b.PublicationYear,
+            Read = b.Read,
+            Notes = b.Notes,
+            Tags = GetBookTags(b.Tags),
+            Owner = b.User != null
+                ? b.User.Name
+                : ""
+        })];
     }
 }
