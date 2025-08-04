@@ -16,15 +16,18 @@ public static class UsersSeeder
                 await roleManager.CreateAsync(new IdentityRole(role));
             }
         }
-    
+
         var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
         var adminEmail = "admin@admin.com";
         var adminPassword = "Admin@123";
+        var userEmail = "user@user.com";
+        var userPassword = "User@123";
 
-        var userExist = await userManager.FindByEmailAsync(adminEmail);
+        var adminExists = await userManager.FindByEmailAsync(adminEmail);
+        var userExists = await userManager.FindByEmailAsync(userEmail);
 
-        if (userExist == null)
+        if (adminExists == null)
         {
             var adminUser = new IdentityUser
             {
@@ -41,6 +44,27 @@ public static class UsersSeeder
             else
             {
                 throw new Exception("Failed to create the admin user: " + string.Join(", ", adminCreation.Errors));
+            }
+        }
+        
+        if (userExists == null)
+        {
+            var user = new IdentityUser
+            {
+                UserName = userEmail,
+                Email = userEmail,
+                EmailConfirmed = true
+            };
+
+            var userCreation = await userManager.CreateAsync(user, userPassword);
+
+            if (userCreation.Succeeded)
+            {
+                await userManager.AddToRoleAsync(user, "User");
+            }
+            else
+            {
+                throw new Exception("Failed to create the admin user: " + string.Join(", ", userCreation.Errors));
             }
         }
     }

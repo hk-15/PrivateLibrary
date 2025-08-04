@@ -8,7 +8,7 @@ using PersonalLibrary.Database;
 
 #nullable disable
 
-namespace PersonalLibraryBackend.Migrations
+namespace api.Migrations
 {
     [DbContext(typeof(PersonalLibraryDbContext))]
     partial class PersonalLibraryDbContextModelSnapshot : ModelSnapshot
@@ -115,6 +115,11 @@ namespace PersonalLibraryBackend.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("text");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("character varying(13)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -165,6 +170,10 @@ namespace PersonalLibraryBackend.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator().HasValue("IdentityUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -285,9 +294,6 @@ namespace PersonalLibraryBackend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("LibraryId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Notes")
                         .HasColumnType("text");
 
@@ -310,11 +316,15 @@ namespace PersonalLibraryBackend.Migrations
                     b.Property<string>("Translator")
                         .HasColumnType("text");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CollectionId");
 
-                    b.HasIndex("LibraryId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Books");
                 });
@@ -336,23 +346,6 @@ namespace PersonalLibraryBackend.Migrations
                     b.ToTable("Collections");
                 });
 
-            modelBuilder.Entity("PersonalLibrary.Models.Database.Library", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Libraries");
-                });
-
             modelBuilder.Entity("PersonalLibrary.Models.Database.Tag", b =>
                 {
                     b.Property<int>("Id")
@@ -368,6 +361,17 @@ namespace PersonalLibraryBackend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tags");
+                });
+
+            modelBuilder.Entity("PersonalLibrary.Models.Database.User", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasDiscriminator().HasValue("User");
                 });
 
             modelBuilder.Entity("AuthorBook", b =>
@@ -459,15 +463,15 @@ namespace PersonalLibraryBackend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PersonalLibrary.Models.Database.Library", "Library")
+                    b.HasOne("PersonalLibrary.Models.Database.User", "Owner")
                         .WithMany()
-                        .HasForeignKey("LibraryId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Collection");
 
-                    b.Navigation("Library");
+                    b.Navigation("Owner");
                 });
 #pragma warning restore 612, 618
         }

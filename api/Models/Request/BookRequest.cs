@@ -17,5 +17,4 @@ public class BookRequest
     public bool Read { get; set; }
     public string? Notes { get; set; }
     public List<string> Tags { get; set; } = [];
-    public required int LibraryId { get; set; }
 }

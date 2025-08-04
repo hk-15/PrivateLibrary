@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PersonalLibrary.Models.Request;
 using PersonalLibrary.Models.Response;
@@ -10,16 +12,32 @@ namespace PersonalLibrary.Controllers;
 public class BooksController : ControllerBase
 {
     private readonly IBooksService _booksService;
-    public BooksController(IBooksService booksService)
+    private readonly UserManager<IdentityUser> _userManager;
+    public BooksController(IBooksService booksService, UserManager<IdentityUser> userManager)
     {
         _booksService = booksService;
+        _userManager = userManager;
     }
 
     [HttpGet]
+    [Route("/all")]
+    public async Task<ActionResult<List<BookResponse>>> GetAllBooks()
+    {
+        return await _booksService.GetAllBooksResponse();
+    }
+
+    [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetBooks([FromQuery] QueryParameters parameters)
     {
-        var allBooks = await _booksService.GetAllBooksResponse();
-        var query = allBooks.AsQueryable();
+        var currentUserId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(currentUserId))
+        {
+            return BadRequest("User must be logged in");
+        }
+
+        var books = await _booksService.GetBooksByUser(currentUserId);
+        var query = books.AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(parameters.SearchTerm))
         {
@@ -54,13 +72,19 @@ public class BooksController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddBook([FromBody] BookRequest newBook)
     {
+        var currentUserId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(currentUserId))
+        {
+            return BadRequest("User must be logged in");
+        }
+
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
         try
         {
-            await _booksService.Add(newBook);
+            await _booksService.Add(newBook, currentUserId);
         }
         catch (Exception ex)
         {

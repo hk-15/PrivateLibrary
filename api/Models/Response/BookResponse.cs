@@ -18,5 +18,5 @@ public class BookResponse
     public bool Read { get; set; }
     public string? Notes { get; set; }
     public List<string> Tags { get; set; } = [];
-    public string? Library { get; set; }
+    public string? Owner { get; set; }
 }

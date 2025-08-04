@@ -8,6 +8,7 @@ namespace PersonalLibrary.Repositories;
 public interface IBooksRepo
 {
     Task<List<Book>> GetAll();
+    Task<List<Book>> GetByUserId(string userId);
     Task<Book> Get(int id);
     Task Add(Book book);
     Task Update(Book book);
@@ -30,6 +31,21 @@ public class BooksRepo : IBooksRepo
             .Include(b => b.Tags)
             .Include(b => b.Collection)
             .ToListAsync();
+    }
+
+    public async Task<List<Book>> GetByUserId(string userId)
+    {
+        var books = await _context.Books
+            .Include(b => b.Authors)
+            .Include(b => b.Tags)
+            .Include(b => b.Collection)
+            .Where(b => b.UserId == userId)
+            .ToListAsync();
+        if (books.Count == 0)
+        {
+            throw new NotFoundException("No books found for the current user");
+        }
+        return books;
     }
 
     public async Task<Book> Get(int id)

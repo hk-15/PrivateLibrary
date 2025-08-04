@@ -48,6 +48,7 @@ export interface User {
 
 export interface NewUser {
     username: string,
+    name: string,
     email: string,
     password: string
 }
@@ -192,6 +193,8 @@ export async function logIn (user: User) {
             throw new Error(errorMessage);
         }
     };
+
+    return response.json();
 }
 
 export async function signUp (newUser: NewUser) {

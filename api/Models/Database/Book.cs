@@ -19,6 +19,6 @@ public class Book
     public bool Read { get; set; }
     public string? Notes { get; set; }
     public List<Tag> Tags { get; set; } = [];
-    public int LibraryId { get; set; }
-    public Library? Library { get; set; }
+    public required string UserId { get; set; }
+    public User? Owner { get; set; }
 }

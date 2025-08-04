@@ -1,12 +1,15 @@
-import { useState, type JSX } from "react";
+import { useContext, useState, type JSX } from "react";
 import { useForm } from "react-hook-form";
 import type { FormStatus } from "../AddBookForm/AddBookForm";
 import { logIn } from "../../api/ApiClient";
-import { Navigate } from "react-router-dom";
+import { LoginContext } from "../LoginManager/LoginManager";
+import { useNavigate } from "react-router-dom";
 
 export const LoginForm: React.FC = (): JSX.Element => {
     const [status, setStatus] = useState<FormStatus>("READY");
     const [error, setError] = useState<string>("");
+    const loginContext = useContext(LoginContext);
+    const navigate = useNavigate();
 
     const {
         register,
@@ -25,20 +28,16 @@ export const LoginForm: React.FC = (): JSX.Element => {
     }) {
         setStatus("SUBMITTING");
         logIn(data)
-            .then(() => {
-                setStatus("FINISHED");
+            .then((response) => {
+                loginContext.logIn(response.isAdmin)
+                setStatus("FINISHED")
+                navigate("/");
             })
             .catch((err) => {
                 setStatus("ERROR")
                 setError("Login failed. " + err.message);
             })
     };
-
-    if (status === "FINISHED") {
-        return (
-            <Navigate to="/"></Navigate>
-        )
-    }
 
     return (
         <div>

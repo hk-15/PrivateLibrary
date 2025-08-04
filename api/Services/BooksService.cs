@@ -8,7 +8,8 @@ namespace PersonalLibrary.Services;
 public interface IBooksService
 {
     Task<List<BookResponse>> GetAllBooksResponse();
-    Task Add(BookRequest newBook);
+    Task<List<BookResponse>> GetBooksByUser(string userId);
+    Task Add(BookRequest newBook, string userId);
     Task UpdateReadStatus(int id);
     Task Update(int id, BookRequest book);
     Task Delete(int id);
@@ -49,11 +50,36 @@ public class BooksService : IBooksService
             Read = b.Read,
             Notes = b.Notes,
             Tags = GetBookTags(b.Tags),
-            Library = b.Library?.Name
         })];
     }
 
-    public async Task Add(BookRequest newBook)
+    public async Task<List<BookResponse>> GetBooksByUser(string userId)
+    {
+        var books = await _booksRepo.GetByUserId(userId);
+        return [.. books.Select(b => new BookResponse
+        {
+            Id = b.Id,
+            Isbn = b.Isbn,
+            Title = b.Title,
+            SortTitle = RemoveLeadingArticle(b.Title),
+            Subtitle = b.Subtitle,
+            Authors = GetAuthorNames(b.Authors),
+            SortAuthor = b.Authors.Count > 0 
+                ? b.Authors[0].Name.Split(' ').Last() 
+                : "",
+            Translator = b.Translator,
+            SortTranslator = b.Translator?.Split(' ').Last(),
+            Language = b.Language,
+            OriginalLanguage = b.OriginalLanguage,
+            Collection = b.Collection?.Name,
+            PublicationYear = b.PublicationYear,
+            Read = b.Read,
+            Notes = b.Notes,
+            Tags = GetBookTags(b.Tags),
+        })];
+    }
+
+    public async Task Add(BookRequest newBook, string userId)
     {
         CleanData(newBook);
         var authors = await _authorsService.GetListFromRequest(newBook.Authors);
@@ -72,7 +98,7 @@ public class BooksService : IBooksService
             Read = newBook.Read,
             Notes = newBook.Notes,
             Tags = tags,
-            LibraryId = newBook.LibraryId
+            UserId = userId
         };
         await _booksRepo.Add(book);
     }
@@ -152,7 +178,6 @@ public class BooksService : IBooksService
         book.PublicationYear = request.PublicationYear;
         book.Notes = request.Notes;
         book.CollectionId = request.CollectionId;
-        book.LibraryId = request.LibraryId;
     }
 
     private static string CapitaliseString(string input)

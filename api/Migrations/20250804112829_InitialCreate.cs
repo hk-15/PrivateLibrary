@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace PersonalLibraryBackend.Migrations
+namespace api.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -31,6 +31,8 @@ namespace PersonalLibraryBackend.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
+                    Discriminator = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -75,19 +77,6 @@ namespace PersonalLibraryBackend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Collections", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Libraries",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Libraries", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -225,21 +214,21 @@ namespace PersonalLibraryBackend.Migrations
                     PublicationYear = table.Column<int>(type: "integer", nullable: false),
                     Read = table.Column<bool>(type: "boolean", nullable: false),
                     Notes = table.Column<string>(type: "text", nullable: true),
-                    LibraryId = table.Column<int>(type: "integer", nullable: false)
+                    UserId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Books", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Books_Collections_CollectionId",
-                        column: x => x.CollectionId,
-                        principalTable: "Collections",
+                        name: "FK_Books_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Books_Libraries_LibraryId",
-                        column: x => x.LibraryId,
-                        principalTable: "Libraries",
+                        name: "FK_Books_Collections_CollectionId",
+                        column: x => x.CollectionId,
+                        principalTable: "Collections",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -340,9 +329,9 @@ namespace PersonalLibraryBackend.Migrations
                 column: "CollectionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_LibraryId",
+                name: "IX_Books_UserId",
                 table: "Books",
-                column: "LibraryId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BookTag_TagsId",
@@ -378,9 +367,6 @@ namespace PersonalLibraryBackend.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "Authors");
 
             migrationBuilder.DropTable(
@@ -390,10 +376,10 @@ namespace PersonalLibraryBackend.Migrations
                 name: "Tags");
 
             migrationBuilder.DropTable(
-                name: "Collections");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Libraries");
+                name: "Collections");
         }
     }
 }

@@ -27,11 +27,9 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IAuthorsRepo, AuthorsRepo>();
 builder.Services.AddScoped<IBooksRepo, BooksRepo>();
 builder.Services.AddScoped<ICollectionsRepo, CollectionsRepo>();
-builder.Services.AddScoped<ILibrariesRepo, LibrariesRepo>();
 builder.Services.AddScoped<ITagsRepo, TagsRepo>();
 builder.Services.AddScoped<IAuthorsService, AuthorsService>();
 builder.Services.AddScoped<IBooksService, BooksService>();
-builder.Services.AddScoped<ILibrariesService, LibrariesService>();
 builder.Services.AddScoped<ICollectionsService, CollectionsService>();
 builder.Services.AddScoped<ITagsService, TagsService>();
 
@@ -62,8 +60,8 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider;
-    await DatabaseSeeder.SeedDatabase(context);
     await UsersSeeder.SeedUsers(context);
+    await DatabaseSeeder.SeedDatabase(context);
 }
 ;
 
