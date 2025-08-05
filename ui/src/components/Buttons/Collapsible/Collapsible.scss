@@ -1,0 +1,14 @@
+.collapsible-header {
+    
+    button {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 80vw;
+    }
+}
+
+.collapsible-body {
+    max-height: 60vh;
+    overflow-y: scroll;
+}

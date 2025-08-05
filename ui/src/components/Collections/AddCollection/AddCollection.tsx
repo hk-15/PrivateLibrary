@@ -1,12 +1,16 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { addCollection, getAllCollections } from "../../api/ApiClient";
+import { addCollection } from "../../../api/ApiClient";
 
 type FormStatus = "READY" | "SUBMITTING" | "ERROR" | "DUPLICATE" | "FINISHED";
 
-export default function AddCollection() {
+interface IProps {
+    collections: string[],
+    getRefresh: (boolean: boolean) => void
+}
+
+export const AddCollection: React.FC<IProps> = ({ collections, getRefresh }) => {
     const [status, setStatus] = useState<FormStatus>("READY");
-    const [collections, setCollections] = useState<string[]>([]);
     const [showForm, setShowForm] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
     const [fadeOut, setFadeOut] = useState(false);
@@ -28,13 +32,6 @@ export default function AddCollection() {
         }
     };
 
-    useEffect(() => {
-            getAllCollections()
-                .then((response) => {
-                    setCollections(response.map(collection => collection.name))})
-                .catch((err) => console.error(err));
-        }, []);
-    
     function submitForm(data: {
         collection: string
     }) {
@@ -57,6 +54,7 @@ export default function AddCollection() {
                 }, 4000);     
             })
             .catch(() => setStatus("ERROR"));
+        getRefresh(true);
     }
 
     return (

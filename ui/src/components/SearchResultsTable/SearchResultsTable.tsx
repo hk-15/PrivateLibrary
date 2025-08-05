@@ -29,7 +29,7 @@ export default function SearchResultsTable(props:
             <tbody>
                 {books.length === 0 ? <tr><td>No books to see here...</td></tr> :
                     books.map(b =>
-                        <tr key={b.id} className={`${b.read ? 'marked-read' : ''}`}>
+                        <tr key={b.id}>
                             <td>{b.isbn}</td>
                             <td>{b.title}</td>
                             <td>{b.authors.length > 1 ? `${b.authors.join(', ')}` : b.authors}</td>

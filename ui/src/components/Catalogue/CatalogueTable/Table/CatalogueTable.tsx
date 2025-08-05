@@ -21,6 +21,18 @@ export const emptyBook: Book = {
     owner: ''
 };
 
+export function prevPage(page: string) {
+    let pageNum = +page;
+    pageNum--;
+    return pageNum.toString();
+}
+
+export function nextPage(page: string) {
+    let pageNum = +page;
+    pageNum++;
+    return pageNum.toString();
+}
+
 export default function CatalogueTable(props:
     {
         pageSize: string,
@@ -39,27 +51,18 @@ export default function CatalogueTable(props:
     useEffect(() => {
         getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
             .then(response => setBooks(response))
-            .catch((err) => console.error(err));
+            .catch(err => console.error(err));
     }, [props, pageNum]);
 
     useEffect(() => {
         getAllCollections()
             .then((response) => {
-                setCollections(response.sort((a, b) => a.name.localeCompare(b.name)))})
+                setCollections(response.sort((a, b) => a.name.localeCompare(b.name)))
+            })
             .catch((err) => console.error(err));
     }, [books]);
 
-    function prevPage(page: string) {
-        let pageNum = +page;
-        pageNum--;
-        return pageNum.toString();
-    }
 
-    function nextPage(page: string) {
-        let pageNum = +page;
-        pageNum++;
-        return pageNum.toString();
-    }
 
     function checkMaxPage() {
         useEffect(() => {
@@ -68,9 +71,9 @@ export default function CatalogueTable(props:
         }, [props, pageNum]);
         return nextPageBooks.length === 0 ? true : false;
     }
-    
+
     useEffect(() => {
-        if(changeReadStatusId) {
+        if (changeReadStatusId) {
             const doUpdate = async () => {
                 try {
                     await updateReadStatus(changeReadStatusId);
@@ -80,13 +83,13 @@ export default function CatalogueTable(props:
                     console.error("Failed to update or fetch books: ", err);
                 }
             };
-        doUpdate();
-        setChangeReadStatusId(0);
+            doUpdate();
+            setChangeReadStatusId(0);
         }
     }, [changeReadStatusId]);
-    
+
     useEffect(() => {
-        if(editedBook !== emptyBook) {
+        if (editedBook !== emptyBook) {
             const doUpdate = async () => {
                 try {
                     const bookUpdate: BookRequest = {
@@ -114,7 +117,7 @@ export default function CatalogueTable(props:
             setEditedBook(emptyBook);
         }
     }, [editedBook])
-    
+
     useEffect(() => {
         if (deleteId) {
             const doUpdate = async () => {
@@ -145,21 +148,21 @@ export default function CatalogueTable(props:
                 {showEdit ? "Library view" : "Edit view"}
             </button>
 
-            {!showEdit && <LibraryView books={books} getSelectedId={setChangeReadStatusId}/>}
+            {!showEdit && <LibraryView books={books} getSelectedId={setChangeReadStatusId} />}
 
-            {showEdit && <EditView books={books} collections={collections} getEditedBook={setEditedBook} getDeleteId={setDeleteId}/>}
+            {showEdit && <EditView books={books} collections={collections} getEditedBook={setEditedBook} getDeleteId={setDeleteId} />}
 
             <button
                 onClick={() => setPageNum(prevPage(pageNum))}
                 disabled={pageNum === "1"}
-                >
+            >
                 &lt;
             </button>
             {pageNum}
             <button
                 onClick={() => setPageNum(nextPage(pageNum))}
                 disabled={checkMaxPage()}
-                > &gt; </button>
+            > &gt; </button>
         </div>
     )
 }
