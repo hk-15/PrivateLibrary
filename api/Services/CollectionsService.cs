@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using PersonalLibrary.Exceptions;
 using PersonalLibrary.Models.Database;
 using PersonalLibrary.Repositories;
@@ -47,7 +46,7 @@ public class CollectionsService : ICollectionsService
         var books = await _booksService.GetByCollection(collection);
         if (books.Count != 0)
         {
-            throw new Exception("Cannot delete collection that contains books");
+            throw new Exception("Cannot delete a collection that contains books");
         }
         _collectionsRepo.Delete(collection);
     }

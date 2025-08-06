@@ -52,7 +52,7 @@ public class BooksController : ControllerBase
         var currentUserId = _userManager.GetUserId(User);
         if (string.IsNullOrEmpty(currentUserId))
         {
-            return BadRequest("User must be logged in");
+            return BadRequest( new { message = "User must be logged in" });
         }
 
         var books = await _booksService.GetByUser(currentUserId);
@@ -95,7 +95,7 @@ public class BooksController : ControllerBase
         var currentUserId = _userManager.GetUserId(User);
         if (string.IsNullOrEmpty(currentUserId))
         {
-            return BadRequest("User must be logged in");
+            return BadRequest(new { message = "User must be logged in" });
         }
 
         if (!ModelState.IsValid)
@@ -108,7 +108,7 @@ public class BooksController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { message = ex.Message });
         }
         return Ok();
     }
@@ -128,7 +128,7 @@ public class BooksController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { message = ex.Message });
         }
         return Ok();
     }
@@ -144,7 +144,7 @@ public class BooksController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { message = ex.Message });
         }
         return Ok();
     }
@@ -160,7 +160,7 @@ public class BooksController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { message = ex.Message });
         }
         return Ok();
     }

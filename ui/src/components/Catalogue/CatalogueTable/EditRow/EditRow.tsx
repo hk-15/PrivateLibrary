@@ -1,6 +1,5 @@
 import { useState } from "react";
 import type { Book, Collection } from "../../../../api/ApiClient";
-import { emptyBook } from "../Table/CatalogueTable";
 
 type Props = {
     book: Book,
@@ -8,6 +7,23 @@ type Props = {
     collections: Collection[],
     getEditedBook: (book: Book) => void,
     getSaveStatus: (status: boolean) => void
+};
+
+const emptyBook: Book = {
+    id: 0,
+    isbn: '',
+    title: '',
+    subtitle: '',
+    authors: [''],
+    translator: '',
+    language: '',
+    originalLanguage: '',
+    collection: '',
+    publicationYear: 0,
+    notes: '',
+    tags: [''],
+    read: false,
+    owner: ''
 };
 
 type CommaSeparatedField = 'tags' | 'authors';

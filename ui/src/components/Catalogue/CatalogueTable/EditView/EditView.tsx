@@ -1,13 +1,29 @@
 import { useEffect, useState } from "react";
 import type { Book, Collection } from "../../../../api/ApiClient"
 import { EditRow } from "../EditRow/EditRow";
-import { emptyBook } from "../Table/CatalogueTable";
 
 type Props = {
     books: Book[],
     collections: Collection[],
     getEditedBook: (book: Book) => void,
     getDeleteId: (id: number) => void
+};
+
+const emptyBook: Book = {
+    id: 0,
+    isbn: '',
+    title: '',
+    subtitle: '',
+    authors: [''],
+    translator: '',
+    language: '',
+    originalLanguage: '',
+    collection: '',
+    publicationYear: 0,
+    notes: '',
+    tags: [''],
+    read: false,
+    owner: ''
 };
 
 export const EditView: React.FC<Props> = ({ books, collections, getEditedBook, getDeleteId }) => {

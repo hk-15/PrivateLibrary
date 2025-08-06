@@ -86,9 +86,9 @@ export async function addBook(book: BookRequest) {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(book), 
+        body: JSON.stringify(book),
     });
-    
+
     if (!response.ok) {
         throw new Error(await response.json());
     }
@@ -155,15 +155,36 @@ export async function addCollection(name: string) {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(name), 
+        body: JSON.stringify(name),
     });
-    
+
     if (!response.ok) {
         throw new Error(await response.json());
     }
 }
 
-export async function logIn (user: User) {
+export async function deleteCollection(name: string) {
+    const response = await fetch(`http://localhost:5108/collections`, {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(name),
+    });
+    
+    if (!response.ok) {
+        let errorMessage = "Something went wrong. Please try again.";
+        try {
+            const error = await response.json();
+            errorMessage = error.message || errorMessage;
+        } finally {
+            throw new Error(errorMessage);
+        }
+    };
+}
+
+export async function logIn(user: User) {
     const response = await fetch('http://localhost:5108/accounts/login', {
         method: "POST",
         credentials: "include",
@@ -174,7 +195,7 @@ export async function logIn (user: User) {
     });
 
     if (!response.ok) {
-        let errorMessage = "";
+        let errorMessage = "Something went wrong. Please try again.";
         try {
             const error = await response.json();
             errorMessage = error.message || errorMessage;
@@ -186,7 +207,7 @@ export async function logIn (user: User) {
     return response.json();
 }
 
-export async function signUp (newUser: NewUser) {
+export async function signUp(newUser: NewUser) {
     const response = await fetch('http://localhost:5108/accounts', {
         method: "POST",
         credentials: "include",
@@ -197,7 +218,7 @@ export async function signUp (newUser: NewUser) {
     });
 
     if (!response.ok) {
-        let errorMessage = "";
+        let errorMessage = "Something went wrong. Please try again.";
         try {
             const error = await response.json();
             errorMessage = error.message || errorMessage;

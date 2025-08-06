@@ -4,7 +4,7 @@ import "./CatalogueTable.scss";
 import { LibraryView } from "../LibraryView/LibraryView";
 import { EditView } from "../EditView/EditView";
 
-export const emptyBook: Book = {
+const emptyBook: Book = {
     id: 0,
     isbn: '',
     title: '',

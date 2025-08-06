@@ -4,6 +4,7 @@ import { LoginContext } from "../../components/LoginManager/LoginManager";
 import { Page } from "../Page/Page";
 import { CollectionsManagement } from "../../components/Collections/CollectionsManagement/CollectionsManagement";
 import { getAllCollections } from "../../api/ApiClient";
+import { RemoveCollection } from "../../components/Collections/RemoveCollection/RemoveCollection";
 
 export default function Collections() {
     const loginContext = useContext(LoginContext);
@@ -31,6 +32,7 @@ export default function Collections() {
         <Page>
             <h1>Collections</h1>
             <AddCollection collections={collections} getRefresh={setRefresh} />
+            <RemoveCollection collections={collections} getRefresh={setRefresh} />
             <CollectionsManagement collections={collections} />
         </Page>
     )

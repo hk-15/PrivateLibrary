@@ -19,18 +19,12 @@ export const AddCollection: React.FC<IProps> = ({ collections, getRefresh }) => 
         register,
         handleSubmit,
         reset,
-        formState: {errors},
+        formState: { errors },
     } = useForm({
         defaultValues: {
             collection: ""
         },
     });
-
-    const formErrors = {
-        collection: {
-            required: "This field is required"
-        }
-    };
 
     function submitForm(data: {
         collection: string
@@ -51,10 +45,10 @@ export const AddCollection: React.FC<IProps> = ({ collections, getRefresh }) => 
                 }, 3000);
                 setTimeout(() => {
                     setShowMessage(false);
-                }, 4000);     
+                }, 4000)
+                getRefresh(true);
             })
             .catch(() => setStatus("ERROR"));
-        getRefresh(true);
     }
 
     return (
@@ -66,31 +60,31 @@ export const AddCollection: React.FC<IProps> = ({ collections, getRefresh }) => 
                 </button>
             )}
             {showForm && (
-            <form onSubmit={handleSubmit(submitForm)}>
-                <label htmlFor="collection">
-                    Collection name <span className="required">*</span>
-                <input
-                    id="collection"
-                    type="text"
-                    {...register("collection", formErrors.collection)}
-                />
-                {errors.collection && (<span className="error"> {errors.collection.message}</span>)}
-                </label>
-                <button
-                    disabled={status === "SUBMITTING"}
-                    type="submit">
-                    Add Collection
-                </button>
-                {status === "ERROR" && <p>Something went wrong. Please try again.</p>}
-                {status === "DUPLICATE" && <p>That collection already exists.</p>}
-                {status === "FINISHED" && showMessage && <p className={`message ${fadeOut ? 'fade-out' : ''}`}>Collection has been added.</p>}
-                <button
-                    type="button"
-                    onClick={() => setShowForm(false)}>
-                    Cancel
-                </button>
-            </form>
-        )}
+                <form onSubmit={handleSubmit(submitForm)}>
+                    <label htmlFor="collection">
+                        Collection name <span className="required">*</span>
+                        <input
+                            id="collection"
+                            type="text"
+                            {...register("collection", { required: { value: true, message: "This field is required" } })}
+                        />
+                        {errors.collection && (<span className="error"> {errors.collection.message}</span>)}
+                    </label>
+                    <button
+                        disabled={status === "SUBMITTING"}
+                        type="submit">
+                        Add Collection
+                    </button>
+                    {status === "ERROR" && <p>Something went wrong. Please try again.</p>}
+                    {status === "DUPLICATE" && <p>That collection already exists.</p>}
+                    {status === "FINISHED" && showMessage && <p className={`message ${fadeOut ? 'fade-out' : ''}`}>Collection has been added.</p>}
+                    <button
+                        type="button"
+                        onClick={() => setShowForm(false)}>
+                        Cancel
+                    </button>
+                </form>
+            )}
         </div>
     )
 }

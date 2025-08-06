@@ -36,13 +36,13 @@ public class CollectionsController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { message = ex.Message });
         }
         return Ok();
     }
 
     [HttpDelete]
-    public async Task<IActionResult> DeleteCollection(string name)
+    public async Task<IActionResult> DeleteCollection([FromBody] string name)
     {
         try
         {
@@ -50,7 +50,7 @@ public class CollectionsController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new { message = ex.Message });
         }
         return Ok();
     }
