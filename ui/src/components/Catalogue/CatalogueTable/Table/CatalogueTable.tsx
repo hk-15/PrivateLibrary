@@ -21,18 +21,6 @@ const emptyBook: Book = {
     owner: ''
 };
 
-export function prevPage(page: string) {
-    let pageNum = +page;
-    pageNum--;
-    return pageNum.toString();
-}
-
-export function nextPage(page: string) {
-    let pageNum = +page;
-    pageNum++;
-    return pageNum.toString();
-}
-
 export default function CatalogueTable(props:
     {
         pageSize: string,
@@ -62,7 +50,17 @@ export default function CatalogueTable(props:
             .catch((err) => console.error(err));
     }, [books]);
 
+    function prevPage(page: string) {
+        let pageNum = +page;
+        pageNum--;
+        return pageNum.toString();
+    }
 
+    function nextPage(page: string) {
+        let pageNum = +page;
+        pageNum++;
+        return pageNum.toString();
+    }
 
     function checkMaxPage() {
         useEffect(() => {

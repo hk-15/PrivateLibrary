@@ -22,4 +22,5 @@ public class Book
     public List<Tag> Tags { get; set; } = [];
     public required string UserId { get; set; }
     public IdentityUser? User { get; set; }
+    public bool TransferPending { get; set; } = false;
 }

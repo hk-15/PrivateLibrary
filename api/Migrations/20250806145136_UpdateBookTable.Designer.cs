@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PersonalLibrary.Database;
@@ -11,9 +12,11 @@ using PersonalLibrary.Database;
 namespace api.Migrations
 {
     [DbContext(typeof(PersonalLibraryDbContext))]
-    partial class PersonalLibraryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250806145136_UpdateBookTable")]
+    partial class UpdateBookTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

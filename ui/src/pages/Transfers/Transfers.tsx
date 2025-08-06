@@ -18,6 +18,9 @@ export default function Transfers() {
         <Page>
             <h1>Transfers</h1>
             
+            <h2>Incoming transfer requests</h2>
+
+            <h2>Sent transfer requests</h2>
         </Page>
     )
 }
