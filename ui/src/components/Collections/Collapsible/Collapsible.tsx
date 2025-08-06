@@ -74,6 +74,7 @@ export const Collapsible: React.FC<IProps> = ({ open, header, books, collections
                                 <label htmlFor="collectionId">
                                     New collection
                                     <select
+                                        id="collectionId"
                                         onChange={(e) => setCollectionId(e.currentTarget.value)}
                                     >
                                         <option value="0">Select</option>
@@ -116,7 +117,7 @@ export const Collapsible: React.FC<IProps> = ({ open, header, books, collections
                                             <td>{b.authors.length > 1 ? `${b.authors.join(', ')}` : b.authors}</td>
                                             <td>{b.translator}</td>
                                             <td>{b.publicationYear}</td>
-                                            {selectBooks && <td><input type="checkbox" onChange={() => setSelectedBooks(prev => ([...prev, b.id]))} /></td>}
+                                            {selectBooks && <td><input type="checkbox" id={b.id.toString()} name={b.id.toString()} onChange={() => setSelectedBooks(prev => ([...prev, b.id]))} /></td>}
                                         </tr>
                                     )}
                             </tbody>

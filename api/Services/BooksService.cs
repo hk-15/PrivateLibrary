@@ -14,6 +14,7 @@ public interface IBooksService
     Task UpdateReadStatus(int id);
     Task Update(int id, BookRequest book);
     Task UpdateCollection(RecategoriseRequest request);
+    Task Transfer(List<int> ids, string userId);
     Task Delete(int id);
 }
 
@@ -114,10 +115,20 @@ public class BooksService : IBooksService
     public async Task UpdateCollection(RecategoriseRequest request)
     {
         var existingBooks = await _booksRepo.GetMany(request.Ids);
-
         foreach (var book in existingBooks)
         {
             book.CollectionId = request.CollectionId;
+        }
+
+        await _booksRepo.UpdateMany(existingBooks);
+    }
+
+    public async Task Transfer(List<int> ids, string userId)
+    {
+        var existingBooks = await _booksRepo.GetMany(ids);
+        foreach (var book in existingBooks)
+        {
+            book.UserId = userId;
         }
 
         await _booksRepo.UpdateMany(existingBooks);
