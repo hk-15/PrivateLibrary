@@ -30,10 +30,9 @@ public static class UsersSeeder
 
         if (adminExists == null)
         {
-            var adminUser = new User
+            var adminUser = new IdentityUser
             {
-                Name = "Admin",
-                UserName = adminEmail,
+                UserName = "Admin",
                 Email = adminEmail,
                 EmailConfirmed = true
             };
@@ -51,10 +50,9 @@ public static class UsersSeeder
         
         if (userExists == null)
         {
-            var user = new User
+            var user = new IdentityUser
             {
-                Name = "User",
-                UserName = userEmail,
+                UserName = "User",
                 Email = userEmail,
                 EmailConfirmed = true
             };

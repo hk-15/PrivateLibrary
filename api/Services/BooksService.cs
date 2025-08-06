@@ -236,7 +236,7 @@ public class BooksService : IBooksService
             Notes = b.Notes,
             Tags = GetBookTags(b.Tags),
             Owner = b.User != null
-                ? b.User.Name
+                ? b.User.UserName
                 : ""
         })];
     }

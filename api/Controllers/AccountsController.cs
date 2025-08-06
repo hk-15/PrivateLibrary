@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
-using PersonalLibrary.Models.Database;
 using PersonalLibrary.Models.Request;
 
 namespace PersonalLibrary.Controllers;
@@ -66,7 +65,7 @@ public class AccountsController : ControllerBase
 
         try
         {
-            var user = new User { UserName = newUser.UserName, Name = newUser.Name, Email = newUser.Email };
+            var user = new IdentityUser { UserName = newUser.UserName, Email = newUser.Email };
 
             if (await _userManager.FindByNameAsync(newUser.UserName) != null)
             {

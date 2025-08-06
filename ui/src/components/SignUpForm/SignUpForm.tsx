@@ -20,7 +20,6 @@ export default function SignUpForm () {
         mode: "onChange",
         defaultValues: {
             username: "",
-            name: "",
             email: "",
             password: ""
         }
@@ -59,7 +58,6 @@ export default function SignUpForm () {
 
     function submitForm(data: {
         username: string,
-        name: string,
         email: string,
         password: string
     }) {
@@ -88,15 +86,6 @@ export default function SignUpForm () {
                 {...register("username", {required: true, pattern: {value: /^\w{4,12}$/, message: "Username must be between 4 and 12 characters long and contain only letters, numbers and underscores."}})}
                 />
                 {errors.username && <p className="erorr">{errors.username.message}</p>}
-            </label>
-
-            <label htmlFor="name-signup">
-                Name<span className="required">*</span>
-                <input
-                id="name-signup"
-                type="text"
-                {...register("name", {required: true})}
-                />
             </label>
 
             <label htmlFor="email-signup">

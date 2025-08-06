@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace PersonalLibrary.Models.Database;
 
@@ -20,5 +21,5 @@ public class Book
     public string? Notes { get; set; }
     public List<Tag> Tags { get; set; } = [];
     public required string UserId { get; set; }
-    public User? User { get; set; }
+    public IdentityUser? User { get; set; }
 }
