@@ -9,6 +9,7 @@ public interface IBooksRepo
 {
     Task<List<Book>> GetAll();
     Task<List<Book>> GetByUserId(string userId);
+    Task<List<Book>> GetByCollectionId(int collectionId);
     Task<Book> Get(int id);
     Task Add(Book book);
     Task Update(Book book);
@@ -48,6 +49,13 @@ public class BooksRepo : IBooksRepo
             throw new NotFoundException("No books found for the current user");
         }
         return books;
+    }
+
+    public async Task<List<Book>> GetByCollectionId(int collectionId)
+    {
+        return await _context.Books
+            .Where(b => b.CollectionId == collectionId)
+            .ToListAsync();
     }
 
     public async Task<Book> Get(int id)

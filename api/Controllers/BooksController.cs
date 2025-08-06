@@ -55,7 +55,7 @@ public class BooksController : ControllerBase
             return BadRequest("User must be logged in");
         }
 
-        var books = await _booksService.GetBooksByUser(currentUserId);
+        var books = await _booksService.GetByUser(currentUserId);
         var query = books.AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(parameters.SearchTerm))

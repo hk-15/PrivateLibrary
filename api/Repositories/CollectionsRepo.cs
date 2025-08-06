@@ -9,6 +9,7 @@ public interface ICollectionsRepo
     Task<List<Collection>> GetAll();
     Task<Collection?> GetByName(string name);
     Task Add(Collection collection);
+    void Delete(Collection collection);
 }
 
 public class CollectionsRepo : ICollectionsRepo
@@ -34,5 +35,11 @@ public class CollectionsRepo : ICollectionsRepo
     {
         await _context.Collections.AddAsync(collection);
         await _context.SaveChangesAsync();
+    }
+
+    public void Delete(Collection collection)
+    {
+        _context.Remove(collection);
+        _context.SaveChanges();
     }
 }
