@@ -13,6 +13,7 @@ public interface IBooksService
     Task Add(BookRequest newBook, string userId);
     Task UpdateReadStatus(int id);
     Task Update(int id, BookRequest book);
+    Task UpdateCollection(RecategoriseRequest request);
     Task Delete(int id);
 }
 
@@ -108,6 +109,18 @@ public class BooksService : IBooksService
             await _tagsService.DeleteUnnecessaryTags(oldTags);
         }
         await _booksRepo.Update(oldBook);
+    }
+
+    public async Task UpdateCollection(RecategoriseRequest request)
+    {
+        var existingBooks = await _booksRepo.GetMany(request.Ids);
+
+        foreach (var book in existingBooks)
+        {
+            book.CollectionId = request.CollectionId;
+        }
+
+        await _booksRepo.UpdateMany(existingBooks);
     }
 
     public async Task Delete(int id)

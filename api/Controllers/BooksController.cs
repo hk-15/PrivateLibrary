@@ -134,6 +134,26 @@ public class BooksController : ControllerBase
     }
 
     [HttpPatch]
+    [Route("recategorise")]
+    [Authorize]
+    public async Task<IActionResult> RecategoriseBooks([FromBody] RecategoriseRequest request)
+    {
+        if (request == null || request.Ids.Count == 0)
+        {
+            return BadRequest(new { message = "Request cannot be empty" });
+        }
+        try
+        {
+            await _booksService.UpdateCollection(request);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = ex.Message });
+        }
+        return Ok();
+    }
+
+    [HttpPatch]
     [Route("{id}")]
     [Authorize]
     public async Task<IActionResult> UpdateReadStatus(int id)

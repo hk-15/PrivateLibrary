@@ -13,7 +13,7 @@ export const CollectionsManagement: React.FC<Props> = ({ collections }) => {
         getBooks("0", "", "", "")
             .then(response => setBooks(response))
             .catch(err => console.error(err))
-    }, [collections]); //ADD TO DEPENDENCY ARRAY
+    }, [collections]);
     
     return (
         <div>

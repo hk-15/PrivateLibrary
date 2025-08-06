@@ -11,8 +11,10 @@ public interface IBooksRepo
     Task<List<Book>> GetByUserId(string userId);
     Task<List<Book>> GetByCollectionId(int collectionId);
     Task<Book> Get(int id);
+    Task<List<Book>> GetMany(List<int> ids);
     Task Add(Book book);
     Task Update(Book book);
+    Task UpdateMany(List<Book> books);
     void Delete(Book book);
 }
 
@@ -67,6 +69,17 @@ public class BooksRepo : IBooksRepo
         return book;
     }
 
+    public async Task<List<Book>> GetMany(List<int> ids)
+    {
+        var books = await _context.Books
+            .Include(b => b.Authors)
+            .Include(b => b.Tags)
+            .Where(b => ids.Contains(b.Id))
+            .ToListAsync();
+        if (books.Count == 0) throw new NotFoundException("No books found");
+        return books;
+    }
+
     public async Task Add(Book book)
     {
         await _context.Books.AddAsync(book);
@@ -76,6 +89,12 @@ public class BooksRepo : IBooksRepo
     public async Task Update(Book book)
     {
         _context.Update(book);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateMany(List<Book> books)
+    {
+        _context.UpdateRange(books);
         await _context.SaveChangesAsync();
     }
 
