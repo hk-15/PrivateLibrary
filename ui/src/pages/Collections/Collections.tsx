@@ -3,7 +3,7 @@ import { AddCollection } from "../../components/Collections/AddCollection/AddCol
 import { LoginContext } from "../../components/LoginManager/LoginManager";
 import { Page } from "../Page/Page";
 import { CollectionsManagement } from "../../components/Collections/CollectionsManagement/CollectionsManagement";
-import { getAllCollections } from "../../api/ApiClient";
+import { getAllCollections, type Collection } from "../../api/ApiClient";
 import { RemoveCollection } from "../../components/Collections/RemoveCollection/RemoveCollection";
 
 export default function Collections() {
@@ -15,13 +15,15 @@ export default function Collections() {
         )
     };
 
-    const [collections, setCollections] = useState<string[]>([]);
+    const [collections, setCollections] = useState<Collection[]>([]);
+    const [collectionNames, setCollectionNames] = useState<string[]>([]);
     const [refresh, setRefresh] = useState(false);
 
     useEffect(() => {
         getAllCollections()
             .then((response) => {
-                setCollections(response.map(collection => collection.name))
+                setCollections(response)
+                setCollectionNames(response.map(response => response.name));
             })
             .catch((err) => console.error(err));
         setRefresh(false);
@@ -31,8 +33,8 @@ export default function Collections() {
     return (
         <Page>
             <h1>Collections</h1>
-            <AddCollection collections={collections} getRefresh={setRefresh} />
-            <RemoveCollection collections={collections} getRefresh={setRefresh} />
+            <AddCollection collections={collectionNames} getRefresh={setRefresh} />
+            <RemoveCollection collections={collectionNames} getRefresh={setRefresh} />
             <CollectionsManagement collections={collections} />
         </Page>
     )

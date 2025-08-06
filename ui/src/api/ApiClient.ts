@@ -30,6 +30,11 @@ export interface BookRequest {
     tags: string[]
 }
 
+export interface RecategoriseRequest {
+    ids: number[],
+    collectionId: number
+}
+
 export interface Collection {
     id: number,
     name: string
@@ -116,6 +121,21 @@ export async function updateBookDetails(id: number, book: BookRequest) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(book),
+    });
+
+    if (!response.ok) {
+        throw new Error(await response.json());
+    }
+}
+
+export async function recategoriseBooks(request: RecategoriseRequest) {
+    const response = await fetch(`http://localhost:5108/books/recategorise`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(request),
     });
 
     if (!response.ok) {
