@@ -12,9 +12,9 @@ public interface IBooksService
     Task<List<Book>> GetByCollection(Collection collection);
     Task Add(BookRequest newBook, string userId);
     Task UpdateReadStatus(int id);
+    Task UpdateTransferStatus(int id);
     Task Update(int id, BookRequest book);
     Task UpdateCollection(RecategoriseRequest request);
-    Task Transfer(List<int> ids, string userId);
     Task Delete(int id);
 }
 
@@ -74,14 +74,16 @@ public class BooksService : IBooksService
     public async Task UpdateReadStatus(int id)
     {
         var book = await _booksRepo.Get(id);
-        if (book.Read == true)
-        {
-            book.Read = false;
-        }
-        else
-        {
-            book.Read = true;
-        }
+        if (book.Read == true) book.Read = false;
+        else book.Read = true;
+        await _booksRepo.Update(book);
+    }
+
+    public async Task UpdateTransferStatus(int id)
+    {
+        var book = await _booksRepo.Get(id);
+        if (book.TransferPending == false) book.TransferPending = true;
+        else book.TransferPending = false;
         await _booksRepo.Update(book);
     }
 
@@ -118,17 +120,6 @@ public class BooksService : IBooksService
         foreach (var book in existingBooks)
         {
             book.CollectionId = request.CollectionId;
-        }
-
-        await _booksRepo.UpdateMany(existingBooks);
-    }
-
-    public async Task Transfer(List<int> ids, string userId)
-    {
-        var existingBooks = await _booksRepo.GetMany(ids);
-        foreach (var book in existingBooks)
-        {
-            book.UserId = userId;
         }
 
         await _booksRepo.UpdateMany(existingBooks);

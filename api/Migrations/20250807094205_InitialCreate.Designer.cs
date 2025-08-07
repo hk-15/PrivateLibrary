@@ -12,7 +12,7 @@ using PersonalLibrary.Database;
 namespace api.Migrations
 {
     [DbContext(typeof(PersonalLibraryDbContext))]
-    [Migration("20250804112829_InitialCreate")]
+    [Migration("20250807094205_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -118,11 +118,6 @@ namespace api.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("text");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("character varying(13)");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -173,10 +168,6 @@ namespace api.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator().HasValue("IdentityUser");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -316,6 +307,9 @@ namespace api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("TransferPending")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Translator")
                         .HasColumnType("text");
 
@@ -366,15 +360,38 @@ namespace api.Migrations
                     b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("PersonalLibrary.Models.Database.User", b =>
+            modelBuilder.Entity("PersonalLibrary.Models.Database.Transfer", b =>
                 {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
 
-                    b.Property<string>("Name")
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("NewUserId")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasDiscriminator().HasValue("User");
+                    b.Property<string>("RejectedMessage")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("NewUserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Transfers");
                 });
 
             modelBuilder.Entity("AuthorBook", b =>
@@ -466,7 +483,7 @@ namespace api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PersonalLibrary.Models.Database.User", "Owner")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -474,7 +491,34 @@ namespace api.Migrations
 
                     b.Navigation("Collection");
 
-                    b.Navigation("Owner");
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PersonalLibrary.Models.Database.Transfer", b =>
+                {
+                    b.HasOne("PersonalLibrary.Models.Database.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "NewUser")
+                        .WithMany()
+                        .HasForeignKey("NewUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("NewUser");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

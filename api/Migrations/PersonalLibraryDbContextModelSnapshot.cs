@@ -34,7 +34,7 @@ namespace api.Migrations
 
                     b.HasIndex("BooksId");
 
-                    b.ToTable("AuthorBook");
+                    b.ToTable("AuthorBook", (string)null);
                 });
 
             modelBuilder.Entity("BookTag", b =>
@@ -49,7 +49,7 @@ namespace api.Migrations
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("BookTag");
+                    b.ToTable("BookTag", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -262,7 +262,7 @@ namespace api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Authors");
+                    b.ToTable("Authors", (string)null);
                 });
 
             modelBuilder.Entity("PersonalLibrary.Models.Database.Book", b =>
@@ -320,7 +320,7 @@ namespace api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Books");
+                    b.ToTable("Books", (string)null);
                 });
 
             modelBuilder.Entity("PersonalLibrary.Models.Database.Collection", b =>
@@ -337,7 +337,7 @@ namespace api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Collections");
+                    b.ToTable("Collections", (string)null);
                 });
 
             modelBuilder.Entity("PersonalLibrary.Models.Database.Tag", b =>
@@ -354,7 +354,41 @@ namespace api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
+                });
+
+            modelBuilder.Entity("PersonalLibrary.Models.Database.Transfer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("NewUserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("RejectedMessage")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("NewUserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Transfers", (string)null);
                 });
 
             modelBuilder.Entity("AuthorBook", b =>
@@ -453,6 +487,33 @@ namespace api.Migrations
                         .IsRequired();
 
                     b.Navigation("Collection");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PersonalLibrary.Models.Database.Transfer", b =>
+                {
+                    b.HasOne("PersonalLibrary.Models.Database.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "NewUser")
+                        .WithMany()
+                        .HasForeignKey("NewUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("NewUser");
 
                     b.Navigation("User");
                 });

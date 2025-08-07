@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PersonalLibrary.Exceptions;
 using PersonalLibrary.Models.Request;
 using PersonalLibrary.Models.Response;
 using PersonalLibrary.Services;
@@ -146,27 +145,6 @@ public class BooksController : ControllerBase
         try
         {
             await _booksService.UpdateCollection(request);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = ex.Message });
-        }
-        return Ok();
-    }
-
-    [HttpPatch]
-    [Route("transfer")]
-    [Authorize]
-    public async Task<IActionResult> TransferBooks([FromBody] TransferRequest request)
-    {
-        if (request == null || request.Ids.Count == 0)
-        {
-            return BadRequest(new { message = "Request cannot be empty" });
-        }
-        try
-        {
-            var user = await _userManager.FindByNameAsync(request.Username) ?? throw new NotFoundException("User not found");
-            await _booksService.Transfer(request.Ids, user.Id);
         }
         catch (Exception ex)
         {

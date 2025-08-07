@@ -34,6 +34,7 @@ public class BooksRepo : IBooksRepo
             .Include(b => b.Tags)
             .Include(b => b.Collection)
             .Include(b => b.User)
+            .Where(b => b.TransferPending != true)
             .ToListAsync();
     }
 
@@ -44,7 +45,7 @@ public class BooksRepo : IBooksRepo
             .Include(b => b.Tags)
             .Include(b => b.Collection)
             .Include(b => b.User)
-            .Where(b => b.UserId == userId)
+            .Where(b => b.UserId == userId && b.TransferPending != true)
             .ToListAsync();
         if (books.Count == 0)
         {
@@ -62,11 +63,10 @@ public class BooksRepo : IBooksRepo
 
     public async Task<Book> Get(int id)
     {
-        var book = await _context.Books
+        return await _context.Books
             .Include(b => b.Authors)
             .Include(b => b.Tags)
-            .FirstOrDefaultAsync(b => b.Id == id) ?? throw new NotFoundException("Book not found.");
-        return book;
+            .FirstOrDefaultAsync(b => b.Id == id) ?? throw new NotFoundException("Book not found");
     }
 
     public async Task<List<Book>> GetMany(List<int> ids)

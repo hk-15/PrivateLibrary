@@ -31,8 +31,6 @@ namespace api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
-                    Discriminator = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -214,7 +212,8 @@ namespace api.Migrations
                     PublicationYear = table.Column<int>(type: "integer", nullable: false),
                     Read = table.Column<bool>(type: "boolean", nullable: false),
                     Notes = table.Column<string>(type: "text", nullable: true),
-                    UserId = table.Column<string>(type: "text", nullable: false)
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    TransferPending = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -281,6 +280,40 @@ namespace api.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Transfers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    BookId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    NewUserId = table.Column<string>(type: "text", nullable: false),
+                    RejectedMessage = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Transfers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Transfers_AspNetUsers_NewUserId",
+                        column: x => x.NewUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Transfers_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Transfers_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -337,6 +370,21 @@ namespace api.Migrations
                 name: "IX_BookTag_TagsId",
                 table: "BookTag",
                 column: "TagsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transfers_BookId",
+                table: "Transfers",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transfers_NewUserId",
+                table: "Transfers",
+                column: "NewUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transfers_UserId",
+                table: "Transfers",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -364,16 +412,19 @@ namespace api.Migrations
                 name: "BookTag");
 
             migrationBuilder.DropTable(
+                name: "Transfers");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Authors");
 
             migrationBuilder.DropTable(
-                name: "Books");
+                name: "Tags");
 
             migrationBuilder.DropTable(
-                name: "Tags");
+                name: "Books");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

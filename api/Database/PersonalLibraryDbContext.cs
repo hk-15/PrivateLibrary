@@ -10,6 +10,7 @@ public class PersonalLibraryDbContext : IdentityDbContext
     public DbSet<Author> Authors { get; set; }
     public DbSet<Collection> Collections { get; set; }
     public DbSet<Tag> Tags { get; set; }
+    public DbSet<Transfer> Transfers { get; set; }
     private readonly IConfiguration _configuration;
 
     public PersonalLibraryDbContext(IConfiguration configuration)
