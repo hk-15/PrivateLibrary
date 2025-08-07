@@ -34,7 +34,6 @@ public class BooksRepo : IBooksRepo
             .Include(b => b.Tags)
             .Include(b => b.Collection)
             .Include(b => b.User)
-            .Where(b => b.TransferPending != true)
             .ToListAsync();
     }
 
@@ -45,7 +44,7 @@ public class BooksRepo : IBooksRepo
             .Include(b => b.Tags)
             .Include(b => b.Collection)
             .Include(b => b.User)
-            .Where(b => b.UserId == userId && b.TransferPending != true)
+            .Where(b => b.UserId == userId)
             .ToListAsync();
         if (books.Count == 0)
         {

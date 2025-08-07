@@ -62,6 +62,9 @@ public class TransfersService : ITransfersService
         var transfer = await _transfersRepo.Get(id);
         var book = transfer.Book;
         book.UserId = transfer.NewUserId;
+        book.Read = false;
+        book.Notes = "";
+        book.Tags = [];
         book.TransferPending = false;
         await _booksRepo.Update(book);
         _transfersRepo.Delete(transfer);

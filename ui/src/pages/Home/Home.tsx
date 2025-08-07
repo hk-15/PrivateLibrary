@@ -22,6 +22,11 @@ export default function Home() {
     return (
         <Page>
             <h1>Home</h1>
+            <button
+            onClick={() => console.log(loginContext.username)}
+            >
+                Test
+            </button>
             <AddBookButton />
             <ManageCollectionsButton />
             <ViewCatalogueButton />

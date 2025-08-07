@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { LoginContext } from "../../components/LoginManager/LoginManager";
 import { Page } from "../Page/Page";
+import { PendingTransfers } from "../../components/Transfers/PendingTransfers/PendingTransfers";
 
 export default function Transfers() {
     const loginContext = useContext(LoginContext);
@@ -17,10 +18,7 @@ export default function Transfers() {
     return (
         <Page>
             <h1>Transfers</h1>
-            
-            <h2>Incoming transfer requests</h2>
-
-            <h2>Sent transfer requests</h2>
+            <PendingTransfers currentUser={loginContext.username} />
         </Page>
     )
 }

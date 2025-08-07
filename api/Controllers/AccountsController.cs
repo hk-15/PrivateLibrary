@@ -44,7 +44,7 @@ public class AccountsController : ControllerBase
         {
             isAdmin = true;
         }
-        return Ok(new { message = "Login successful", isAdmin });
+        return Ok(new { message = "Login successful", isAdmin, user.UserName });
     }
 
     [HttpPost("logout")]

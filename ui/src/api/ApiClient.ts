@@ -35,6 +35,16 @@ export interface RecategoriseRequest {
     collectionId: number
 }
 
+export interface Transfer {
+    id: number,
+    isbn: string,
+    bookTitle: string,
+    author: string[],
+    transferFrom: string,
+    transferTo: string,
+    rejectedMessage: string
+}
+
 export interface TransferRequest {
     ids: number[],
     username: string
@@ -73,7 +83,6 @@ export async function getBooks(pageNum: string, pageSize: string, sortBy: string
             "Content-Type": "application/json"
         }
     });
-
     return await response.json();
 }
 
@@ -84,7 +93,6 @@ export async function getAllBooks(searchTerm: string): Promise<Book[]> {
             "Content-Type": "application/json"
         }
     });
-
     return await response.json();
 }
 
@@ -97,7 +105,6 @@ export async function addBook(book: BookRequest) {
         },
         body: JSON.stringify(book),
     });
-
     if (!response.ok) {
         throw new Error(await response.json());
     }
@@ -111,7 +118,6 @@ export async function updateReadStatus(id: number) {
             "Content-Type": "application/json"
         },
     });
-
     if (!response.ok) {
         throw new Error(await response.json());
     }
@@ -126,7 +132,6 @@ export async function updateBookDetails(id: number, book: BookRequest) {
         },
         body: JSON.stringify(book),
     });
-
     if (!response.ok) {
         throw new Error(await response.json());
     }
@@ -141,22 +146,6 @@ export async function recategoriseBooks(request: RecategoriseRequest) {
         },
         body: JSON.stringify(request),
     });
-
-    if (!response.ok) {
-        throw new Error(await response.json());
-    }
-}
-
-export async function transferBooks(request: TransferRequest) {
-    const response = await fetch(`http://localhost:5108/books/transfer`, {
-        method: "PATCH",
-        credentials: "include",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(request),
-    });
-
     if (!response.ok) {
         throw new Error(await response.json());
     }
@@ -170,7 +159,57 @@ export async function deleteBook(id: number) {
             "Content-Type": "application/json"
         }
     });
+    if (!response.ok) {
+        throw new Error(await response.json());
+    }
+}
 
+export async function getTransfers(): Promise<Transfer[]> {
+    const response = await fetch(`http://localhost:5108/transfers`, {
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+    return await response.json();
+}
+
+export async function addTransfer(request: TransferRequest) {
+    const response = await fetch(`http://localhost:5108/transfers`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(request),
+    });
+    if (!response.ok) {
+        throw new Error(await response.json());
+    }
+}
+
+export async function handleTransfer(id: number, action: string, message: string) {
+    const response = await fetch(`http://localhost:5108/transfers/${action}/${id}`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(message),
+    });
+    if (!response.ok) {
+        throw new Error(await response.json());
+    }
+}
+
+export async function deleteTransfer(id: number) {
+    const response = await fetch(`http://localhost:5108/transfers/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
     if (!response.ok) {
         throw new Error(await response.json());
     }
@@ -183,7 +222,6 @@ export async function getAllCollections(): Promise<Collection[]> {
             "Content-Type": "application/json"
         }
     });
-
     return await response.json();
 }
 
@@ -196,7 +234,6 @@ export async function addCollection(name: string) {
         },
         body: JSON.stringify(name),
     });
-
     if (!response.ok) {
         throw new Error(await response.json());
     }
@@ -211,7 +248,6 @@ export async function deleteCollection(name: string) {
         },
         body: JSON.stringify(name),
     });
-    
     if (!response.ok) {
         let errorMessage = "Something went wrong. Please try again.";
         try {
@@ -242,7 +278,6 @@ export async function logIn(user: User) {
             throw new Error(errorMessage);
         }
     };
-
     return response.json();
 }
 
@@ -255,7 +290,6 @@ export async function signUp(newUser: NewUser) {
         },
         body: JSON.stringify(newUser),
     });
-
     if (!response.ok) {
         let errorMessage = "Something went wrong. Please try again.";
         try {

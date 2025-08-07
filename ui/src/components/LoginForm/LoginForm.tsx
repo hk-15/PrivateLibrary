@@ -29,7 +29,7 @@ export const LoginForm: React.FC = (): JSX.Element => {
         setStatus("SUBMITTING");
         logIn(data)
             .then((response) => {
-                loginContext.logIn(response.isAdmin)
+                loginContext.logIn(response.isAdmin, response.userName)
                 setStatus("FINISHED")
                 navigate("/");
             })

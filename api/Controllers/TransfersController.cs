@@ -66,25 +66,27 @@ public class TransfersController : ControllerBase
     }
 
     [HttpPatch]
-    [Route("{id}")]
-    public async Task<IActionResult> AcceptTransfer(int id, [FromBody] bool accept, string? message)
+    [Route("reject/{id}")]
+    public async Task<IActionResult> RejectTransfer(int id, [FromBody] string message)
     {
-        if (accept == true)
-        {
-            try
-            {
-                await _transfersService.Accept(id);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
-        }
         try
         {
-            if (message == null) message = "";
             await _transfersService.Reject(id, message);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
+
+    [HttpPatch]
+    [Route("accept/{id}")]
+    public async Task<IActionResult> AcceptTransfer(int id, [FromBody] string message)
+    {
+        try
+        {
+            await _transfersService.Accept(id);
             return Ok();
         }
         catch (Exception ex)
