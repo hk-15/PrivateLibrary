@@ -67,17 +67,11 @@ export interface NewUser {
 }
 
 export async function getBooks(pageNum: string, pageSize: string, sortBy: string, searchTerm: string): Promise<Book[]> {
-    if (pageNum === "0") {
-        const response = await fetch(`http://localhost:5108/books/current-user`, {
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-        return await response.json();
-    }
+    const page = (pageNum === "" ? "" : `?PageNumber=${pageNum}`) + (pageSize === "" ? "" : `&PageSize=${pageSize}`);
+    const sort = sortBy === "" ? "" : page === "" ? `?SortBy=${sortBy}` : `&SortBy=${sortBy}`;
+    const search = searchTerm === "" ? "" : page === "" && sort === "" ? `?SearchTerm=${searchTerm}` : `&SearchTerm=${searchTerm}`;
 
-    const response = await fetch(`http://localhost:5108/books/current-user?PageNumber=${pageNum}&PageSize=${pageSize}&SortBy=${sortBy}&SearchTerm=${searchTerm}`, {
+    const response = await fetch(`http://localhost:5108/books/current-user${page}${sort}${search}`, {
         credentials: "include",
         headers: {
             "Content-Type": "application/json"

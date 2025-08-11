@@ -11,7 +11,7 @@ export const CollectionsManagement: React.FC<Props> = ({ collections }) => {
     const [fetchBooks, setFetchBooks] = useState(false);
 
     useEffect(() => {
-        getBooks("0", "", "", "")
+        getBooks("", "", "", "")
             .then(response => setBooks(response))
             .catch(err => console.error(err))
             setFetchBooks(false);

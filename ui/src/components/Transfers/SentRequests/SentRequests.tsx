@@ -1,10 +1,18 @@
-import type { Transfer } from "../../../api/ApiClient";
+import { deleteTransfer, type Transfer } from "../../../api/ApiClient";
 
 type Props = {
     requests: Transfer[];
+    getRefresh: (boolean: boolean) => void;
 }
 
-export const SentRequests: React.FC<Props> = ({ requests }) => {
+export const SentRequests: React.FC<Props> = ({ requests, getRefresh }) => {
+
+    const handleClick = (id: number) => {
+        deleteTransfer(id)
+            .then(() => getRefresh(true))
+            .catch(err => console.error(err));
+    }
+
     return (
         <table>
             <thead>
@@ -24,15 +32,13 @@ export const SentRequests: React.FC<Props> = ({ requests }) => {
                         <td>{r.author}</td>
                         <td>{r.transferTo}</td>
                         {r.rejectedMessage === "" ? 
-                        <span>
-                        <td>Pending</td>
-                        <td><button>Cancel</button></td>
-                        </span>
+                        <td>Pending
+                        <button
+                        onClick={() => handleClick(r.id)}
+                        >Cancel</button></td>
                         :
-                        <span>
-                        <td>Rejected <br/> Reason: {r.rejectedMessage}</td>
-                        <td><button>Reshelve</button></td>   
-                        </span>
+                        <td>Rejected <br/> Reason: {r.rejectedMessage}
+                        <button onClick={() => handleClick(r.id)}>Reshelve</button></td>   
                     }
                     </tr>
                 ))}

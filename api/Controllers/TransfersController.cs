@@ -13,12 +13,10 @@ namespace PersonalLibrary.Controllers;
 public class TransfersController : ControllerBase
 {
     private readonly ITransfersService _transfersService;
-    private readonly IBooksService _booksService;
     private readonly UserManager<IdentityUser> _userManager;
-    public TransfersController(ITransfersService transfersService, IBooksService booksService, UserManager<IdentityUser> userManager)
+    public TransfersController(ITransfersService transfersService, UserManager<IdentityUser> userManager)
     {
         _transfersService = transfersService;
-        _booksService = booksService;
         _userManager = userManager;
     }
 
