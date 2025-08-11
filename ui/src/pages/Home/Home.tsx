@@ -6,6 +6,7 @@ import { Page } from "../Page/Page";
 import { LoginContext } from "../../components/LoginManager/LoginManager";
 import { SearchBar } from "../../components/SearchBar/SearchBar";
 import SearchResultsTable from "../../components/SearchResultsTable/SearchResultsTable";
+import { Stats } from "../../components/Stats/Stats";
 
 export default function Home() {
     const loginContext = useContext(LoginContext);
@@ -22,11 +23,7 @@ export default function Home() {
     return (
         <Page>
             <h1>Home</h1>
-            <button
-            onClick={() => console.log(loginContext.username)}
-            >
-                Test
-            </button>
+            <Stats username={loginContext.username} />
             <AddBookButton />
             <ManageCollectionsButton />
             <ViewCatalogueButton />
