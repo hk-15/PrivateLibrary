@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
-import { type Book, getAllBooks } from "../../api/ApiClient";
-import { BarCharts } from "./BarCharts/BarCharts";
+import { getBooks, type Book } from "../../../api/ApiClient";
+import { UserBarCharts } from "../UserBarCharts/UserBarCharts";
 
+type Props = {
+    username: string;
+}
 
-export default function Stats() {
+export const UserStats: React.FC<Props> = ({ username }) => {
     const [books, setBooks] = useState<Book[]>([]);
 
     useEffect(() => {
-        getAllBooks("")
+        getBooks("", "", "", "")
             .then(response => setBooks(response))
             .catch(err => console.error(err));
     }, []);
@@ -26,7 +29,7 @@ export default function Stats() {
 
     return (
         <div>
-            <h2>Library stats </h2>
+            <h2>{username}&#8217;s stats </h2>
             <div>
                 <ul>
                     <li>{numOfBooks} books</li>
@@ -37,7 +40,7 @@ export default function Stats() {
             </div>
             <div>
                 <h3>Collections, languages and authors</h3>
-                <BarCharts books={books} authorData={authorData} />
+                <UserBarCharts books={books} authorData={authorData} />
             </div>
         </div>
     )

@@ -6,7 +6,8 @@ import { Page } from "../Page/Page";
 import { LoginContext } from "../../components/LoginManager/LoginManager";
 import { SearchBar } from "../../components/SearchBar/SearchBar";
 import SearchResultsTable from "../../components/SearchResultsTable/SearchResultsTable";
-import { Stats } from "../../components/Stats/Stats";
+import { UserStats } from "../../components/Stats/UserStats/UserStats";
+import Stats from "../../components/Stats/Stats";
 
 export default function Home() {
     const loginContext = useContext(LoginContext);
@@ -23,12 +24,13 @@ export default function Home() {
     return (
         <Page>
             <h1>Home</h1>
-            <Stats username={loginContext.username} />
+            <SearchBar getSearchTerm={setSearchTerm} />
+            {searchTerm && <SearchResultsTable searchTerm={searchTerm} />}
+            <Stats />
+            <UserStats username={loginContext.username} />
             <AddBookButton />
             <ManageCollectionsButton />
             <ViewCatalogueButton />
-            <SearchBar getSearchTerm={setSearchTerm} />
-            {searchTerm && <SearchResultsTable searchTerm={searchTerm} />}
         </Page>
     )
 }

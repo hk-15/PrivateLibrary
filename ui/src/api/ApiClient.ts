@@ -81,7 +81,8 @@ export async function getBooks(pageNum: string, pageSize: string, sortBy: string
 }
 
 export async function getAllBooks(searchTerm: string): Promise<Book[]> {
-    const response = await fetch(`http://localhost:5108/books/all-users?SearchTerm=${searchTerm}`, {
+    const search = searchTerm === "" ? "" : `?SearchTerm=${searchTerm}`;
+    const response = await fetch(`http://localhost:5108/books/all-users${search}`, {
         credentials: "include",
         headers: {
             "Content-Type": "application/json"

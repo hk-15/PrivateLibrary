@@ -9,7 +9,7 @@ type Props = {
     }[];
 }
 
-export const BarCharts: React.FC<Props> = ({ books, authorData }) => {
+export const UserBarCharts: React.FC<Props> = ({ books, authorData }) => {
 
     const collectionCounts = books.reduce<Record<string, number>>((acc, book) => {
         acc[book.collection] = (acc[book.collection] || 0) + 1;
