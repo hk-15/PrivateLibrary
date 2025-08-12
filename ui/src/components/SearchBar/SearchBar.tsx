@@ -1,3 +1,5 @@
+import "./SearchBar.scss";
+
 type Props = {
   getSearchTerm: (term: string) => void;
 };
@@ -5,10 +7,11 @@ type Props = {
 export const SearchBar: React.FC<Props> = ({ getSearchTerm }) =>
 {
     return (
-        <label htmlFor="searchBar">
+        <label className="search-label" htmlFor="searchBar">
             Search
             <input
             id="searchBar"
+            className="search-bar"
             type="text"
             onChange={e => getSearchTerm(e.target.value)}
             />

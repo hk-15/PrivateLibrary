@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { addBook, getAllCollections, type Collection } from "../../api/ApiClient";
-import "./AddBookForm.scss";
 
 export type FormStatus = "READY" | "SUBMITTING" | "ERROR" | "FINISHED";
 
@@ -13,10 +12,10 @@ export default function AddBookForm() {
     const currentYear: number = new Date().getFullYear();
 
     const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
     } = useForm({
         mode: "onChange",
         defaultValues: {
@@ -39,11 +38,12 @@ export default function AddBookForm() {
     useEffect(() => {
         getAllCollections()
             .then((response) => {
-                setCollections(response.sort((a, b) => a.name.localeCompare(b.name)))})
+                setCollections(response.sort((a, b) => a.name.localeCompare(b.name)))
+            })
             .catch((err) => console.error(err));
     }, []);
 
-    function createList (input: string) {
+    function createList(input: string) {
         return input
             .split(',')
             .map(item => item.trim())
@@ -85,134 +85,138 @@ export default function AddBookForm() {
                 }, 3000);
                 setTimeout(() => {
                     setShowMessage(false);
-                }, 4000);     
+                }, 4000);
             })
             .catch(() => setStatus("ERROR"));
     }
 
     return (
-        <form onSubmit={handleSubmit(submitForm)}>
+        <form className="add-book-form" onSubmit={handleSubmit(submitForm)}>
             <label htmlFor="isbn">
-                ISBN<span className="required">*</span>
+                ISBN
                 <input
-                id="isbn"
-                type="text"
-                {...register("isbn", {required: true, pattern: {value: /^[0-9]{10,13}$/, message: "ISBN must be between 10 and 13 characters long and contain only numbers"}})}
+                    id="isbn"
+                    type="text"
+                    {...register("isbn", { required: true, pattern: { value: /^[0-9]{10,13}$/, message: "ISBN must be between 10 and 13 characters long and contain only numbers" } })}
                 />
-                {errors.isbn && (<span className="error">{errors.isbn.message}</span>)}
             </label>
+            {errors.isbn && (<span className="error">{errors.isbn.message}</span>)}
 
             <label htmlFor="title">
-                Title<span className="required">*</span>
+                Title
                 <input
-                id="title"
-                type="text"
-                {...register("title", {required: true})}
+                    id="title"
+                    type="text"
+                    {...register("title", { required: true })}
                 />
             </label>
 
             <label htmlFor="subtitle">
                 Subtitle
                 <input
-                id="subtitle"
-                type="text"
-                {...register("subtitle")}
+                    id="subtitle"
+                    type="text"
+                    {...register("subtitle")}
                 />
             </label>
 
             <label htmlFor="author">
-                Author(s)<span className="required">*</span>
+                Author(s)
                 <input
-                id="author"
-                type="text"
-                {...register("authors", {required: true})}
+                    id="author"
+                    type="text"
+                    {...register("authors", { required: true })}
                 />
             </label>
 
             <label htmlFor="collectionId">
-                Collection<span className="required">*</span>
+                Collection
                 <select
-                    {...register("collectionId", {required: true, valueAsNumber: true})}>
+                    {...register("collectionId", { required: true, valueAsNumber: true })}>
                     <option value="">Select</option>
                     {collections.map((collection) => (
-                    <option key={collection.id} value={collection.id}>
-                        {collection.name}
-                    </option>
+                        <option key={collection.id} value={collection.id}>
+                            {collection.name}
+                        </option>
                     ))}
                 </select>
             </label>
 
             <label htmlFor="publicationYear">
-                Year of publication<span className="required">*</span>
+                Year of publication
                 <input
-                id="publicationYear"
-                type="number"
-                {...register("publicationYear", {required: true, valueAsNumber: true, max: {value: currentYear + 1, message: "Please enter a valid year"}, min: {value: 1900, message: "Please enter a valid year"}})}
+                    id="publicationYear"
+                    type="number"
+                    {...register("publicationYear", { required: true, valueAsNumber: true, max: { value: currentYear + 1, message: "Please enter a valid year" }, min: { value: 1900, message: "Please enter a valid year" } })}
                 />
-                {errors.publicationYear && (<span className="error">{errors.publicationYear.message}</span>)}
             </label>
+            {errors.publicationYear && (<span className="error">{errors.publicationYear.message}</span>)}
 
             <label htmlFor="language">
-                Language<span className="required">*</span>
+                Language
                 <input
-                id="language"
-                type="text"
-                {...register("language", {required: true})}
+                    id="language"
+                    type="text"
+                    {...register("language", { required: true })}
                 />
             </label>
 
             <label htmlFor="originalLanguage">
                 Original language
                 <input
-                id="originalLanguage"
-                type="text"
-                {...register("originalLanguage")}
+                    id="originalLanguage"
+                    type="text"
+                    {...register("originalLanguage")}
                 />
             </label>
 
             <label htmlFor="translator">
                 Translator
                 <input
-                id="translator"
-                type="text"
-                {...register("translator")}
+                    id="translator"
+                    type="text"
+                    {...register("translator")}
                 />
             </label>
 
             <label htmlFor="notes">
                 Notes
                 <input
-                id="notes"
-                type="text"
-                {...register("notes")}
+                    id="notes"
+                    type="text"
+                    {...register("notes")}
                 />
             </label>
 
             <label htmlFor="tags">
                 Tags
                 <input
-                id="tags"
-                type="text"
-                {...register("tags")}
+                    id="tags"
+                    type="text"
+                    {...register("tags")}
                 />
             </label>
 
-            <label htmlFor="read">
-                Read?<span className="required">*</span>
-                <input
-                id="true"
-                type="radio"
-                value="true"
-                {...register("read", {required: true})}
-                />
-                <label htmlFor="true">Yes</label>
-                <input
-                id="false"
-                type="radio"
-                value="false"
-                {...register("read", {required: true})}
-                />
-                <label htmlFor="false">No</label>
+            <label>
+                Read?
+                <span className="radio-options">
+                    <label htmlFor="true">
+                        <input
+                            id="true"
+                            type="radio"
+                            value="true"
+                            {...register("read", { required: true })}
+                        />
+                        Yes</label>
+                    <label htmlFor="false">
+                        <input
+                            id="false"
+                            type="radio"
+                            value="false"
+                            {...register("read", { required: true })}
+                        />
+                        No</label>
+                </span>
             </label>
 
             <button

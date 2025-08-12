@@ -30,29 +30,29 @@ export const UserBarCharts: React.FC<Props> = ({ books, authorData }) => {
         .sort((a, b) => b.count - a.count);
 
     return (
-        <div>
-            <ResponsiveContainer width="33%" height={300}>
-                <BarChart width={500} height={300} data={collectionsData.slice(0, 5)} layout="vertical">
-                    <XAxis type="number" />
+        <div className="bar-charts-container">
+            <ResponsiveContainer width="100%" height={250}>
+                <BarChart width={500} height={300} data={collectionsData.slice(0, 5)} layout="vertical" margin={{ left: 45, right: 2 }}>
+                    <XAxis type="number" hide />
                     <YAxis dataKey="name" type="category" />
                     <Tooltip />
-                    <Bar dataKey="count" fill="#8884d8" />
+                    <Bar dataKey="count" fill="#2079DF" />
                 </BarChart>
             </ResponsiveContainer>
-            <ResponsiveContainer width="33%" height={300}>
-                <BarChart width={500} height={300} data={langData.slice(0, 5)} layout="vertical">
-                    <XAxis type="number" />
+            <ResponsiveContainer width="100%" height={250}>
+                <BarChart width={500} height={300} data={langData.slice(0, 5)} layout="vertical" margin={{ left: 45, right: 2 }}>
+                    <XAxis type="number" hide />
                     <YAxis dataKey="lang" type="category" />
                     <Tooltip />
-                    <Bar dataKey="count" fill="#8884d8" />
+                    <Bar dataKey="count" fill="#DF2079" />
                 </BarChart>
             </ResponsiveContainer>
-            <ResponsiveContainer width="33%" height={300}>
-                <BarChart width={500} height={500} data={authorData.slice(0, 5)} layout="vertical">
-                    <XAxis type="number" />
+            <ResponsiveContainer width="100%" height={250}>
+                <BarChart width={500} height={500} data={authorData.slice(0, 5)} layout="vertical" margin={{ left: 45, right: 2 }}>
+                    <XAxis type="number" hide />
                     <YAxis dataKey="author" type="category" />
                     <Tooltip />
-                    <Bar dataKey="count" fill="#8884d8" />
+                    <Bar dataKey="count" fill="#79DF20" />
                 </BarChart>
             </ResponsiveContainer>
         </div>

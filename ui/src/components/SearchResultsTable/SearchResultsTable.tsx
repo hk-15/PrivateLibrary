@@ -14,10 +14,10 @@ export default function SearchResultsTable(props:
     }, [props]);
 
     return (
-        <table>
+        <table className="home-table">
             <thead>
                 <tr>
-                    <th>ISBN</th>
+                    <th >ISBN</th>
                     <th>Title</th>
                     <th>Author</th>
                     <th>Publication Year</th>

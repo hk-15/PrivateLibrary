@@ -2,6 +2,7 @@ import { useContext } from "react";
 import AddBookForm from "../../components/AddBookForm/AddBookForm";
 import { LoginContext } from "../../components/LoginManager/LoginManager";
 import { Page } from "../Page/Page";
+import "./AddBook.scss";
 
 export default function Catalogue() {
     const loginContext = useContext(LoginContext);
@@ -15,7 +16,7 @@ export default function Catalogue() {
     return (
         <Page>
             <h1>Shelve a book</h1>
-            <AddBookForm/>
+            <AddBookForm />
         </Page>
     );
 }

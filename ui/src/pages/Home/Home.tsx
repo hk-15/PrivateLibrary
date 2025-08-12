@@ -8,6 +8,7 @@ import { SearchBar } from "../../components/SearchBar/SearchBar";
 import SearchResultsTable from "../../components/SearchResultsTable/SearchResultsTable";
 import { UserStats } from "../../components/Stats/UserStats/UserStats";
 import Stats from "../../components/Stats/Stats";
+import "./Home.scss";
 
 export default function Home() {
     const loginContext = useContext(LoginContext);
@@ -26,8 +27,8 @@ export default function Home() {
             <h1>Home</h1>
             <SearchBar getSearchTerm={setSearchTerm} />
             {searchTerm && <SearchResultsTable searchTerm={searchTerm} />}
-            <Stats />
             <UserStats username={loginContext.username} />
+            <Stats />
             <AddBookButton />
             <ManageCollectionsButton />
             <ViewCatalogueButton />

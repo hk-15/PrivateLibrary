@@ -1,0 +1,27 @@
+.stats-container {
+    margin: 40px 0;
+}
+
+.stats-highlights {
+    display: flex;
+    justify-content: space-around;
+    padding: 2rem;
+
+    li {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        text-transform: uppercase;
+        font-size: 1rem;
+        text-align: center;
+    }
+
+    .stat-number {
+        font-weight: bold;
+        font-size: 1.75rem;
+    }
+}
+
+.bar-charts-container {
+    display: flex;
+}

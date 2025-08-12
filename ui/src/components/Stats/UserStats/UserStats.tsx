@@ -28,14 +28,14 @@ export const UserStats: React.FC<Props> = ({ username }) => {
         .sort((a, b) => b.count - a.count);
 
     return (
-        <div>
+        <div className="stats-container">
             <h2>{username}&#8217;s stats </h2>
             <div>
-                <ul>
-                    <li>{numOfBooks} books</li>
-                    <li>{readPercentage}% read</li>
-                    <li>{authorData.length} authors</li>
-                    <li>{translatedPercentage}% translated</li>
+                <ul className="stats-highlights">
+                    <li><span className="stat-number">{numOfBooks}</span>books</li>
+                    <li><span className="stat-number">&nbsp;{readPercentage}%</span>read</li>
+                    <li><span className="stat-number">{authorData.length}</span>authors</li>
+                    <li><span className="stat-number">{translatedPercentage}%</span>translated</li>
                 </ul>
             </div>
             <div>
