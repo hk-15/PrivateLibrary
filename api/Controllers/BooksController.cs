@@ -188,7 +188,7 @@ public class BooksController : ControllerBase
     public static IQueryable<BookResponse> SortQuery(string sortByTerm, IQueryable<BookResponse> query)
     {
         if (sortByTerm == "Author") return query.OrderBy(b => b.SortAuthor);
-        else if (sortByTerm == "Translator") return query.OrderBy(b => b.SortTranslator == null).ThenBy(b => b.SortTranslator);
+        else if (sortByTerm == "Translator") return query.OrderBy(b => b.SortTranslator == null || b.SortTranslator == "").ThenBy(b => b.SortTranslator);
         else if (sortByTerm == "Publication") return query.OrderBy(b => b.PublicationYear);
         else return query.OrderBy(b => b.SortTitle);
     }

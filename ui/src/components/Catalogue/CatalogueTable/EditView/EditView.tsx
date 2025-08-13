@@ -34,7 +34,7 @@ export const EditView: React.FC<Props> = ({ books, collections, getEditedBook, g
     const [saveStatus, setSaveStatus] = useState(false);
 
     useEffect(() => {
-        if (editedBook !== emptyBook) {
+        if (editedBook.id !== 0) {
             getEditedBook(editedBook);
 
             if (saveStatus === true) {

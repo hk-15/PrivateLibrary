@@ -77,7 +77,6 @@ export const EditRow: React.FC<Props> = ({ book, commaSeparatedInputs, collectio
             <td>
                 <input
                     key={book.id}
-                    className="title"
                     type="text"
                     name="title"
                     value={editedBook.title}
@@ -87,7 +86,6 @@ export const EditRow: React.FC<Props> = ({ book, commaSeparatedInputs, collectio
                 <td>
                 <input
                     key={book.id}
-                    className="edit-book"
                     type="text"
                     name="subtitle"
                     value={editedBook.subtitle ?? ""}
@@ -97,7 +95,6 @@ export const EditRow: React.FC<Props> = ({ book, commaSeparatedInputs, collectio
                 <td>
                 <input
                     key={book.id}
-                    className="edit-book"
                     type="text"
                     name="authors"
                     value={rawInputs.authors}
@@ -107,7 +104,6 @@ export const EditRow: React.FC<Props> = ({ book, commaSeparatedInputs, collectio
             <td>
                 <input
                     key={book.id}
-                    className="edit-book"
                     type="number"
                     name="publicationYear"
                     value={editedBook.publicationYear}
@@ -117,7 +113,6 @@ export const EditRow: React.FC<Props> = ({ book, commaSeparatedInputs, collectio
             <td>
                 <input
                     key={book.id}
-                    className="edit-book"
                     type="text"
                     name="language"
                     value={editedBook.language}
@@ -127,7 +122,6 @@ export const EditRow: React.FC<Props> = ({ book, commaSeparatedInputs, collectio
             <td>
                 <input
                     key={book.id}
-                    className="edit-book"
                     type="text"
                     name="originalLanguage"
                     value={editedBook.originalLanguage ?? ""}
@@ -137,7 +131,6 @@ export const EditRow: React.FC<Props> = ({ book, commaSeparatedInputs, collectio
             <td>
                 <input
                     key={book.id}
-                    className="edit-book"
                     type="text"
                     name="translator"
                     value={editedBook.translator ?? ""}
@@ -159,7 +152,6 @@ export const EditRow: React.FC<Props> = ({ book, commaSeparatedInputs, collectio
             <td>
                 <input
                     key={book.id}
-                    className="edit-book"
                     type="text"
                     name="notes"
                     value={editedBook.notes ?? ""}
@@ -169,7 +161,6 @@ export const EditRow: React.FC<Props> = ({ book, commaSeparatedInputs, collectio
             <td>
                 <input
                     key={book.id}
-                    className="edit-book"
                     type="text"
                     name="tags"
                     value={rawInputs.tags}
