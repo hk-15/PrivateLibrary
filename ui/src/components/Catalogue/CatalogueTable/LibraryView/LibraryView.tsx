@@ -7,15 +7,16 @@ type Props = {
 
 export const LibraryView: React.FC<Props> = ({ books, getSelectedId }) => {
     return (
-        <table>
+        <table className="library-view-table">
             <thead>
                 <tr>
-                    <th>ISBN</th>
+                    <th className="isbn">ISBN</th>
                     <th>Title</th>
                     <th>Author</th>
-                    <th>Publication year</th>
-                    <th>Collection</th>
+                    <th className="pub-year">Publication year</th>
+                    <th className="collection">Collection</th>
                     <th>Tags</th>
+                    <th className="actions"></th>
                 </tr>
             </thead>
             <tbody>

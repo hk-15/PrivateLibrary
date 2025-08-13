@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { deleteBook, getAllCollections, getBooks, updateBookDetails, updateReadStatus, type Book, type BookRequest, type Collection } from "../../../../api/ApiClient";
-import "./CatalogueTable.scss";
 import { LibraryView } from "../LibraryView/LibraryView";
 import { EditView } from "../EditView/EditView";
 
@@ -148,7 +147,9 @@ export default function CatalogueTable(props:
 
             {!showEdit && <LibraryView books={books} getSelectedId={setChangeReadStatusId} />}
 
-            {showEdit && <EditView books={books} collections={collections} getEditedBook={setEditedBook} getDeleteId={setDeleteId} />}
+            <div className="edit-view-div">
+                {showEdit && <EditView books={books} collections={collections} getEditedBook={setEditedBook} getDeleteId={setDeleteId} />}
+            </div>
 
             <button
                 onClick={() => setPageNum(prevPage(pageNum))}

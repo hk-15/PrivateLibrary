@@ -1,0 +1,70 @@
+@use "../../styles/constants";
+
+.marked-read td {
+    background-color: constants.$color-primary;
+}
+
+.library-view-table button,
+.edit-view-table button {
+    margin: 0.25rem;
+    padding: 0.25rem;
+    font-size: .75rem;
+}
+
+.library-view-table {
+    width: 95vw;
+}
+
+.edit-view-div {
+    overflow: auto;
+}
+
+.edit-view-table {
+    width: 150%;
+}
+
+.library-view-table,
+.edit-view-table {
+    .isbn {
+        width: 8rem;
+    }
+
+    .pub-year {
+        width: 6rem;
+    }
+
+    .language {
+        width: 7rem;
+    }
+
+    .collection {
+        width: 9rem;
+    }
+
+    .actions {
+        width: 7rem;
+    }
+}
+
+.edit-row {
+    background-color: constants.$color-primary;
+
+    input,
+    select,
+    .isbn {
+        width: 90%;
+    }
+
+    input {
+        border: 1px solid constants.$color-secondary;
+        margin: .5rem;
+        border-radius: 5px;
+        padding: .25rem 0 .25rem .25rem;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    .marked-read td {
+        background-color: constants.$color-secondary-opaque;
+    }
+}

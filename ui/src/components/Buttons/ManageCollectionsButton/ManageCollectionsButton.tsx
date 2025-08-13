@@ -1,9 +1,9 @@
-export default function ManageCollectionsButton(){
+import { Link } from "react-router-dom";
+
+export default function ManageCollectionsButton() {
     return (
-        <button>
-            <a href="/collections">
+        <Link to="/collections" className="button-link">
             Manage collections
-            </a>
-        </button>
+        </Link>
     )
 }

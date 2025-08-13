@@ -1,9 +1,9 @@
-export default function ViewCatalogueButton(){
+import { Link } from "react-router-dom";
+
+export default function ViewCatalogueButton() {
     return (
-        <button>
-            <a href="/catalogue">
+        <Link to="/catalogue" className="button-link">
             View my catalogue
-            </a>
-        </button>
+        </Link>
     )
 }

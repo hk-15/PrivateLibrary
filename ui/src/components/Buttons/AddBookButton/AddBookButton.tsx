@@ -1,9 +1,9 @@
-export default function AddBookButton(){
+import { Link } from "react-router-dom";
+
+export default function AddBookButton() {
     return (
-        <button className="add-book">
-            <a href="/add-book">
+        <Link to="/add-book" className="button-link" id="add-book">
             Shelve a book
-            </a>
-        </button>
+        </Link>
     )
 }

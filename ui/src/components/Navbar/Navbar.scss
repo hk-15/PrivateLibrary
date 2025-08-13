@@ -1,3 +1,5 @@
+@use "../../styles/constants";
+
 .nav {
   display: flex;
   flex-direction: row;
@@ -5,5 +7,27 @@
   position: sticky;
   top: 0;
   z-index: 1;
-  min-width: 90vw;
+  min-width: 100vw;
+  background-color: constants.$color-background-darker;
+  padding: 30px 0;
+}
+
+.nav-link.active {
+  color: constants.$color-primary;
+}
+
+.add-link.active,
+.add-link:hover {
+  color: constants.$color-green;
+}
+
+.login-link.active,
+.login-link:hover {
+  color: constants.$color-pink;
+}
+
+@media (prefers-color-scheme: light) {
+  .nav {
+    background-color: constants.$color-background-light-darker;
+  }
 }

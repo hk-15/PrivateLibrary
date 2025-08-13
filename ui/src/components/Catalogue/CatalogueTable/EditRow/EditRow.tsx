@@ -63,11 +63,11 @@ export const EditRow: React.FC<Props> = ({ book, commaSeparatedInputs, collectio
     };
 
     return (
-        <tr key={book.id} className={`${book.read ? 'marked-read' : ''}`}>
+        <tr key={book.id} className={`${book.read ? 'marked-read' : ''} edit-row`}>
             <td>
                 <input
                     key={book.id}
-                    className="edit-book"
+                    className="isbn"
                     type="text"
                     name="isbn"
                     value={editedBook.isbn}
@@ -77,7 +77,7 @@ export const EditRow: React.FC<Props> = ({ book, commaSeparatedInputs, collectio
             <td>
                 <input
                     key={book.id}
-                    className="edit-book"
+                    className="title"
                     type="text"
                     name="title"
                     value={editedBook.title}
@@ -103,18 +103,6 @@ export const EditRow: React.FC<Props> = ({ book, commaSeparatedInputs, collectio
                     value={rawInputs.authors}
                     onChange={handleCommaSeparatedInput}
                 />
-            </td>
-                <td>
-                <select key={book.id} name="collection"
-                onChange={handleInput}>
-                    {[...collections]
-                    .sort((a, c) => (a.name === book.collection ? -1 : c.name === book.collection ? 1 : 0))
-                    .map(collection => (
-                        <option key={collection.id} value={collection.name}>
-                        {collection.name}
-                        </option>
-                    ))}
-                </select>
             </td>
             <td>
                 <input
@@ -155,6 +143,18 @@ export const EditRow: React.FC<Props> = ({ book, commaSeparatedInputs, collectio
                     value={editedBook.translator ?? ""}
                     onChange={handleInput}
                 />
+            </td>
+            <td>
+                <select key={book.id} name="collection"
+                onChange={handleInput}>
+                    {[...collections]
+                    .sort((a, c) => (a.name === book.collection ? -1 : c.name === book.collection ? 1 : 0))
+                    .map(collection => (
+                        <option key={collection.id} value={collection.name}>
+                        {collection.name}
+                        </option>
+                    ))}
+                </select>
             </td>
             <td>
                 <input

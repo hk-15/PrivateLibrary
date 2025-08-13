@@ -19,10 +19,10 @@ export function Navbar () {
         <nav className="nav">
             <NavLink className="nav-link" to="/">Home</NavLink>
             <NavLink className="nav-link" to="/catalogue">Catalogue</NavLink>
-            <NavLink className="nav-link add-book" to="/add-book">Shelve a book</NavLink>
+            <NavLink className="nav-link add-link" to="/add-book">Shelve a book</NavLink>
             <NavLink className="nav-link" to="/collections">Collections</NavLink>
             <NavLink className="nav-link" to="/transfers">Transfers</NavLink>
-            <NavLink className="nav-link" to="/login">Log out?</NavLink>
+            <NavLink className="nav-link login-link" to="/login">Log out?</NavLink>
         </nav>
     )
 };

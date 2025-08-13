@@ -7,6 +7,7 @@ import { SearchBar } from "../../components/SearchBar/SearchBar";
 import { CatalogueSort } from "../../components/Catalogue/CatalogueSort/CatalogueSort";
 import { CataloguePageSize } from "../../components/Catalogue/CataloguePageSize/CataloguePageSize";
 import { LoginContext } from "../../components/LoginManager/LoginManager";
+import "./Catalogue.scss";
 
 export default function Catalogue() {
     const [pageSize, setPageSize] = useState("25");

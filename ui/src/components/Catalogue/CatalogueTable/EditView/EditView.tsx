@@ -45,20 +45,21 @@ export const EditView: React.FC<Props> = ({ books, collections, getEditedBook, g
     }, [editedBook]);
 
     return (
-        <table>
+        <table className="edit-view-table">
             <thead>
                 <tr>
-                    <th>ISBN</th>
+                    <th className="isbn">ISBN</th>
                     <th>Title</th>
                     <th>Subtitle</th>
                     <th>Author</th>
-                    <th>Publication year</th>
-                    <th>Language</th>
-                    <th>Original language</th>
+                    <th className="pub-year">Publication year</th>
+                    <th className="language">Language</th>
+                    <th className="language">Original language</th>
                     <th>Translator</th>
-                    <th>Collection</th>
+                    <th className="collection">Collection</th>
                     <th>Notes</th>
                     <th>Tags</th>
+                    <th className="actions"></th>
                 </tr>
             </thead>
             <tbody>
@@ -77,7 +78,7 @@ export const EditView: React.FC<Props> = ({ books, collections, getEditedBook, g
                                 <td>{b.collection}</td>
 
                                 <td>{b.notes}</td>
-                                <td>{b.tags.join(', ')}</td>
+                                <td className="tags">{b.tags.join(', ')}</td>
                                 <td>
                                     <button
                                         onClick={() => {
