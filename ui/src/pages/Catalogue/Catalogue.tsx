@@ -24,9 +24,11 @@ export default function Catalogue() {
     return (
         <Page>
             <h1>Catalogue</h1>
+            <div className="catalogue-options-container">
             <SearchBar getSearchTerm={setSearchTerm}/>
             <CatalogueSort getSortBy={setSortBy}/>
             <CataloguePageSize getPageSize={setPageSize}/>
+            </div>
             <CatalogueTable pageSize={pageSize} sortBy={sortBy} searchTerm={searchTerm}/>
             <AddBookButton/>
             <ManageCollectionsButton/>

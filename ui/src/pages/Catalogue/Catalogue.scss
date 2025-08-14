@@ -1,6 +1,18 @@
 @use "../../styles/constants";
 
-.marked-read td {
+.catalogue-options-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 50vw;
+    margin: 0 auto;
+
+    select {
+        margin: 0.5rem 1rem 0.5rem 0.5rem;
+    }
+}
+
+.marked-read {
     background-color: constants.$color-primary;
 }
 
@@ -12,15 +24,27 @@
 }
 
 .library-view-table {
-    width: 95vw;
+    width: 90vw;
 }
 
-.edit-view-div {
+.catalogue-and-nav-container {
+    padding: 1.5rem;
+}
+
+.catalogue-table-container {
     overflow: auto;
+    background-color: constants.$color-background-darker;
+    padding: 1rem;
+    border-radius: 1rem;
 }
 
 .edit-view-table {
     width: 150%;
+
+    .delete-message {
+        font-size: .75rem;
+        background-color: red;
+    }
 }
 
 .library-view-table,
@@ -47,7 +71,7 @@
 }
 
 .edit-row {
-    background-color: constants.$color-primary;
+    background-color: constants.$color-secondary;
 
     input,
     select,
@@ -64,7 +88,16 @@
 }
 
 @media (prefers-color-scheme: light) {
-    .marked-read td {
+    .marked-read {
         background-color: constants.$color-secondary-opaque;
+    }
+
+    .catalogue-table-container {
+        background-color: constants.$color-background-light-darker;
+
+    }
+
+    .edit-row {
+        background-color: constants.$color-primary;
     }
 }

@@ -132,7 +132,7 @@ export default function CatalogueTable(props:
     }, [deleteId]);
 
     return (
-        <div>
+        <div className="catalogue-and-nav-container">
             <button
                 onClick={() => {
                     if (!showEdit) {
@@ -145,9 +145,10 @@ export default function CatalogueTable(props:
                 {showEdit ? "Library view" : "Edit view"}
             </button>
 
-            {!showEdit && <LibraryView books={books} getSelectedId={setChangeReadStatusId} />}
-
-            <div className="edit-view-div">
+            <div className={!showEdit ? "catalogue-table-container" : ""}>
+                {!showEdit && <LibraryView books={books} getSelectedId={setChangeReadStatusId} />}
+            </div>
+            <div className={showEdit ? "catalogue-table-container" : ""}>
                 {showEdit && <EditView books={books} collections={collections} getEditedBook={setEditedBook} getDeleteId={setDeleteId} />}
             </div>
 

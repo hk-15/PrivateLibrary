@@ -95,7 +95,7 @@ export const EditView: React.FC<Props> = ({ books, collections, getEditedBook, g
                                         Remove
                                     </button>
                                     {popup && deleteFocus === b.id ?
-                                        <span>Are you sure?
+                                        <div className="delete-message">Are you sure?
                                             <button
                                                 onClick={() => {
                                                     getDeleteId(b.id)
@@ -112,7 +112,7 @@ export const EditView: React.FC<Props> = ({ books, collections, getEditedBook, g
                                                 }}>
                                                 Cancel
                                             </button>
-                                        </span>
+                                        </div>
                                         : ""}
                                 </td>
                             </tr>
