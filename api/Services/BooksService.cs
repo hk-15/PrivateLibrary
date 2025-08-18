@@ -8,6 +8,7 @@ namespace PersonalLibrary.Services;
 public interface IBooksService
 {
     Task<List<BookResponse>> GetAllBooksResponse();
+    Task<BookResponse> GetById(int id);
     Task<List<BookResponse>> GetByUser(string userId);
     Task<List<Book>> GetByCollection(Collection collection);
     Task Add(BookRequest newBook, string userId);
@@ -34,6 +35,16 @@ public class BooksService : IBooksService
     {
         var allBooks = await _booksRepo.GetAll();
         return MapResponse(allBooks);
+    }
+
+    public async Task<BookResponse> GetById(int id)
+    {
+        var list = new List<Book>
+        {
+            await _booksRepo.Get(id)
+        };
+        var response = MapResponse(list);
+        return response[0];
     }
 
     public async Task<List<BookResponse>> GetByUser(string userId)

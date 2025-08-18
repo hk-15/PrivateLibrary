@@ -23,25 +23,32 @@ public class BooksController : ControllerBase
     [Route("all-users")]
     public async Task<ActionResult<List<BookResponse>>> GetBooks([FromQuery] QueryParameters parameters)
     {
-        var books = await _booksService.GetAllBooksResponse();
-        var query = books.AsQueryable();
-
-        if (!string.IsNullOrWhiteSpace(parameters.SearchTerm))
+        try
         {
-            var searchTerm = parameters.SearchTerm.Trim();
-            query = query.Where(b =>
-            b.Isbn.Contains(searchTerm) ||
-            b.Authors.Any(a => a.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)) ||
-            (b.Translator ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
-            b.Title.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
-            b.Language.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
-            (b.OriginalLanguage ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
-            (b.Notes ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
-            b.Tags.Any(t => t.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase))
-            );
-        };
-        query = query.OrderBy(b => b.SortTitle);
-        return Ok(query.ToList());
+            var books = await _booksService.GetAllBooksResponse();
+            var query = books.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(parameters.SearchTerm))
+            {
+                var searchTerm = parameters.SearchTerm.Trim();
+                query = query.Where(b =>
+                b.Isbn.Contains(searchTerm) ||
+                b.Authors.Any(a => a.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)) ||
+                (b.Translator ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+                b.Title.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+                b.Language.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+                (b.OriginalLanguage ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+                (b.Notes ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+                b.Tags.Any(t => t.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase))
+                );
+            };
+            query = query.OrderBy(b => b.SortTitle);
+            return Ok(query.ToList());
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = ex.Message });
+        }
     }
 
     [HttpGet]
@@ -49,43 +56,66 @@ public class BooksController : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetUserBooks([FromQuery] QueryParameters parameters)
     {
-        var currentUserId = _userManager.GetUserId(User);
-        if (string.IsNullOrEmpty(currentUserId))
+        try
         {
-            return BadRequest( new { message = "User must be logged in" });
+            var currentUserId = _userManager.GetUserId(User);
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+                return BadRequest(new { message = "User must be logged in" });
+            }
+
+            var books = await _booksService.GetByUser(currentUserId);
+            var query = books.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(parameters.SearchTerm))
+            {
+                var searchTerm = parameters.SearchTerm.Trim();
+                query = query.Where(b =>
+                b.Isbn.Contains(searchTerm) ||
+                b.Authors.Any(a => a.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)) ||
+                (b.Translator ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+                b.Title.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+                b.Language.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+                (b.OriginalLanguage ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+                (b.Notes ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
+                b.Tags.Any(t => t.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase))
+                );
+            }
+
+            if (!string.IsNullOrWhiteSpace(parameters.SortBy))
+            {
+                query = SortQuery(parameters.SortBy, query);
+            }
+            else
+            {
+                query = query.OrderBy(b => b.SortTitle);
+            }
+
+            var skipAmount = (parameters.PageNumber - 1) * parameters.PageSize;
+            query = query.Skip(skipAmount).Take(parameters.PageSize);
+
+            return Ok(query.ToList());
         }
-
-        var books = await _booksService.GetByUser(currentUserId);
-        var query = books.AsQueryable();
-
-        if (!string.IsNullOrWhiteSpace(parameters.SearchTerm))
+        catch (Exception ex)
         {
-            var searchTerm = parameters.SearchTerm.Trim();
-            query = query.Where(b =>
-            b.Isbn.Contains(searchTerm) ||
-            b.Authors.Any(a => a.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)) ||
-            (b.Translator ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
-            b.Title.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
-            b.Language.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
-            (b.OriginalLanguage ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
-            (b.Notes ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
-            b.Tags.Any(t => t.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase))
-            );
+            return StatusCode(500, new { message = ex.Message });
         }
+    }
 
-        if (!string.IsNullOrWhiteSpace(parameters.SortBy))
+    [HttpGet]
+    [Route("{id}")]
+    [Authorize]
+    public async Task<IActionResult> GetBookById(int id)
+    {
+        try
         {
-            query = SortQuery(parameters.SortBy, query);
+            var book = await _booksService.GetById(id);
+            return Ok(book);
         }
-        else
+        catch (Exception ex)
         {
-            query = query.OrderBy(b => b.SortTitle);
+            return StatusCode(500, new { message = ex.Message });
         }
-
-        var skipAmount = (parameters.PageNumber - 1) * parameters.PageSize;
-        query = query.Skip(skipAmount).Take(parameters.PageSize);
-
-        return Ok(query.ToList());
     }
 
     [HttpPost]
@@ -105,12 +135,13 @@ public class BooksController : ControllerBase
         try
         {
             await _booksService.Add(newBook, currentUserId);
+            return Ok();
+
         }
         catch (Exception ex)
         {
             return StatusCode(500, new { message = ex.Message });
         }
-        return Ok();
     }
 
     [HttpPatch]
@@ -125,12 +156,12 @@ public class BooksController : ControllerBase
         try
         {
             await _booksService.Update(id, book);
+            return Ok();
         }
         catch (Exception ex)
         {
             return StatusCode(500, new { message = ex.Message });
         }
-        return Ok();
     }
 
     [HttpPatch]
@@ -145,12 +176,12 @@ public class BooksController : ControllerBase
         try
         {
             await _booksService.UpdateCollection(request);
+            return Ok();
         }
         catch (Exception ex)
         {
             return StatusCode(500, new { message = ex.Message });
         }
-        return Ok();
     }
 
     [HttpPatch]
@@ -161,12 +192,12 @@ public class BooksController : ControllerBase
         try
         {
             await _booksService.UpdateReadStatus(id);
+            return Ok();
         }
         catch (Exception ex)
         {
             return StatusCode(500, new { message = ex.Message });
         }
-        return Ok();
     }
 
     [HttpDelete]
@@ -177,12 +208,12 @@ public class BooksController : ControllerBase
         try
         {
             await _booksService.Delete(id);
+            return Ok();
         }
         catch (Exception ex)
         {
             return StatusCode(500, new { message = ex.Message });
         }
-        return Ok();
     }
 
     public static IQueryable<BookResponse> SortQuery(string sortByTerm, IQueryable<BookResponse> query)
