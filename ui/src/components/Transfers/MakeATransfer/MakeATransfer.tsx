@@ -63,6 +63,7 @@ export const MakeATransfer: React.FC<Props> = ({ getRefresh }) => {
         <div>
             {!showForm && (
                 <button
+                    className="green-button"
                     onClick={() => setShowForm(true)}>
                     Make a transfer
                 </button>
@@ -88,6 +89,7 @@ export const MakeATransfer: React.FC<Props> = ({ getRefresh }) => {
                         )}
                     </ul>
                     <button
+                        className="green-button"
                         disabled={status === "SUBMITTING"}
                         type="submit">
                         Create transfer request

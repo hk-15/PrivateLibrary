@@ -21,6 +21,14 @@ a {
   text-decoration: inherit;
 }
 
+.login-message-link {
+  color: constants.$color-primary;
+}
+
+.login-message-link:hover {
+  color: constants.$color-pink;
+}
+
 a:hover {
   color: constants.$color-primary;
 }
@@ -54,6 +62,7 @@ button,
 
 button:hover,
 .button-link:hover {
+  color: constants.$color-primary;
   border-color: constants.$color-primary;
 }
 
@@ -64,9 +73,15 @@ button:focus-visible,
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-#add-book:hover {
+#add-book:hover,
+.green-button:hover {
   border-color: constants.$color-green;
   color: constants.$color-green;
+}
+
+.red-button:hover {
+  border-color: red;
+  color: red;
 }
 
 form {
@@ -79,7 +94,12 @@ form {
     justify-content: space-between;
     align-items: center;
   }
+
+  label:focus-within {
+    font-weight: bold;
+  }
 }
+
 table {
   table-layout: fixed;
   margin: 0 auto;
@@ -112,9 +132,12 @@ td {
     color: #213547;
   }
 
-  button:hover,
-  .button-link:hover {
-    border-color: constants.$color-primary;
+  .login-message-link {
+    color: constants.$color-primary;
+  }
+
+  .login-message-link:hover {
+    color: constants.$color-pink;
   }
 
   table,

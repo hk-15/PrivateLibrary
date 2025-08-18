@@ -1,3 +1,5 @@
+@use "../../styles/constants";
+
 .add-book-form {
     width: 30vw;
 
@@ -11,5 +13,10 @@
 
     .radio-options {
         display: flex;
+    }
+
+    button:hover {
+        border-color: constants.$color-green;
+        color: constants.$color-green;
     }
 }

@@ -169,6 +169,7 @@ export const EditRow: React.FC<Props> = ({ book, commaSeparatedInputs, collectio
             </td>
             <td>
                 <button
+                    className="green-button"
                     onClick={() => {
                         getEditedBook(editedBook)
                         setEditedBook(emptyBook)

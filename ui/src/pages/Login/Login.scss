@@ -1,0 +1,22 @@
+@use "../../styles/constants";
+
+.account-form {
+    width: 30vw;
+
+    label {
+        padding: 8px 0;
+    }
+
+    input {
+        width: 50%;
+    }
+
+    small {
+        text-align: right;
+    }
+}
+
+.account-button:hover {
+    border-color: constants.$color-pink;
+    color: constants.$color-pink;
+}

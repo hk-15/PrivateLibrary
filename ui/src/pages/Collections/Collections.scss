@@ -1,0 +1,31 @@
+@use "../../styles/constants";
+
+.collection-options-container {
+    display: flex;
+    justify-content: center;
+
+    .collection-form-container {
+        padding: 1rem;
+        width: 440px;
+    }
+}
+
+.collection-form {
+    width: 25vw;
+
+    .form-buttons-container {
+        display: flex;
+    }
+
+    label {
+        margin: 1rem;
+    }
+
+    input {
+        width: 50%;
+    }
+
+    button {
+        margin: 0.75rem auto;
+    }
+}

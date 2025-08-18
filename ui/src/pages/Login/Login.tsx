@@ -4,6 +4,7 @@ import SignUpForm from "../../components/SignUpForm/SignUpForm";
 import { Page } from "../Page/Page";
 import { LoginContext } from "../../components/LoginManager/LoginManager";
 import LogOutButton from "../../components/Buttons/LogOutButton/LogOutButton";
+import "./Login.scss";
 
 export default function Login() {
     const loginContext = useContext(LoginContext);

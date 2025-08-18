@@ -88,6 +88,7 @@ export const EditView: React.FC<Props> = ({ books, collections, getEditedBook, g
                                         Edit
                                     </button>
                                     <button
+                                        className="red-button"
                                         onClick={() => {
                                             setPopup(true)
                                             setDeleteFocus(b.id)

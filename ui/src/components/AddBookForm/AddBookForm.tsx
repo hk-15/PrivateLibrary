@@ -220,6 +220,7 @@ export default function AddBookForm() {
             </label>
 
             <button
+                className="add-book-button"
                 disabled={status === "SUBMITTING"}
                 type="submit">
                 Shelve book

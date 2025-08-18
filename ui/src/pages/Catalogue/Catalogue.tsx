@@ -8,6 +8,7 @@ import { CatalogueSort } from "../../components/Catalogue/CatalogueSort/Catalogu
 import { CataloguePageSize } from "../../components/Catalogue/CataloguePageSize/CataloguePageSize";
 import { LoginContext } from "../../components/LoginManager/LoginManager";
 import "./Catalogue.scss";
+import LoginMessage from "../../components/LoginMessage/LoginMessage";
 
 export default function Catalogue() {
     const [pageSize, setPageSize] = useState("25");
@@ -17,9 +18,11 @@ export default function Catalogue() {
 
     if (!loginContext.isLoggedIn) {
         return (
-            <p>Please <a href="/login">log in</a></p>
+            <Page>
+                <LoginMessage />
+            </Page>
         )
-    }
+    };
 
     return (
         <Page>

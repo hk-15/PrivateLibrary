@@ -5,13 +5,17 @@ import { Page } from "../Page/Page";
 import { CollectionsManagement } from "../../components/Collections/CollectionsManagement/CollectionsManagement";
 import { getAllCollections, type Collection } from "../../api/ApiClient";
 import { RemoveCollection } from "../../components/Collections/RemoveCollection/RemoveCollection";
+import "./Collections.scss";
+import LoginMessage from "../../components/LoginMessage/LoginMessage";
 
 export default function Collections() {
     const loginContext = useContext(LoginContext);
-    
+
     if (!loginContext.isLoggedIn) {
         return (
-            <p>Please <a href="/login">log in</a></p>
+            <Page>
+                <LoginMessage />
+            </Page>
         )
     };
 
@@ -28,13 +32,15 @@ export default function Collections() {
             .catch((err) => console.error(err));
         setRefresh(false);
     }, [refresh]);
-        
+
 
     return (
         <Page>
             <h1>Collections</h1>
-            <AddCollection collections={collectionNames} getRefresh={setRefresh} />
-            <RemoveCollection collections={collectionNames} getRefresh={setRefresh} />
+            <div className="collection-options-container">
+                <AddCollection collections={collectionNames} getRefresh={setRefresh} />
+                <RemoveCollection collections={collectionNames} getRefresh={setRefresh} />
+            </div>
             <CollectionsManagement collections={collections} />
         </Page>
     )

@@ -77,47 +77,51 @@ export default function SignUpForm () {
     };
 
     return (
-        <form onSubmit={handleSubmit(submitForm)}>
+        <form className="account-form" onSubmit={handleSubmit(submitForm)}>
             <label htmlFor="username-signup">
-                Username<span className="required">*</span>
+                Username
                 <input
+                required
                 id="username-signup"
                 type="text"
                 {...register("username", {required: true, pattern: {value: /^\w{4,12}$/, message: "Username must be between 4 and 12 characters long and contain only letters, numbers and underscores."}})}
                 />
-                {errors.username && <p className="erorr">{errors.username.message}</p>}
             </label>
+            {errors.username && <p className="erorr">{errors.username.message}</p>}
 
             <label htmlFor="email-signup">
-                Email<span className="required">*</span>
+                Email
                 <input
+                required
                 id="email-signup"
                 type="email"
                 {...register("email", {required: true, pattern: {value: /^[^\s]+@[^\s]+\.[^\s]{3,}$/, message: "Please enter a valid email."}})}
                 />
-                {errors.email && <p className="error">{errors.email.message}</p>}
             </label>
+            {errors.email && <p className="error">{errors.email.message}</p>}
 
             <label htmlFor="password-signup">
-                Password<span className="required">*</span>
+                Password
                 <input
+                required
                 id="password-signup"
                 type="password"
                 {...register("password", {required: true})}
                 />
-                <small>
-                    Password strength:{' '}
-                    <span style={{
-                        fontWeight: 'bold',
-                        color: strengthColor[strength as keyof typeof strengthColor],
-                    }}>
-                        {strength}
-                    </span>
-                </small>
-                {passwordError && <p className="error">{passwordError}</p>}
             </label>
+            <small>
+                Password strength: {' '}
+                <span style={{
+                    fontWeight: 'bold',
+                    color: strengthColor[strength as keyof typeof strengthColor],
+                }}>
+                    {strength}
+                </span>
+            </small>
+            {passwordError && <p className="error">{passwordError}</p>}
 
             <button
+                className="account-button"
                 disabled={status === "SUBMITTING"}
                 type="submit">
                 Submit

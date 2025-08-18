@@ -9,6 +9,7 @@ import SearchResultsTable from "../../components/SearchResultsTable/SearchResult
 import { UserStats } from "../../components/Stats/UserStats/UserStats";
 import Stats from "../../components/Stats/Stats";
 import "./Home.scss";
+import LoginMessage from "../../components/LoginMessage/LoginMessage";
 
 export default function Home() {
     const loginContext = useContext(LoginContext);
@@ -18,7 +19,7 @@ export default function Home() {
         return (
             <Page>
                 <h1>Home</h1>
-                <p>Please <a href="/login">log in</a></p>
+                <LoginMessage />
             </Page>
         )
     };

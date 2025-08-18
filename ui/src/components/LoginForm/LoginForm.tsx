@@ -40,25 +40,24 @@ export const LoginForm: React.FC = (): JSX.Element => {
     };
 
     return (
-        <div>
-            <form onSubmit={handleSubmit(submitForm)}>
-                <label htmlFor="email">
-                    Email
-                    <input type="email" id="email" {...register("email", {required: true})} />
-                </label>
+        <form className="account-form" onSubmit={handleSubmit(submitForm)}>
+            <label htmlFor="email">
+                Email
+                <input required type="email" id="email" {...register("email", {required: true})} />
+            </label>
 
-                <label htmlFor="password">
-                    Password
-                    <input id="password" type="password" {...register("password", {required: true})} />
-                </label>
+            <label htmlFor="password">
+                Password
+                <input required id="password" type="password" {...register("password", {required: true})} />
+            </label>
 
-                <button 
-                    disabled={status === "SUBMITTING"}
-                    type="submit">
-                    Log In
-                </button>
-                {status === "ERROR" && <p>{error}.</p>}
-            </form>
-        </div>
+            <button 
+                className="account-button"
+                disabled={status === "SUBMITTING"}
+                type="submit">
+                Log In
+            </button>
+            {status === "ERROR" && <p>{error}.</p>}
+        </form>
     )
 };

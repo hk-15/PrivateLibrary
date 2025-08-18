@@ -19,7 +19,6 @@ export const AddCollection: React.FC<IProps> = ({ collections, getRefresh }) => 
         register,
         handleSubmit,
         reset,
-        formState: { errors },
     } = useForm({
         defaultValues: {
             collection: ""
@@ -32,6 +31,14 @@ export const AddCollection: React.FC<IProps> = ({ collections, getRefresh }) => 
         setStatus("SUBMITTING");
         if (collections.includes(data.collection)) {
             setStatus("DUPLICATE")
+            reset();
+            setFadeOut(false)
+            setTimeout(() => {
+                setFadeOut(true);
+            }, 3000);
+            setTimeout(() => {
+                setStatus("READY");
+            }, 4000)
             return;
         }
         addCollection(data.collection)
@@ -48,41 +55,55 @@ export const AddCollection: React.FC<IProps> = ({ collections, getRefresh }) => 
                 }, 4000)
                 getRefresh(true);
             })
-            .catch(() => setStatus("ERROR"));
+            .catch((err) => {
+                console.error(err);
+                setStatus("ERROR");
+                setFadeOut(false)
+                setTimeout(() => {
+                    setFadeOut(true);
+                }, 3000);
+                setTimeout(() => {
+                    setStatus("READY");
+                }, 4000)
+            });
     }
 
     return (
-        <div>
+        <div className="collection-form-container">
             {!showForm && (
                 <button
+                    className="green-button"
                     onClick={() => setShowForm(true)}>
                     Add Collection
                 </button>
             )}
             {showForm && (
-                <form onSubmit={handleSubmit(submitForm)}>
+                <form className="collection-form" onSubmit={handleSubmit(submitForm)}>
                     <label htmlFor="collection">
-                        Collection name <span className="required">*</span>
+                        Collection name
                         <input
                             id="collection"
                             type="text"
-                            {...register("collection", { required: { value: true, message: "This field is required" } })}
+                            required
+                            {...register("collection")}
                         />
-                        {errors.collection && (<span className="error"> {errors.collection.message}</span>)}
                     </label>
-                    <button
-                        disabled={status === "SUBMITTING"}
-                        type="submit">
-                        Add Collection
-                    </button>
-                    {status === "ERROR" && <p>Something went wrong. Please try again.</p>}
-                    {status === "DUPLICATE" && <p>That collection already exists.</p>}
+                    {status === "ERROR" && <p className={`message ${fadeOut ? 'fade-out' : ''}`}>Something went wrong. Please try again.</p>}
+                    {status === "DUPLICATE" && <p className={`message ${fadeOut ? 'fade-out' : ''}`}>That collection already exists.</p>}
                     {status === "FINISHED" && showMessage && <p className={`message ${fadeOut ? 'fade-out' : ''}`}>Collection has been added.</p>}
-                    <button
-                        type="button"
-                        onClick={() => setShowForm(false)}>
-                        Cancel
-                    </button>
+                    <div className="form-buttons-container">
+                        <button
+                            className="green-button"
+                            disabled={status === "SUBMITTING"}
+                            type="submit">
+                            Add Collection
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setShowForm(false)}>
+                            Cancel
+                        </button>
+                    </div>
                 </form>
             )}
         </div>

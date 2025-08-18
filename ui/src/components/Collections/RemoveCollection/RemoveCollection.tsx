@@ -20,7 +20,6 @@ export const RemoveCollection: React.FC<IProps> = ({ collections, getRefresh }) 
         register,
         handleSubmit,
         reset,
-        formState: {errors},
     } = useForm({
         defaultValues: {
             collection: ""
@@ -48,49 +47,56 @@ export const RemoveCollection: React.FC<IProps> = ({ collections, getRefresh }) 
                 setTimeout(() => {
                     setShowMessage(false);
                 }, 4000)
-                getRefresh(true);  
+                getRefresh(true);
             })
             .catch((err) => {
                 setStatus("ERROR")
                 setErrMessage(err.message)
                 reset();
             });
-        
+
     }
 
     return (
-        <div>
+        <div className="collection-form-container">
             {!showForm && (
                 <button
+                    className="red-button"
                     onClick={() => setShowForm(true)}>
                     Remove Collection
                 </button>
             )}
             {showForm && (
-            <form onSubmit={handleSubmit(submitForm)}>
-                <label htmlFor="collection">
-                    Please enter collection name to confirm removal
-                <input
-                    id="collection"
-                    type="text"
-                    {...register("collection")}
-                />
-                {errors.collection && (<span className="error"> {errors.collection.message}</span>)}
-                </label>
-                <button
-                    disabled={status === "SUBMITTING"}
-                    type="submit">
-                    Remove Collection
-                </button>
-                {status === "ERROR" && <p>{errMessage}</p>}
-                {status === "FINISHED" && showMessage && <p className={`message ${fadeOut ? 'fade-out' : ''}`}>Collection has been removed.</p>}
-                <button
-                    type="button"
-                    onClick={() => setShowForm(false)}>
-                    Cancel
-                </button>
-            </form>
-        )}
+                <form className="collection-form" onSubmit={handleSubmit(submitForm)}>
+                    <label htmlFor="collection">
+                        Collection name
+                        <input
+                            id="collection"
+                            type="text"
+                            required
+                            {...register("collection")}
+                        />
+                    </label>
+                    {status === "ERROR" && <p>{errMessage}</p>}
+                    {status === "FINISHED" && showMessage && <p className={`message ${fadeOut ? 'fade-out' : ''}`}>Collection has been removed.</p>}
+                    <div className="form-buttons-container">
+                        <button
+                            className="red-button"
+                            disabled={status === "SUBMITTING"}
+                            type="submit">
+                            Remove Collection
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setShowForm(false);
+                                setErrMessage("");
+                            }}>
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            )}
         </div>
     )
 }
