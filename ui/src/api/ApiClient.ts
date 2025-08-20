@@ -9,11 +9,28 @@ export interface Book {
     originalLanguage?: string,
     collection: string,
     publicationYear: number,
-    read?: boolean,
+    read: boolean,
     notes?: string,
     tags: string[],
     owner: string
 }
+
+export const emptyBook: Book = {
+    id: 0,
+    isbn: '',
+    title: '',
+    subtitle: '',
+    authors: [''],
+    translator: '',
+    language: '',
+    originalLanguage: '',
+    collection: '',
+    publicationYear: 0,
+    notes: '',
+    tags: [''],
+    read: false,
+    owner: ''
+};
 
 export interface BookRequest {
     isbn: string,
@@ -25,7 +42,7 @@ export interface BookRequest {
     originalLanguage?: string,
     collectionId: number,
     publicationYear: number,
-    read?: boolean,
+    read: boolean,
     notes?: string,
     tags: string[]
 }

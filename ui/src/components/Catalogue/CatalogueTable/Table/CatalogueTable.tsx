@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { deleteBook, getAllCollections, getBooks, updateBookDetails, updateReadStatus, type Book, type BookRequest, type Collection } from "../../../../api/ApiClient";
-import { LibraryView } from "../LibraryView/LibraryView";
-import { EditView } from "../EditView/EditView";
+import { DetailsPopUp } from "../../DetailsPopUp/DetailsPopUp";
 
 const emptyBook: Book = {
     id: 0,
@@ -26,7 +25,6 @@ export default function CatalogueTable(props:
         sortBy: string,
         searchTerm: string
     }) {
-    const [showEdit, setShowEdit] = useState(false);
     const [books, setBooks] = useState<Book[]>([]);
     const [collections, setCollections] = useState<Collection[]>([]);
     const [nextPageBooks, setNextPageBooks] = useState<Book[]>([]);
@@ -34,6 +32,8 @@ export default function CatalogueTable(props:
     const [changeReadStatusId, setChangeReadStatusId] = useState(0);
     const [deleteId, setDeleteId] = useState(0);
     const [editedBook, setEditedBook] = useState(emptyBook);
+    const [showPopUp, setShowPopUp] = useState(false);
+    const [selectedBook, setSelectedBook] = useState<Book>(emptyBook);
 
     useEffect(() => {
         getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
@@ -86,7 +86,7 @@ export default function CatalogueTable(props:
     }, [changeReadStatusId]);
 
     useEffect(() => {
-        if (editedBook !== emptyBook) {
+        if (editedBook.id !== 0) {
             const doUpdate = async () => {
                 try {
                     const bookUpdate: BookRequest = {
@@ -103,6 +103,7 @@ export default function CatalogueTable(props:
                         notes: editedBook.notes ?? "",
                         tags: editedBook.tags
                     };
+                    console.log(typeof editedBook.read);
                     await updateBookDetails(editedBook.id, bookUpdate);
                     await getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
                         .then(response => setBooks(response));
@@ -111,6 +112,7 @@ export default function CatalogueTable(props:
                 }
             };
             doUpdate();
+            setSelectedBook(editedBook);
             setEditedBook(emptyBook);
         }
     }, [editedBook])
@@ -128,29 +130,54 @@ export default function CatalogueTable(props:
             };
             doUpdate();
             setDeleteId(0);
+            setShowPopUp(false);
         }
     }, [deleteId]);
 
     return (
         <div className="catalogue-and-nav-container">
-            <button
-                onClick={() => {
-                    if (!showEdit) {
-                        setShowEdit(true)
-                    }
-                    else {
-                        setShowEdit(false)
-                    }
-                }}>
-                {showEdit ? "Library view" : "Edit view"}
-            </button>
-
-            <div className={!showEdit ? "catalogue-table-container" : ""}>
-                {!showEdit && <LibraryView books={books} getSelectedId={setChangeReadStatusId} />}
-            </div>
-            <div className={showEdit ? "catalogue-table-container" : ""}>
-                {showEdit && <EditView books={books} collections={collections} getEditedBook={setEditedBook} getDeleteId={setDeleteId} />}
-            </div>
+            <table className="library-view-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th className="pub-year">Publication year</th>
+                        <th className="collection">Collection</th>
+                        <th>Tags</th>
+                        <th className="actions"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {books.length === 0 ? <tr><td>No books to see here...</td></tr> :
+                        books.map(b =>
+                            <tr key={b.id} className={`${b.read ? 'marked-read' : ''}`}>
+                                <td><span
+                                    className="clickable"
+                                    onClick={() => {
+                                        setSelectedBook(b)
+                                        setShowPopUp(true)
+                                    }}>{b.title}</span></td>
+                                <td>{b.authors.length > 1 ? `${b.authors.join(', ')}` : b.authors}</td>
+                                <td>{b.publicationYear}</td>
+                                <td>{b.collection}</td>
+                                <td>{b.tags.map(tag => <span className="tag" key={tag} >{tag}</span>)}</td>
+                                <td>
+                                    <button
+                                        onClick={() => setChangeReadStatusId(b.id)}
+                                    >{`${b.read ? 'Mark unread' : 'Mark read'}`}</button>
+                                    <button
+                                        onClick={() => {
+                                            setSelectedBook(b)
+                                            setShowPopUp(true)
+                                        }}
+                                    >Details
+                                    </button>
+                                </td>
+                            </tr>
+                        )}
+                </tbody>
+            </table>
+            <DetailsPopUp showPopUp={showPopUp} closePopUp={() => setShowPopUp(false)} book={selectedBook} getEditedBook={setEditedBook} collections={collections} getDeleteId={setDeleteId} />
 
             <button
                 onClick={() => setPageNum(prevPage(pageNum))}

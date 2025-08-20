@@ -102,22 +102,6 @@ public class BooksController : ControllerBase
         }
     }
 
-    [HttpGet]
-    [Route("{id}")]
-    [Authorize]
-    public async Task<IActionResult> GetBookById(int id)
-    {
-        try
-        {
-            var book = await _booksService.GetById(id);
-            return Ok(book);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = ex.Message });
-        }
-    }
-
     [HttpPost]
     [Authorize]
     public async Task<IActionResult> AddBook([FromBody] BookRequest newBook)

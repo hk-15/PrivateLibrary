@@ -16,8 +16,7 @@
     background-color: constants.$color-primary;
 }
 
-.library-view-table button,
-.edit-view-table button {
+.library-view-table button {
     margin: 0.25rem;
     padding: 0.25rem;
     font-size: .75rem;
@@ -25,33 +24,21 @@
 
 .library-view-table {
     width: 90vw;
+    background-color: constants.$color-background-darker;
+    padding: 1rem;
+    border-radius: 1rem;
+
+    .clickable:hover {
+        cursor: pointer;
+    }
 }
 
 .catalogue-and-nav-container {
     padding: 1.5rem;
 }
 
-.catalogue-table-container {
-    overflow: auto;
-    background-color: constants.$color-background-darker;
-    padding: 1rem;
-    border-radius: 1rem;
-}
-
-.edit-view-table {
-    width: 150%;
-
-    .delete-message {
-        font-size: .75rem;
-        background-color: red;
-    }
-}
-
-.library-view-table,
-.edit-view-table {
-    .isbn {
-        width: 8rem;
-    }
+.library-view-table {
+    text-align: left;
 
     .pub-year {
         width: 6rem;
@@ -66,24 +53,56 @@
     }
 
     .actions {
-        width: 7rem;
+        width: 9.5rem;
     }
 }
 
-.edit-row {
-    background-color: constants.$color-secondary;
+.PopUp {
+    position: fixed;
+    
+    left: 15%;
+    top: 15%;
 
-    input,
-    select,
-    .isbn {
-        width: 85%;
+    width: 70%;
+    height: 80%;
+    overflow-y: scroll;
+
+    border: 1px solid grey;
+    border-radius: 1em;
+    box-shadow: -2px 5px 5px grey;
+
+    background-color: white;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    .close-button {
+        position: absolute;
+        right: 0;
     }
 
-    input {
-        border: 1px solid constants.$color-secondary;
-        margin: .5rem;
-        border-radius: 5px;
-        padding: .25rem 0 .25rem .25rem;
+    table {
+        margin: 2rem auto;
+        text-align: left;
+        width: 70%;
+        
+        .first-col {
+            width: 10rem;
+        }
+        tr {
+            height: 2.5rem;
+            border-bottom: solid grey;
+        }
+        td {
+            padding-left: 1rem;
+        }
+    }
+
+    .actions-container {
+        display: flex;
+        justify-content: center;
     }
 }
 
@@ -92,12 +111,8 @@
         background-color: constants.$color-secondary-opaque;
     }
 
-    .catalogue-table-container {
+    .library-view-table {
         background-color: constants.$color-background-light-darker;
 
-    }
-
-    .edit-row {
-        background-color: constants.$color-primary;
     }
 }
