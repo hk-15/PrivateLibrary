@@ -9,13 +9,15 @@ type Props = {
 }
 
 export const PendingTransfers: React.FC<Props> = ({ currentUser }) => {
-    const [transfers, setTransfers] = useState<Transfer[]>([]);
+    const [incoming, setIncoming] = useState<Transfer[]>([]);
+    const [sent, setSent] = useState<Transfer[]>([]);
     const [refresh, setRefresh] = useState(false);
 
     useEffect(() => {
         getTransfers()
             .then(response => {
-                setTransfers(response);
+                setIncoming(response.filter(t => t.transferTo === currentUser && t.rejectedMessage === ""));
+                setSent(response.filter(t => t.transferFrom == currentUser));
                 setRefresh(false);
             })
             .catch(err => console.error(err));
@@ -23,11 +25,21 @@ export const PendingTransfers: React.FC<Props> = ({ currentUser }) => {
 
     return (
         <div>
-            <MakeATransfer getRefresh={setRefresh}/>
-            <h2>Incoming transfer requests</h2>
-            <IncomingRequests requests={transfers.filter(t => t.transferTo === currentUser && t.rejectedMessage === "")} getRefresh={setRefresh} />
-            <h2>Sent transfer requests</h2>
-            <SentRequests requests={transfers.filter(t => t.transferFrom == currentUser)} getRefresh={setRefresh} />
+            <MakeATransfer getRefresh={setRefresh} />
+            {incoming.length > 0 &&
+                <div>
+                    <h2>Incoming transfer requests</h2>
+                    <div className="border-spaced-bottom">
+                        <IncomingRequests requests={incoming} getRefresh={setRefresh} />
+                    </div>
+                </div>
+            }
+            {sent.length > 0 &&
+                <div className="border-spaced-bottom">
+                    <h2>Sent transfer requests</h2>
+                    <SentRequests requests={sent} getRefresh={setRefresh} />
+                </div>
+            }
         </div>
     )
 }

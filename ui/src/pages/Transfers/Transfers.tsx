@@ -3,6 +3,7 @@ import { LoginContext } from "../../components/LoginManager/LoginManager";
 import { Page } from "../Page/Page";
 import { PendingTransfers } from "../../components/Transfers/PendingTransfers/PendingTransfers";
 import LoginMessage from "../../components/LoginMessage/LoginMessage";
+import "./Transfers.scss";
 
 export default function Transfers() {
     const loginContext = useContext(LoginContext);

@@ -40,13 +40,14 @@ export const IncomingRequests: React.FC<Props> = ({ requests, getRefresh }) => {
     }
 
     return (
-        <table>
+        <table className="requests-table">
             <thead>
                 <tr>
                     <th>ISBN</th>
                     <th>Title</th>
                     <th>Author</th>
                     <th>User</th>
+                    <th className="actions"></th>
                 </tr>
             </thead>
             <tbody>
@@ -57,22 +58,37 @@ export const IncomingRequests: React.FC<Props> = ({ requests, getRefresh }) => {
                         <td>{r.author}</td>
                         <td>{r.transferFrom}</td>
                         <td>
-                            <button
-                                onClick={() =>
-                                    setHandleRequest(prev => ({
-                                        ...prev,
-                                        id: r.id,
-                                        action: "accept"
-                                    }))}
-                            >Accept</button>
-                            {handleRequest.id === r.id && handleRequest.action === "accept" &&
-                                <span>Are you sure?
+                            {handleRequest.id === 0 &&
+                                <div>
                                     <button
+                                        className="no-margin-button green-button"
+                                        onClick={() =>
+                                            setHandleRequest(prev => ({
+                                                ...prev,
+                                                id: r.id,
+                                                action: "accept"
+                                            }))}
+                                    >Accept</button>
+                                    <button
+                                        className="no-margin-button red-button"
+                                        onClick={() => setHandleRequest(prev => ({
+                                            ...prev,
+                                            id: r.id,
+                                            action: "reject"
+                                        }))}
+                                    >Reject</button>
+                                </div>
+                            }
+                            {handleRequest.id === r.id && handleRequest.action === "accept" &&
+                                <span className="action-check">Are you sure?
+                                    <button
+                                        className="no-margin-button green-button"
                                         onClick={handleSave}
                                     >
-                                        Add {r.bookTitle} to catalogue
+                                        Add to catalogue
                                     </button>
                                     <button
+                                        className="no-margin-button"
                                         onClick={() => setHandleRequest(prev => ({
                                             ...prev,
                                             id: 0,
@@ -83,16 +99,8 @@ export const IncomingRequests: React.FC<Props> = ({ requests, getRefresh }) => {
                                     </button>
                                 </span>
                             }
-
-                            <button
-                                onClick={() => setHandleRequest(prev => ({
-                                    ...prev,
-                                    id: r.id,
-                                    action: "reject"
-                                }))}
-                            >Reject</button>
                             {handleRequest.id === r.id && handleRequest.action === "reject" &&
-                                <span>Are you sure?
+                                <span className="action-check">
                                     <label
                                         htmlFor="message"
                                     >Please provide a reason:
@@ -108,16 +116,20 @@ export const IncomingRequests: React.FC<Props> = ({ requests, getRefresh }) => {
                                     </label>
                                     {err && <p>{err}</p>}
                                     <button
+                                        className="red-button"
                                         onClick={handleSave}
                                     >
                                         Reject request
                                     </button>
                                     <button
-                                        onClick={() => setHandleRequest(prev => ({
+                                        onClick={() => {
+                                            setHandleRequest(prev => ({
                                             ...prev,
                                             id: 0,
                                             action: ""
-                                        }))}
+                                            }))
+                                            setErr("");
+                                        }}
                                     >
                                         Cancel
                                     </button>

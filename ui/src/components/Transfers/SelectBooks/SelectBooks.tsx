@@ -21,9 +21,7 @@ export const SelectBooks: React.FC<Props> = ({ searchTerm, getSelectedBooks }) =
     }, [selectedBooks])
 
     if (!searchTerm) {
-        return (
-            <p>Search your catalogue</p>
-        )
+        return (null)
     };
 
     return (
@@ -35,6 +33,7 @@ export const SelectBooks: React.FC<Props> = ({ searchTerm, getSelectedBooks }) =
                     <th>Author</th>
                     <th>Publication Year</th>
                     <th>Collection</th>
+                    <th className="select-col"></th>
                 </tr>
             </thead>
             <tbody>
@@ -46,8 +45,7 @@ export const SelectBooks: React.FC<Props> = ({ searchTerm, getSelectedBooks }) =
                             <td>{b.authors.length > 1 ? `${b.authors.join(', ')}` : b.authors}</td>
                             <td>{b.publicationYear}</td>
                             <td>{b.collection}</td>
-                            <td>{b.tags.join(', ')}</td>
-                            <td><input type="checkbox" id={b.id.toString()} name={b.id.toString()} onChange={(e) => {
+                            <td><input type="checkbox" id={b.id.toString()} name={b.id.toString()} checked={selectedBooks.some(book => book.id === b.id)} onChange={(e) => {
                                 setSelectedBooks(prev => {
                                     if (e.target.checked) return [...prev, b];
                                     else return prev.filter(book => book.id !== b.id);

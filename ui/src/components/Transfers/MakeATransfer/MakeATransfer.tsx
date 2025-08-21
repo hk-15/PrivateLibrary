@@ -60,29 +60,29 @@ export const MakeATransfer: React.FC<Props> = ({ getRefresh }) => {
     }
 
     return (
-        <div>
+        <div className="new-transfer-container border-spaced-bottom">
             {!showForm && (
                 <button
-                    className="green-button"
+                    className="green-button no-margin-button"
                     onClick={() => setShowForm(true)}>
                     Make a transfer
                 </button>
             )}
             {showForm && (
                 <form onSubmit={handleSubmit(submitForm)}>
-                    To transfer books to another user of the library, enter their username and search books from your catalogue to add to the request.
+                    <span className="border-spaced-bottom">To transfer books to another user of the library, enter their username and search books from your catalogue to add to the request.</span>
                     <label htmlFor="username">
-                        User (case-sensitive)<span className="required">*</span>
+                        Username (case-sensitive)
                         <input
                             id="username"
                             type="text"
                             {...register("username", { required: { value: true, message: "This field is required" } })}
                         />
-                        {errors.username && (<span className="error"> {errors.username.message}</span>)}
                     </label>
+                    {errors.username && (<span className="error"> {errors.username.message}</span>)}
                     <SearchBar getSearchTerm={setSearchTerm} />
                     <SelectBooks searchTerm={searchTerm} getSelectedBooks={setSelectedBooks} />
-                    <p>Books to be transferred</p>
+                    <p className="search-heading">Books to be transferred</p>
                     <ul>
                         {selectedBooks.map(book =>
                             <li key={book.id}>{book.isbn}: {book.title}</li>

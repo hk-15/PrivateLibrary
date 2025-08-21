@@ -14,7 +14,7 @@ export const SentRequests: React.FC<Props> = ({ requests, getRefresh }) => {
     }
 
     return (
-        <table>
+        <table className="requests-table">
             <thead>
                 <tr>
                     <th>ISBN</th>
@@ -22,6 +22,7 @@ export const SentRequests: React.FC<Props> = ({ requests, getRefresh }) => {
                     <th>Author</th>
                     <th>User</th>
                     <th>Status</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -32,13 +33,20 @@ export const SentRequests: React.FC<Props> = ({ requests, getRefresh }) => {
                         <td>{r.author}</td>
                         <td>{r.transferTo}</td>
                         {r.rejectedMessage === "" ? 
-                        <td>Pending
+                        <div>
+                        <td>Pending</td>
+                        <td>
                         <button
                         onClick={() => handleClick(r.id)}
-                        >Cancel</button></td>
+                        >Cancel</button>
+                        </td>
+                        </div>
                         :
-                        <td>Rejected <br/> Reason: {r.rejectedMessage}
-                        <button onClick={() => handleClick(r.id)}>Reshelve</button></td>   
+                        <div>
+                        <td className="transfer-status-col">Rejected <br/> Reason: {r.rejectedMessage}</td>
+                            <td>
+                        <button className="no-margin-button" onClick={() => handleClick(r.id)}>Close</button></td>  
+                        </div> 
                     }
                     </tr>
                 ))}
