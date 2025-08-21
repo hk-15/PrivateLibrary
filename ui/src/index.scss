@@ -21,9 +21,6 @@ textarea {
 
 .page {
   padding: 2rem 0;
-  min-height: calc(
-    100vh - #{constants.$nav-height} - #{constants.$footer-height}
-  );
 }
 
 a {

@@ -13,18 +13,22 @@ import Footer from './components/Footer/Footer'
 export default function App() {
   return (
     <LoginManager>
-      <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/catalogue" element={<Catalogue />} />
-          <Route path="/collections" element={<Collections />} />
-          <Route path="/add-book" element={<AddBook />} />
-          <Route path="/transfers" element={<Transfers />} />
-          <Route path="/login" element={<Login />} />
-        </Routes>
-        <Footer />
-      </BrowserRouter>
+      <div className="app-container">
+        <BrowserRouter>
+          <Navbar />
+          <div className="main-content">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/catalogue" element={<Catalogue />} />
+              <Route path="/collections" element={<Collections />} />
+              <Route path="/add-book" element={<AddBook />} />
+              <Route path="/transfers" element={<Transfers />} />
+              <Route path="/login" element={<Login />} />
+            </Routes>
+          </div>
+          <Footer />
+        </BrowserRouter>
+      </div>
     </LoginManager>
   )
 }
