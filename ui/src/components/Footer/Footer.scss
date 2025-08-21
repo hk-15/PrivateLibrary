@@ -1,0 +1,17 @@
+@use "../../styles/constants";
+
+.footer {
+    background-color: light-dark(constants.$color-background-dark, constants.$color-background-light);
+    color: light-dark(constants.$color-background-light, constants.$color-background-dark);
+    width: 100vw;
+    height: constants.$footer-height;
+    position: relative;
+    bottom: 0;
+
+    p {
+        text-transform: uppercase;
+        font-weight: 600;
+        padding: 1.5rem;
+        margin: 0 auto;
+    }
+}

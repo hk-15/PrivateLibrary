@@ -8,6 +8,7 @@ import { Navbar } from './components/Navbar/Navbar'
 import Login from './pages/Login/Login'
 import { LoginManager } from './components/LoginManager/LoginManager'
 import Transfers from './pages/Transfers/Transfers'
+import Footer from './components/Footer/Footer'
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/transfers" element={<Transfers />} />
           <Route path="/login" element={<Login />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </LoginManager>
   )

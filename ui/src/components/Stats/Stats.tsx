@@ -26,7 +26,7 @@ export default function Stats() {
 
     return (
         <div className="border-spaced-bottom">
-            <h2 className="border-spaced-bottom">Library stats </h2>
+            <h2>Library stats </h2>
             <div className="border-spaced-bottom">
                 <ul className="stats-highlights">
                     <li><span className="stat-number">{numOfBooks}</span>books</li>
