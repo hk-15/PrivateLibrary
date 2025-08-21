@@ -135,7 +135,7 @@ export default function CatalogueTable(props:
     }, [deleteId]);
 
     return (
-        <div className="catalogue-and-nav-container">
+        <div className="border-spaced-bottom">
             <table className="library-view-table">
                 <thead>
                     <tr>
@@ -167,7 +167,7 @@ export default function CatalogueTable(props:
                                         onClick={() => setChangeReadStatusId(b.id)}
                                     >{`${b.read ? 'Mark unread' : 'Mark read'}`}</button>
                                 </td>
-                                <td className="actions">
+                                <td className="actions details">
                                     <button
                                         onClick={() => {
                                             setSelectedBook(b)

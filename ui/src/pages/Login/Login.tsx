@@ -12,19 +12,22 @@ export default function Login() {
     if (loginContext.isLoggedIn) {
         return (
             <Page>
-                <h1>Log out?</h1>
-                <LogOutButton/>
+                <h1 className="border-spaced-bottom">Log out?</h1>
+                <LogOutButton />
             </Page>
         )
     };
-    
+
     return (
         <Page>
-            <h1>Log in</h1>
-            <LoginForm/>
-            <p>or</p>
-            <h2>Create an acccount</h2>
-            <SignUpForm/>
+            <h1 className="border-spaced-bottom">Log in</h1>
+            <div className="border-spaced-bottom">
+                <LoginForm />
+            </div>
+            <h2 className="border-spaced-bottom">Create an acccount</h2>
+            <div className="border-spaced-bottom">
+                <SignUpForm />
+            </div>
         </Page>
     )
 }

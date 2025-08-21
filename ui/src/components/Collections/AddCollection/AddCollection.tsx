@@ -72,7 +72,7 @@ export const AddCollection: React.FC<IProps> = ({ collections, getRefresh }) => 
         <div className="collection-form-container">
             {!showForm && (
                 <button
-                    className="green-button"
+                    className="green-button no-margin-button"
                     onClick={() => setShowForm(true)}>
                     Add Collection
                 </button>

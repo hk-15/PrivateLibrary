@@ -5,9 +5,58 @@
     justify-content: center;
 
     .collection-form-container {
-        padding: 1rem;
         width: 440px;
     }
+}
+
+.collapsible-container {
+    width: 80vw;
+}
+
+.collapsible-header {
+    button {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 80vw;
+        margin-left: 0;
+    }
+}
+
+.collapsible-body {
+    max-height: 60vh;
+    overflow-y: scroll;
+
+    .table-container {
+        padding-bottom: 2rem;
+
+        select {
+            margin-left: 2rem;
+        }
+
+        table {
+            width:100%;
+        }
+
+        .select-col {
+            width: 2rem;
+        }
+
+        .message {
+            margin-top: 2rem;
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+
+            button {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    
 }
 
 .collection-form {

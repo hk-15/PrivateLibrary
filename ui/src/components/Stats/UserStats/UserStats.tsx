@@ -28,9 +28,9 @@ export const UserStats: React.FC<Props> = ({ username }) => {
         .sort((a, b) => b.count - a.count);
 
     return (
-        <div className="stats-container">
-            <h2>{username}&#8217;s stats </h2>
-            <div>
+        <div className="border-spaced-bottom">
+            <h2 className="border-spaced-bottom">{username}&#8217;s stats </h2>
+            <div className="border-spaced-bottom">
                 <ul className="stats-highlights">
                     <li><span className="stat-number">{numOfBooks}</span>books</li>
                     <li><span className="stat-number">&nbsp;{readPercentage}%</span>read</li>

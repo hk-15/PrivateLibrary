@@ -25,9 +25,9 @@ export default function Stats() {
         .sort((a, b) => b.count - a.count);
 
     return (
-        <div className="stats-container">
-            <h2>Library stats </h2>
-            <div>
+        <div className="border-spaced-bottom">
+            <h2 className="border-spaced-bottom">Library stats </h2>
+            <div className="border-spaced-bottom">
                 <ul className="stats-highlights">
                     <li><span className="stat-number">{numOfBooks}</span>books</li>
                     <li><span className="stat-number">&nbsp;{readPercentage}%</span>read</li>

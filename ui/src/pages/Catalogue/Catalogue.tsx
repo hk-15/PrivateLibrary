@@ -26,15 +26,17 @@ export default function Catalogue() {
 
     return (
         <Page>
-            <h1>Catalogue</h1>
-            <div className="catalogue-options-container">
-            <SearchBar getSearchTerm={setSearchTerm}/>
-            <CatalogueSort getSortBy={setSortBy}/>
-            <CataloguePageSize getPageSize={setPageSize}/>
+            <h1 className="border-spaced-bottom">Catalogue</h1>
+            <div className="catalogue-options-container border-spaced-bottom">
+                <SearchBar getSearchTerm={setSearchTerm} />
+                <CatalogueSort getSortBy={setSortBy} />
+                <CataloguePageSize getPageSize={setPageSize} />
             </div>
-            <CatalogueTable pageSize={pageSize} sortBy={sortBy} searchTerm={searchTerm}/>
-            <AddBookButton/>
-            <ManageCollectionsButton/>
+            <CatalogueTable pageSize={pageSize} sortBy={sortBy} searchTerm={searchTerm} />
+            <div className="border-spaced-bottom">
+                <AddBookButton />
+                <ManageCollectionsButton />
+            </div>
         </Page>
     );
 }

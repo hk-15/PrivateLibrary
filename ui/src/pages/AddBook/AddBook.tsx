@@ -18,7 +18,7 @@ export default function Catalogue() {
 
     return (
         <Page>
-            <h1>Shelve a book</h1>
+            <h1 className="border-spaced-bottom">Shelve a book</h1>
             <AddBookForm />
         </Page>
     );

@@ -7,10 +7,11 @@ $color-secondary: #70A9EB;
 $color-secondary-opaque: #70A9EB90;
 
 $color-green: #86ED3F;
+$color-green-opaque: #86ED3F90;
 $color-orange: #F4B453;
 $color-pink: #F453E3;
 $color-blue: #5393F4;
 
-$border: 1px solid #242424;
+$border: 1px solid light-dark(#242424, white);
 
 $font: 'Schibsted Grotesk', Avenir, Arial, Helvetica, sans-serif;

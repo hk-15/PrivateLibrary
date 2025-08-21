@@ -36,8 +36,8 @@ export default function Collections() {
 
     return (
         <Page>
-            <h1>Collections</h1>
-            <div className="collection-options-container">
+            <h1 className="border-spaced-bottom">Collections</h1>
+            <div className="collection-options-container border-spaced-bottom">
                 <AddCollection collections={collectionNames} getRefresh={setRefresh} />
                 <RemoveCollection collections={collectionNames} getRefresh={setRefresh} />
             </div>

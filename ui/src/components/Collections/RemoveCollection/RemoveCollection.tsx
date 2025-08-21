@@ -61,7 +61,7 @@ export const RemoveCollection: React.FC<IProps> = ({ collections, getRefresh }) 
         <div className="collection-form-container">
             {!showForm && (
                 <button
-                    className="red-button"
+                    className="red-button no-margin-button"
                     onClick={() => setShowForm(true)}>
                     Remove Collection
                 </button>

@@ -1,11 +1,9 @@
-.stats-container {
-    margin: 40px 0;
-}
+@use "../../styles/constants.scss";
 
 .stats-highlights {
     display: flex;
     justify-content: space-around;
-    padding: 2rem;
+    padding-left: 0;
 
     li {
         list-style: none;
@@ -22,6 +20,12 @@
     }
 }
 
+ul.stats-highlights {
+    margin: 0;
+}
+
 .bar-charts-container {
     display: flex;
+    padding-left: 2rem;
+    padding-right: 3rem;
 }

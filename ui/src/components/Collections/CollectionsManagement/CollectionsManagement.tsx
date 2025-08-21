@@ -18,7 +18,7 @@ export const CollectionsManagement: React.FC<Props> = ({ collections }) => {
     }, [collections, fetchBooks]);
     
     return (
-        <div>
+        <div className="border-spaced-bottom">
             {collections.sort().map(collection => {
                 return <Collapsible key={collection.id} open={false} header={collection.name} books={books.filter(b => b.collection === collection.name)} collections={collections} getRefresh={setFetchBooks}/>
             })}

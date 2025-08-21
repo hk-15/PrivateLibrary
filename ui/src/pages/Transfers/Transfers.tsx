@@ -17,7 +17,7 @@ export default function Transfers() {
 
     return (
         <Page>
-            <h1>Transfers</h1>
+            <h1 className="border-spaced-bottom">Transfers</h1>
             <PendingTransfers currentUser={loginContext.username} />
         </Page>
     )

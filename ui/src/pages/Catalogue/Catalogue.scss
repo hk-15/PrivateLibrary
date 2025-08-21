@@ -5,10 +5,6 @@
     align-items: center;
     justify-content: center;
     width: 100vw;
-    margin: 0 auto;
-    border-bottom: constants.$border;
-    margin-bottom: 2rem;
-    padding-bottom: 2rem;
 
     label {
         padding: 0 2rem;
@@ -19,7 +15,7 @@
 }
 
 .marked-read {
-    background-color: constants.$color-green;
+    background-color: light-dark(constants.$color-green, constants.$color-green-opaque);
     font-weight: 500;
 }
 
@@ -39,15 +35,7 @@
     }
 }
 
-.catalogue-and-nav-container {
-    padding-bottom: 2rem;
-    margin-bottom: 2rem;
-    border-bottom: constants.$border;
-}
-
 .library-view-table {
-    text-align: left;
-
     .pub-year {
         width: 6rem;
     }
@@ -66,8 +54,10 @@
         text-align: center;
     }
 
-    th.actions.details {
+    th.actions.details,
+    td.actions.details {
         width: 5rem;
+        padding-right: 1.5rem;
     }
 }
 

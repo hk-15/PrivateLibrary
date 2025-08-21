@@ -1,7 +1,6 @@
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import "./Collapsible.scss";
 import { recategoriseBooks, type Book, type Collection, type RecategoriseRequest } from "../../../api/ApiClient";
 
 interface IProps {
@@ -52,6 +51,7 @@ export const Collapsible: React.FC<IProps> = ({ open, header, books, collections
         <div className="collapsible-container">
             <div className="collapsible-header">
                 <button
+                    className="collapsible-button"
                     onClick={handleOpen}
                 ><h2>{header}</h2> {!isOpen ? (
                     <FontAwesomeIcon icon={faChevronDown} />
@@ -63,14 +63,17 @@ export const Collapsible: React.FC<IProps> = ({ open, header, books, collections
             <div className="collapsible-body">
                 {books.length === 0 && isOpen ? <p>Nothing to see here...</p> :
                     isOpen &&
-                    <div>
+                    <div className="table-container">
                         {!selectBooks ?
+                        <div className="border-spaced-bottom">
                             <button
+                                className="no-margin-button"
                                 onClick={() => setSelectBooks(true)}
                             >
                                 Select books to recategorise
-                            </button> :
-                            <div>
+                            </button>
+                        </div> :
+                            <div className="border-spaced-bottom">
                                 <label htmlFor="collectionId">
                                     New collection
                                     <select
@@ -85,14 +88,19 @@ export const Collapsible: React.FC<IProps> = ({ open, header, books, collections
                                         ))}
                                     </select>
                                 </label>
-                                <button
-                                    onClick={handleSubmit}
-                                >
-                                    Recategorise selected books
-                                </button>
-                                <button
-                                    onClick={() => setSelectBooks(false)}
-                                >Cancel</button>
+                                <div className="buttons-container">
+                                    <button
+                                        onClick={handleSubmit}
+                                    >
+                                        Recategorise selected books
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setSelectBooks(false)
+                                            setMessage("")
+                                        }}
+                                    >Cancel</button>
+                                </div>
                                 {message && <p className={`message ${fadeOut ? 'fade-out' : ''}`}>{message}</p>}
                             </div>
                         }
@@ -105,6 +113,7 @@ export const Collapsible: React.FC<IProps> = ({ open, header, books, collections
                                     <th>Author</th>
                                     <th>Translator</th>
                                     <th>Publication Year</th>
+                                    <th className="select-col"></th>
                                 </tr>
                             </thead>
                             <tbody>

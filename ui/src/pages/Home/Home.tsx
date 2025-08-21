@@ -18,21 +18,25 @@ export default function Home() {
     if (!loginContext.isLoggedIn) {
         return (
             <Page>
-                <h1>Home</h1>
+                <h1 className="border-spaced-bottom">Personal Library</h1>
                 <LoginMessage />
             </Page>
         )
     };
     return (
         <Page>
-            <h1>Home</h1>
-            <SearchBar getSearchTerm={setSearchTerm} />
+            <h1 className="border-spaced-bottom">Personal Library</h1>
+            <div className="border-spaced-bottom">
+                <SearchBar getSearchTerm={setSearchTerm} />
+            </div>
             {searchTerm && <SearchResultsTable searchTerm={searchTerm} />}
             <UserStats username={loginContext.username} />
             <Stats />
-            <AddBookButton />
-            <ManageCollectionsButton />
-            <ViewCatalogueButton />
+            <div className="border-spaced-bottom">
+                <AddBookButton />
+                <ManageCollectionsButton />
+                <ViewCatalogueButton />
+            </div>
         </Page>
     )
 }

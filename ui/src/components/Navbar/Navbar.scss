@@ -10,7 +10,7 @@
   min-width: 100vw;
   background-color: light-dark(constants.$color-background-light, constants.$color-background-dark);
   padding: 30px 0;
-  border-bottom: 1px solid black;
+  border-bottom: constants.$border;
 
   a.nav-link {
     text-transform: uppercase;
