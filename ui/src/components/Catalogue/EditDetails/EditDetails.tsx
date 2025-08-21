@@ -37,7 +37,7 @@ export const EditDetails: React.FC<Props> = ({ book, commaSeparatedInputs, getEd
         }));
     };
 
-    const handleInput = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
+    const handleInput = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setEditedBook(prev => ({
             ...prev,
@@ -50,12 +50,12 @@ export const EditDetails: React.FC<Props> = ({ book, commaSeparatedInputs, getEd
         <table>
             <thead>
                 <tr>
-                    <th className="first-col"></th>
+                    <th className="first-col">Edit details</th>
                 </tr>
             </thead>
             <tbody>
                 <tr key={book.id}>
-                    <td>ISBN</td>
+                    <td className="first-col">ISBN</td>
                     <td>
                         <input
                             key={book.id}
@@ -68,7 +68,7 @@ export const EditDetails: React.FC<Props> = ({ book, commaSeparatedInputs, getEd
                     </td>
                 </tr>
                 <tr>
-                    <td>Title</td>
+                    <td className="first-col">Title</td>
                     <td>
                         <input
                             key={book.id}
@@ -80,7 +80,7 @@ export const EditDetails: React.FC<Props> = ({ book, commaSeparatedInputs, getEd
                     </td>
                 </tr>
                 <tr>
-                    <td>Subtitle</td>
+                    <td className="first-col">Subtitle</td>
                     <td>
                         <input
                             key={book.id}
@@ -92,7 +92,7 @@ export const EditDetails: React.FC<Props> = ({ book, commaSeparatedInputs, getEd
                     </td>
                 </tr>
                 <tr>
-                    <td>Author</td>
+                    <td className="first-col">Author</td>
                     <td>
                         <input
                             key={book.id}
@@ -101,22 +101,24 @@ export const EditDetails: React.FC<Props> = ({ book, commaSeparatedInputs, getEd
                             value={rawInputs.authors}
                             onChange={handleCommaSeparatedInput}
                         />
+                        <span className="input-tip">Tip: separate authors with a comma</span>
                     </td>
                 </tr>
                 <tr>
-                    <td>Publication Year</td>
+                    <td className="first-col">Publication Year</td>
                     <td>
                         <input
                             key={book.id}
                             type="number"
                             name="publicationYear"
+                            className="publication-year"
                             value={editedBook.publicationYear}
                             onChange={handleInput}
                         />
                     </td>
                 </tr>
                 <tr>
-                    <td>Language</td>
+                    <td className="first-col">Language</td>
                     <td>
                         <input
                             key={book.id}
@@ -128,7 +130,7 @@ export const EditDetails: React.FC<Props> = ({ book, commaSeparatedInputs, getEd
                     </td>
                 </tr>
                 <tr>
-                    <td>Original Language</td>
+                    <td className="first-col">Original Language</td>
                     <td>
                         <input
                             key={book.id}
@@ -140,7 +142,7 @@ export const EditDetails: React.FC<Props> = ({ book, commaSeparatedInputs, getEd
                     </td>
                 </tr>
                 <tr>
-                    <td>Translator</td>
+                    <td className="first-col">Translator</td>
                     <td>
                         <input
                             key={book.id}
@@ -152,7 +154,7 @@ export const EditDetails: React.FC<Props> = ({ book, commaSeparatedInputs, getEd
                     </td>
                 </tr>
                 <tr>
-                    <td>Collection</td>
+                    <td className="first-col">Collection</td>
                     <td>
                         <select key={book.id} name="collection"
                             onChange={handleInput}>
@@ -167,19 +169,18 @@ export const EditDetails: React.FC<Props> = ({ book, commaSeparatedInputs, getEd
                     </td>
                 </tr>
                 <tr>
-                    <td>Notes</td>
+                    <td className="first-col">Notes</td>
                     <td>
-                        <input
+                        <textarea
                             key={book.id}
-                            type="text"
                             name="notes"
                             value={editedBook.notes ?? ""}
                             onChange={handleInput}
-                        />
+                        ></textarea>
                     </td>
                 </tr>
                 <tr>
-                    <td>Tags</td>
+                    <td className="first-col">Tags</td>
                     <td>
                         <input
                             key={book.id}
@@ -188,10 +189,11 @@ export const EditDetails: React.FC<Props> = ({ book, commaSeparatedInputs, getEd
                             value={rawInputs.tags}
                             onChange={handleCommaSeparatedInput}
                         />
+                        <span className="input-tip">Tip: separate tags with a comma</span>
                     </td>
                 </tr>
                 <tr>
-                    <td>Read?</td>
+                    <td className="first-col">Read?</td>
                     <td>
                         <label>
                         Yes
@@ -199,6 +201,7 @@ export const EditDetails: React.FC<Props> = ({ book, commaSeparatedInputs, getEd
                             name="read"
                             type="radio"
                             value="true"
+                            className="read-radio"
                             checked={editedBook.read === true}
                             onChange={handleInput}
                         />
@@ -209,6 +212,7 @@ export const EditDetails: React.FC<Props> = ({ book, commaSeparatedInputs, getEd
                             name="read"
                             type="radio"
                             value="false"
+                            className="read-radio"
                             checked={editedBook.read === false}
                             onChange={handleInput}
                         />

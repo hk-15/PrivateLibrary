@@ -3,17 +3,24 @@
 .catalogue-options-container {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
-    width: 50vw;
+    justify-content: center;
+    width: 100vw;
     margin: 0 auto;
+    border-bottom: constants.$border;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
 
+    label {
+        padding: 0 2rem;
+    }
     select {
         margin: 0.5rem 1rem 0.5rem 0.5rem;
     }
 }
 
 .marked-read {
-    background-color: constants.$color-primary;
+    background-color: constants.$color-green;
+    font-weight: 500;
 }
 
 .library-view-table button {
@@ -23,8 +30,7 @@
 }
 
 .library-view-table {
-    width: 90vw;
-    background-color: constants.$color-background-darker;
+    width: 100vw;
     padding: 1rem;
     border-radius: 1rem;
 
@@ -34,7 +40,9 @@
 }
 
 .catalogue-and-nav-container {
-    padding: 1.5rem;
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+    border-bottom: constants.$border;
 }
 
 .library-view-table {
@@ -53,25 +61,31 @@
     }
 
     .actions {
-        width: 9.5rem;
+        width: 6rem;
+        padding-left: 0;
+        text-align: center;
+    }
+
+    th.actions.details {
+        width: 5rem;
     }
 }
 
 .PopUp {
     position: fixed;
     
-    left: 15%;
+    left: 20%;
     top: 15%;
 
-    width: 70%;
-    height: 80%;
+    width: 60%;
+    max-height: 80%;
     overflow-y: scroll;
 
     border: 1px solid grey;
     border-radius: 1em;
     box-shadow: -2px 5px 5px grey;
 
-    background-color: white;
+    background-color: light-dark(constants.$color-background-light, constants.$color-background-dark);
 
     display: flex;
     flex-direction: column;
@@ -86,33 +100,40 @@
     table {
         margin: 2rem auto;
         text-align: left;
-        width: 70%;
+        width: 100%;
         
         .first-col {
             width: 10rem;
+            text-transform: uppercase;
+            font-size: .75rem;
+            font-weight: 500;
         }
         tr {
             height: 2.5rem;
             border-bottom: solid grey;
         }
-        td {
-            padding-left: 1rem;
-        }
+    }
+
+    input,
+    textarea {
+        width: 50%;
+    }
+
+    input.publication-year {
+        width: 4rem;
+    }
+
+    input.read-radio {
+        width: 2rem;
+    }
+
+    .input-tip {
+        font-size: .75rem;
+        padding-left: 2rem;
     }
 
     .actions-container {
         display: flex;
         justify-content: center;
-    }
-}
-
-@media (prefers-color-scheme: light) {
-    .marked-read {
-        background-color: constants.$color-secondary-opaque;
-    }
-
-    .library-view-table {
-        background-color: constants.$color-background-light-darker;
-
     }
 }

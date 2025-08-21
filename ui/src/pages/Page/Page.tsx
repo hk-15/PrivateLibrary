@@ -1,5 +1,4 @@
 import type { JSX, ReactNode } from "react";
-import "./Page.scss";
 
 interface PageProps {
     children: ReactNode;

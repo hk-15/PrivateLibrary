@@ -6,8 +6,8 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: constants.$color-background-dark;
+  color: light-dark(#213547, rgba(255, 255, 255, 0.87));
+  background-color: light-dark(constants.$color-background-light, constants.$color-background-dark);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -15,9 +15,17 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+textarea {
+  font-family: constants.$font;
+}
+
+.page {
+  padding: 2rem 0;
+}
+
 a {
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.87);
+  color: light-dark(#213547, rgba(255, 255, 255, 0.87));
   text-decoration: inherit;
 }
 
@@ -41,9 +49,13 @@ body {
 }
 
 h1 {
-  font-size: 3.2em;
+  font-size: 2em;
+  text-transform: uppercase;
   line-height: 1.1;
-  font-weight: 600;
+  font-weight: 800;
+  margin: 0 0 2rem;
+  padding-bottom: 2rem;
+  border-bottom: constants.$border;
 }
 
 button,
@@ -54,7 +66,7 @@ button,
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: light-dark(constants.$color-background-light-darker, #1a1a1a);
   cursor: pointer;
   transition: border-color 0.25s;
   margin: 1.25rem;
@@ -103,56 +115,32 @@ form {
 table {
   table-layout: fixed;
   margin: 0 auto;
+
+  th {
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 0.75rem;
+  }
+
+  th,
+  td {
+    padding: .5rem 0 .5rem 2rem;
+  }
 }
 
 table,
 th,
 tr,
 td {
-  border: 1px solid constants.$color-background-dark;
+  border-bottom: constants.$border;
   border-collapse: collapse;
 }
 
 .tag {
     background-color: constants.$color-background-light-darker;
+    color: constants.$color-background-dark;
     border-radius: 1rem;
     padding: .25rem;
     margin: .25rem;
     font-size: .75rem;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: constants.$color-background-light;
-  }
-
-  a:hover {
-    color: constants.$color-primary;
-  }
-
-  button,
-  .button-link {
-    background-color: constants.$color-background-light-darker;
-  }
-
-  a {
-    color: #213547;
-  }
-
-  .login-message-link {
-    color: constants.$color-primary;
-  }
-
-  .login-message-link:hover {
-    color: constants.$color-pink;
-  }
-
-  table,
-  th,
-  tr,
-  td {
-    border: 1px solid constants.$color-background-light;
-    border-collapse: collapse;
-  }
 }

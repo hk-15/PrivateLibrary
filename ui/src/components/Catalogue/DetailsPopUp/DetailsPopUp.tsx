@@ -37,56 +37,56 @@ export const DetailsPopUp: React.FC<Props> = ({ showPopUp, closePopUp, book, get
                     <table>
                         <thead>
                             <tr>
-                                <th className="first-col"></th>
+                                <th className="first-col">Details</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr key={book.id}>
-                                <td>ISBN</td>
+                                <td className="first-col">ISBN</td>
                                 <td>{book.isbn}</td>
                             </tr>
                             <tr>
-                                <td>Title</td>
+                                <td className="first-col">Title</td>
                                 <td>{book.title}</td>
                             </tr>
                             <tr>
-                                <td>Subtitle</td>
+                                <td className="first-col">Subtitle</td>
                                 <td>{book.subtitle}</td>
                             </tr>
                             <tr>
-                                <td>Author</td>
+                                <td className="first-col">Author</td>
                                 <td>{book.authors.join(', ')}</td>
                             </tr>
                             <tr>
-                                <td>Publication Year</td>
+                                <td className="first-col">Publication Year</td>
                                 <td>{book.publicationYear}</td>
                             </tr>
                             <tr>
-                                <td>Language</td>
+                                <td className="first-col">Language</td>
                                 <td>{book.language}</td>
                             </tr>
                             <tr>
-                                <td>Original Language</td>
+                                <td className="first-col">Original Language</td>
                                 <td>{book.originalLanguage}</td>
                             </tr>
                             <tr>
-                                <td>Translator</td>
+                                <td className="first-col">Translator</td>
                                 <td>{book.translator}</td>
                             </tr>
                             <tr>
-                                <td>Collection</td>
+                                <td className="first-col">Collection</td>
                                 <td>{book.collection}</td>
                             </tr>
                             <tr>
-                                <td>Notes</td>
+                                <td className="first-col">Notes</td>
                                 <td>{book.notes}</td>
                             </tr>
                             <tr>
-                                <td>Tags</td>
+                                <td className="first-col">Tags</td>
                                 <td>{book.tags.map(tag => (<span className="tag" key={tag}> {tag} </span>))}</td>
                             </tr>
                             <tr>
-                                <td>Read?</td>
+                                <td className="first-col">Read?</td>
                                 <td>{book.read ? 'Yes' : 'No'}</td>
                             </tr>
                         </tbody>

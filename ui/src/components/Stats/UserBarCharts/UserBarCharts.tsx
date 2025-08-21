@@ -36,7 +36,7 @@ export const UserBarCharts: React.FC<Props> = ({ books, authorData }) => {
                     <XAxis type="number" hide />
                     <YAxis dataKey="name" type="category" />
                     <Tooltip />
-                    <Bar dataKey="count" fill="#2079DF" />
+                    <Bar dataKey="count" fill="#F4B453" />
                 </BarChart>
             </ResponsiveContainer>
             <ResponsiveContainer width="100%" height={250}>
@@ -44,7 +44,7 @@ export const UserBarCharts: React.FC<Props> = ({ books, authorData }) => {
                     <XAxis type="number" hide />
                     <YAxis dataKey="lang" type="category" />
                     <Tooltip />
-                    <Bar dataKey="count" fill="#DF2079" />
+                    <Bar dataKey="count" fill="#F453E3" />
                 </BarChart>
             </ResponsiveContainer>
             <ResponsiveContainer width="100%" height={250}>
@@ -52,7 +52,7 @@ export const UserBarCharts: React.FC<Props> = ({ books, authorData }) => {
                     <XAxis type="number" hide />
                     <YAxis dataKey="author" type="category" />
                     <Tooltip />
-                    <Bar dataKey="count" fill="#79DF20" />
+                    <Bar dataKey="count" fill="#86ED3F" />
                 </BarChart>
             </ResponsiveContainer>
         </div>

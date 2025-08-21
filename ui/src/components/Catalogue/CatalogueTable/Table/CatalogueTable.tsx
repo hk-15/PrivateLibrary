@@ -145,6 +145,7 @@ export default function CatalogueTable(props:
                         <th className="collection">Collection</th>
                         <th>Tags</th>
                         <th className="actions"></th>
+                        <th className="actions details"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -161,10 +162,12 @@ export default function CatalogueTable(props:
                                 <td>{b.publicationYear}</td>
                                 <td>{b.collection}</td>
                                 <td>{b.tags.map(tag => <span className="tag" key={tag} >{tag}</span>)}</td>
-                                <td>
+                                <td className="actions">
                                     <button
                                         onClick={() => setChangeReadStatusId(b.id)}
                                     >{`${b.read ? 'Mark unread' : 'Mark read'}`}</button>
+                                </td>
+                                <td className="actions">
                                     <button
                                         onClick={() => {
                                             setSelectedBook(b)

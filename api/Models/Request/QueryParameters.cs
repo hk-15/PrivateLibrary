@@ -7,7 +7,7 @@ public class QueryParameters
     public int PageSize
     {
         get => _pageSize;
-        set => _pageSize = value > 50 ? 50 : value;
+        set => _pageSize = value > 100 ? 100 : value;
     }
     public string? SortBy { get; set; }
     public string? SearchTerm { get; set; }
