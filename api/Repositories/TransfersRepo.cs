@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using PersonalLibrary.Database;
-using PersonalLibrary.Exceptions;
-using PersonalLibrary.Models.Database;
+using api.Database;
+using api.Exceptions;
+using api.Models.Database;
 
-namespace PersonalLibrary.Repositories;
+namespace api.Repositories;
 
 public interface ITransfersRepo
 {
@@ -16,9 +16,9 @@ public interface ITransfersRepo
 
 public class TransfersRepo : ITransfersRepo
 {
-    private readonly PersonalLibraryDbContext _context;
+    private readonly PrivateLibraryDbContext _context;
 
-    public TransfersRepo(PersonalLibraryDbContext context)
+    public TransfersRepo(PrivateLibraryDbContext context)
     {
         _context = context;
     }

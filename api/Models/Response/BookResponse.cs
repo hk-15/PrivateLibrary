@@ -1,4 +1,4 @@
-namespace PersonalLibrary.Models.Response;
+namespace api.Models.Response;
 
 public class BookResponse
 {

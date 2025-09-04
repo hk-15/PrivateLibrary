@@ -6,7 +6,7 @@ export default function Footer() {
 
     return (
         <div className="footer">
-            <p>Personal Library &copy; {year}</p>
+            <p>Private Library &copy; {year}</p>
         </div>
     )
 }

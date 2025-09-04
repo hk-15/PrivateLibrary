@@ -1,6 +1,6 @@
-@PersonalLibraryBackend_HostAddress = http://localhost:5108
+@PrivateLibraryBackend_HostAddress = http://localhost:5108
 
-GET {{PersonalLibraryBackend_HostAddress}}/weatherforecast/
+GET {{PrivateLibraryBackend_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###

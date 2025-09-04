@@ -17,7 +17,7 @@ export function Navbar () {
 
     return (
         <nav className="nav">
-            <NavLink className="nav-link" to="/">Personal Library</NavLink>
+            <NavLink className="nav-link" to="/">Private Library</NavLink>
             <NavLink className="nav-link" to="/catalogue">Catalogue</NavLink>
             <NavLink className="nav-link add-link" to="/add-book">Shelve a book</NavLink>
             <NavLink className="nav-link" to="/collections">Collections</NavLink>

@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Identity;
-using PersonalLibrary.Database;
-using PersonalLibrary.Helpers;
-using PersonalLibrary.Repositories;
-using PersonalLibrary.Services;
+using api.Database;
+using api.Helpers;
+using api.Repositories;
+using api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +22,7 @@ builder.Services.AddCors(options =>
 });
 
 // Add services to the container.
-builder.Services.AddDbContext<PersonalLibraryDbContext>();
+builder.Services.AddDbContext<PrivateLibraryDbContext>();
 builder.Services.AddControllers();
 builder.Services.AddScoped<IAuthorsRepo, AuthorsRepo>();
 builder.Services.AddScoped<IBooksRepo, BooksRepo>();
@@ -44,7 +44,7 @@ builder.Services.AddAuthorization();
 builder
     .Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<PersonalLibraryDbContext>();
+    .AddEntityFrameworkStores<PrivateLibraryDbContext>();
 
 
 builder.Services.AddCors(options =>

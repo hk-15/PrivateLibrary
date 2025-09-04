@@ -1,4 +1,4 @@
-namespace PersonalLibrary.Models.Database;
+namespace api.Models.Database;
 
 public class Collection
 {

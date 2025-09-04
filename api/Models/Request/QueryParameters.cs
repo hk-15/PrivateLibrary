@@ -1,4 +1,4 @@
-namespace PersonalLibrary.Models.Request;
+namespace api.Models.Request;
 
 public class QueryParameters
 {

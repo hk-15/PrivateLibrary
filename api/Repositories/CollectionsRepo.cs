@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using PersonalLibrary.Database;
-using PersonalLibrary.Models.Database;
+using api.Database;
+using api.Models.Database;
 
-namespace PersonalLibrary.Repositories;
+namespace api.Repositories;
 
 public interface ICollectionsRepo
 {
@@ -14,9 +14,9 @@ public interface ICollectionsRepo
 
 public class CollectionsRepo : ICollectionsRepo
 {
-    private readonly PersonalLibraryDbContext _context;
+    private readonly PrivateLibraryDbContext _context;
 
-    public CollectionsRepo(PersonalLibraryDbContext context)
+    public CollectionsRepo(PrivateLibraryDbContext context)
     {
         _context = context;
     }

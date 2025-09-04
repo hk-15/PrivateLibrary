@@ -1,8 +1,8 @@
-using PersonalLibrary.Models.Database;
-using PersonalLibrary.Models.Response;
-using PersonalLibrary.Repositories;
+using api.Models.Database;
+using api.Models.Response;
+using api.Repositories;
 
-namespace PersonalLibrary.Services;
+namespace api.Services;
 
 public interface ITransfersService
 {

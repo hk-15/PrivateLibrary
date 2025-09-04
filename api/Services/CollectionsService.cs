@@ -1,8 +1,8 @@
-using PersonalLibrary.Exceptions;
-using PersonalLibrary.Models.Database;
-using PersonalLibrary.Repositories;
+using api.Exceptions;
+using api.Models.Database;
+using api.Repositories;
 
-namespace PersonalLibrary.Services;
+namespace api.Services;
 
 public interface ICollectionsService
 {

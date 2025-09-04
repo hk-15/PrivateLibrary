@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PersonalLibrary.Models.Database;
-using PersonalLibrary.Services;
+using api.Models.Database;
+using api.Services;
 
-namespace PersonalLibrary.Controllers;
+namespace api.Controllers;
 
 [ApiController]
 [Route("/collections")]

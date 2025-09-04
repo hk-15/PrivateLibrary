@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
-using PersonalLibrary.Models.Database;
+using api.Models.Database;
 
-namespace PersonalLibrary.Helpers;
+namespace api.Helpers;
 
 public static class UsersSeeder
 {

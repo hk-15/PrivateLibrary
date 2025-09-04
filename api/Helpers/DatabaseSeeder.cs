@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Identity;
-using PersonalLibrary.Database;
-using PersonalLibrary.Models.Database;
+using api.Database;
+using api.Models.Database;
 
-namespace PersonalLibrary.Helpers;
+namespace api.Helpers;
 public class DatabaseSeeder
 {
     public static async Task SeedDatabase (IServiceProvider serviceProvider)
     {
-        var context = serviceProvider.GetRequiredService<PersonalLibraryDbContext>();
+        var context = serviceProvider.GetRequiredService<PrivateLibraryDbContext>();
 
         if (!context.Set<Collection>().Any())
         {

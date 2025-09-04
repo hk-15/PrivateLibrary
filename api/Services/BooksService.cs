@@ -1,9 +1,9 @@
-using PersonalLibrary.Models.Database;
-using PersonalLibrary.Models.Request;
-using PersonalLibrary.Models.Response;
-using PersonalLibrary.Repositories;
+using api.Models.Database;
+using api.Models.Request;
+using api.Models.Response;
+using api.Repositories;
 
-namespace PersonalLibrary.Services;
+namespace api.Services;
 
 public interface IBooksService
 {

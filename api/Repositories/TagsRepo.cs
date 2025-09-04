@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using PersonalLibrary.Database;
-using PersonalLibrary.Exceptions;
-using PersonalLibrary.Models.Database;
+using api.Database;
+using api.Exceptions;
+using api.Models.Database;
 
-namespace PersonalLibrary.Repositories;
+namespace api.Repositories;
 
 public interface ITagsRepo
 {
@@ -16,9 +16,9 @@ public interface ITagsRepo
 
 public class TagsRepo : ITagsRepo
 {
-    private readonly PersonalLibraryDbContext _context;
+    private readonly PrivateLibraryDbContext _context;
 
-    public TagsRepo(PersonalLibraryDbContext context)
+    public TagsRepo(PrivateLibraryDbContext context)
     {
         _context = context;
     }

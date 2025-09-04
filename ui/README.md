@@ -1,3 +1,7 @@
+# Private Library
+## Setting up
+Run `npm install` to install the app dependencies, then run `npm run dev` to get the app running.
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

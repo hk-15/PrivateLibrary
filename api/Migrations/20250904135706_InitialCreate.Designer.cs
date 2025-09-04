@@ -2,18 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using PersonalLibrary.Database;
+using api.Database;
 
 #nullable disable
 
 namespace api.Migrations
 {
-    [DbContext(typeof(PersonalLibraryDbContext))]
-    partial class PersonalLibraryDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(PrivateLibraryDbContext))]
+    [Migration("20250904135706_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace api.Migrations
 
                     b.HasIndex("BooksId");
 
-                    b.ToTable("AuthorBook", (string)null);
+                    b.ToTable("AuthorBook");
                 });
 
             modelBuilder.Entity("BookTag", b =>
@@ -49,7 +52,7 @@ namespace api.Migrations
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("BookTag", (string)null);
+                    b.ToTable("BookTag");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -248,7 +251,7 @@ namespace api.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("PersonalLibrary.Models.Database.Author", b =>
+            modelBuilder.Entity("api.Models.Database.Author", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -262,10 +265,10 @@ namespace api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Authors", (string)null);
+                    b.ToTable("Authors");
                 });
 
-            modelBuilder.Entity("PersonalLibrary.Models.Database.Book", b =>
+            modelBuilder.Entity("api.Models.Database.Book", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -320,10 +323,10 @@ namespace api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Books", (string)null);
+                    b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("PersonalLibrary.Models.Database.Collection", b =>
+            modelBuilder.Entity("api.Models.Database.Collection", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -337,10 +340,10 @@ namespace api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Collections", (string)null);
+                    b.ToTable("Collections");
                 });
 
-            modelBuilder.Entity("PersonalLibrary.Models.Database.Tag", b =>
+            modelBuilder.Entity("api.Models.Database.Tag", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -354,10 +357,10 @@ namespace api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags", (string)null);
+                    b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("PersonalLibrary.Models.Database.Transfer", b =>
+            modelBuilder.Entity("api.Models.Database.Transfer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -388,18 +391,18 @@ namespace api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Transfers", (string)null);
+                    b.ToTable("Transfers");
                 });
 
             modelBuilder.Entity("AuthorBook", b =>
                 {
-                    b.HasOne("PersonalLibrary.Models.Database.Author", null)
+                    b.HasOne("api.Models.Database.Author", null)
                         .WithMany()
                         .HasForeignKey("AuthorsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PersonalLibrary.Models.Database.Book", null)
+                    b.HasOne("api.Models.Database.Book", null)
                         .WithMany()
                         .HasForeignKey("BooksId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -408,13 +411,13 @@ namespace api.Migrations
 
             modelBuilder.Entity("BookTag", b =>
                 {
-                    b.HasOne("PersonalLibrary.Models.Database.Book", null)
+                    b.HasOne("api.Models.Database.Book", null)
                         .WithMany()
                         .HasForeignKey("BooksId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PersonalLibrary.Models.Database.Tag", null)
+                    b.HasOne("api.Models.Database.Tag", null)
                         .WithMany()
                         .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -472,9 +475,9 @@ namespace api.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PersonalLibrary.Models.Database.Book", b =>
+            modelBuilder.Entity("api.Models.Database.Book", b =>
                 {
-                    b.HasOne("PersonalLibrary.Models.Database.Collection", "Collection")
+                    b.HasOne("api.Models.Database.Collection", "Collection")
                         .WithMany()
                         .HasForeignKey("CollectionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -491,9 +494,9 @@ namespace api.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("PersonalLibrary.Models.Database.Transfer", b =>
+            modelBuilder.Entity("api.Models.Database.Transfer", b =>
                 {
-                    b.HasOne("PersonalLibrary.Models.Database.Book", "Book")
+                    b.HasOne("api.Models.Database.Book", "Book")
                         .WithMany()
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)

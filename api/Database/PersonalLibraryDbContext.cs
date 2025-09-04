@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using PersonalLibrary.Models.Database;
+using api.Models.Database;
 
-namespace PersonalLibrary.Database;
+namespace api.Database;
 
-public class PersonalLibraryDbContext : IdentityDbContext
+public class PrivateLibraryDbContext : IdentityDbContext
 {
     public DbSet<Book> Books { get; set; }
     public DbSet<Author> Authors { get; set; }
@@ -13,13 +13,13 @@ public class PersonalLibraryDbContext : IdentityDbContext
     public DbSet<Transfer> Transfers { get; set; }
     private readonly IConfiguration _configuration;
 
-    public PersonalLibraryDbContext(IConfiguration configuration)
+    public PrivateLibraryDbContext(IConfiguration configuration)
     {
         _configuration = configuration;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql(_configuration["ConnectionStrings:PersonalLibraryDb"]);
+        optionsBuilder.UseNpgsql(_configuration["ConnectionStrings:PrivateLibraryDb"]);
     }
 }

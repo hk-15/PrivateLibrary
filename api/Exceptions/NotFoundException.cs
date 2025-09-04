@@ -1,4 +1,4 @@
-namespace PersonalLibrary.Exceptions
+namespace api.Exceptions
 {
     public class NotFoundException : Exception
     {

@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PersonalLibrary.Exceptions;
-using PersonalLibrary.Models.Request;
-using PersonalLibrary.Services;
+using api.Exceptions;
+using api.Models.Request;
+using api.Services;
 
-namespace PersonalLibrary.Controllers;
+namespace api.Controllers;
 
 [ApiController]
 [Route("/transfers")]

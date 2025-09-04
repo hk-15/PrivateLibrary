@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 
-namespace PersonalLibrary.Models.Database;
+namespace api.Models.Database;
 
 public class Book
 {

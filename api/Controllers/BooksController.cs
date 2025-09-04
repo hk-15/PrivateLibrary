@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PersonalLibrary.Models.Request;
-using PersonalLibrary.Models.Response;
-using PersonalLibrary.Services;
+using api.Models.Request;
+using api.Models.Response;
+using api.Services;
 
-namespace PersonalLibrary.Controllers;
+namespace api.Controllers;
 
 [ApiController]
 [Route("/books")]
@@ -91,8 +91,11 @@ public class BooksController : ControllerBase
                 query = query.OrderBy(b => b.SortTitle);
             }
 
-            var skipAmount = (parameters.PageNumber - 1) * parameters.PageSize;
-            query = query.Skip(skipAmount).Take(parameters.PageSize);
+            if (!string.IsNullOrWhiteSpace(parameters.PageSize.ToString()))
+            {
+                var skipAmount = (parameters.PageNumber - 1) * parameters.PageSize;
+                query = query.Skip(skipAmount).Take(parameters.PageSize);
+            }
 
             return Ok(query.ToList());
         }

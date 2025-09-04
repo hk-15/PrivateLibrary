@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using PersonalLibrary.Database;
-using PersonalLibrary.Models.Database;
-using PersonalLibrary.Exceptions;
+using api.Database;
+using api.Models.Database;
+using api.Exceptions;
 
-namespace PersonalLibrary.Repositories;
+namespace api.Repositories;
 
 public interface IBooksRepo
 {
@@ -20,9 +20,9 @@ public interface IBooksRepo
 
 public class BooksRepo : IBooksRepo
 {
-    private readonly PersonalLibraryDbContext _context;
+    private readonly PrivateLibraryDbContext _context;
 
-    public BooksRepo(PersonalLibraryDbContext context)
+    public BooksRepo(PrivateLibraryDbContext context)
     {
         _context = context;
     }
