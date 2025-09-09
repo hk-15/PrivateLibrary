@@ -14,6 +14,7 @@ export const AddCollection: React.FC<IProps> = ({ collections, getRefresh }) => 
     const [showForm, setShowForm] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
     const [fadeOut, setFadeOut] = useState(false);
+    const collectionsLowerCase = collections.map(collection => collection.toLowerCase());
 
     const {
         register,
@@ -29,7 +30,7 @@ export const AddCollection: React.FC<IProps> = ({ collections, getRefresh }) => 
         collection: string
     }) {
         setStatus("SUBMITTING");
-        if (collections.includes(data.collection)) {
+        if (collectionsLowerCase.includes(data.collection.toLowerCase())) {
             setStatus("DUPLICATE")
             reset();
             setFadeOut(false)
