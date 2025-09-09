@@ -9,7 +9,7 @@ export function Navbar () {
     if (!loginContext.isLoggedIn) {
         return (
             <nav className="nav">
-            <NavLink className="nav-link" to="/">Home</NavLink>
+            <NavLink className="nav-link" to="/">Private Library</NavLink>
             <NavLink className="nav-link login-link" to="/login">Log in</NavLink>
         </nav>
         )

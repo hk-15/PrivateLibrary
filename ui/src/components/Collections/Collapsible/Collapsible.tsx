@@ -64,47 +64,7 @@ export const Collapsible: React.FC<IProps> = ({ open, header, books, collections
                 {books.length === 0 && isOpen ? <p>Nothing to see here...</p> :
                     isOpen &&
                     <div className="table-container">
-                        {!selectBooks ?
-                        <div className="border-spaced-bottom">
-                            <button
-                                className="no-margin-button"
-                                onClick={() => setSelectBooks(true)}
-                            >
-                                Select books to recategorise
-                            </button>
-                        </div> :
-                            <div className="border-spaced-bottom">
-                                <label htmlFor="collectionId">
-                                    New collection
-                                    <select
-                                        id="collectionId"
-                                        onChange={(e) => setCollectionId(e.currentTarget.value)}
-                                    >
-                                        <option value="0">Select</option>
-                                        {collections.filter(collection => collection.name != header).map(collection => (
-                                            <option key={collection.id} value={collection.id}>
-                                                {collection.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </label>
-                                <div className="buttons-container">
-                                    <button
-                                        onClick={handleSubmit}
-                                    >
-                                        Recategorise selected books
-                                    </button>
-                                    <button
-                                        onClick={() => {
-                                            setSelectBooks(false)
-                                            setMessage("")
-                                        }}
-                                    >Cancel</button>
-                                </div>
-                                {message && <p className={`message ${fadeOut ? 'fade-out' : ''}`}>{message}</p>}
-                            </div>
-                        }
-                        <table>
+                        <table className="border-spaced-bottom">
                             <thead>
                                 <tr>
                                     <th>ISBN</th>
@@ -136,6 +96,46 @@ export const Collapsible: React.FC<IProps> = ({ open, header, books, collections
                                     )}
                             </tbody>
                         </table>
+                        {!selectBooks ?
+                            <div>
+                                <button
+                                    className="no-margin-button"
+                                    onClick={() => setSelectBooks(true)}
+                                >
+                                    Select books to recategorise
+                                </button>
+                            </div> :
+                            <div>
+                                <label htmlFor="collectionId">
+                                    New collection
+                                    <select
+                                        id="collectionId"
+                                        onChange={(e) => setCollectionId(e.currentTarget.value)}
+                                    >
+                                        <option value="0">Select</option>
+                                        {collections.filter(collection => collection.name != header).map(collection => (
+                                            <option key={collection.id} value={collection.id}>
+                                                {collection.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </label>
+                                <div className="buttons-container">
+                                    <button
+                                        onClick={handleSubmit}
+                                    >
+                                        Recategorise selected books
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setSelectBooks(false)
+                                            setMessage("")
+                                        }}
+                                    >Cancel</button>
+                                </div>
+                                {message && <p className={`message ${fadeOut ? 'fade-out' : ''}`}>{message}</p>}
+                            </div>
+                        }
                     </div>
                 }
             </div>

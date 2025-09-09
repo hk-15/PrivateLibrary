@@ -39,7 +39,6 @@ export const UserStats: React.FC<Props> = ({ username }) => {
                 </ul>
             </div>
             <div>
-                <h3>Collections, languages and authors</h3>
                 <UserBarCharts books={books} authorData={authorData} />
             </div>
         </div>

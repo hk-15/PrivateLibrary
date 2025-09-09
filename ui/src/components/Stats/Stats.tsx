@@ -36,7 +36,6 @@ export default function Stats() {
                 </ul>
             </div>
             <div>
-                <h3>Collections, languages and authors</h3>
                 <BarCharts books={books} authorData={authorData} />
             </div>
         </div>

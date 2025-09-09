@@ -28,4 +28,8 @@ ul.stats-highlights {
     display: flex;
     padding-left: 2rem;
     padding-right: 3rem;
+
+    .recharts-responsive-container {
+        padding: 0 1rem;
+    }
 }

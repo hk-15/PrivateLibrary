@@ -31,24 +31,24 @@ export const UserBarCharts: React.FC<Props> = ({ books, authorData }) => {
 
     return (
         <div className="bar-charts-container">
-            <ResponsiveContainer width="100%" height={250}>
-                <BarChart width={500} height={300} data={collectionsData.slice(0, 5)} layout="vertical" margin={{ left: 45, right: 2 }}>
+            <ResponsiveContainer width="100%" height={200}>
+                <BarChart width={500} height={200} data={collectionsData.slice(0, 5)} layout="vertical" margin={{ left: 45, right: 2 }}>
                     <XAxis type="number" hide />
                     <YAxis dataKey="name" type="category" />
                     <Tooltip />
                     <Bar dataKey="count" fill="#F4B453" />
                 </BarChart>
             </ResponsiveContainer>
-            <ResponsiveContainer width="100%" height={250}>
-                <BarChart width={500} height={300} data={langData.slice(0, 5)} layout="vertical" margin={{ left: 45, right: 2 }}>
+            <ResponsiveContainer width="100%" height={200}>
+                <BarChart width={500} height={200} data={langData.slice(0, 5)} layout="vertical" margin={{ left: 45, right: 2 }}>
                     <XAxis type="number" hide />
                     <YAxis dataKey="lang" type="category" />
                     <Tooltip />
                     <Bar dataKey="count" fill="#F453E3" />
                 </BarChart>
             </ResponsiveContainer>
-            <ResponsiveContainer width="100%" height={250}>
-                <BarChart width={500} height={500} data={authorData.slice(0, 5)} layout="vertical" margin={{ left: 45, right: 2 }}>
+            <ResponsiveContainer width="100%" height={200}>
+                <BarChart width={500} height={200} data={authorData.slice(0, 5)} layout="vertical" margin={{ left: 45, right: 2 }}>
                     <XAxis type="number" hide />
                     <YAxis dataKey="author" type="category" />
                     <Tooltip />
