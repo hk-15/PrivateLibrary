@@ -93,6 +93,11 @@
         margin: 1rem auto;
         text-align: left;
         width: 100%;
+
+        .input-td {
+            display: flex;
+            flex-direction: column;
+        }
         
         .first-col {
             width: 10rem;
@@ -122,6 +127,11 @@
     .input-tip {
         font-size: .75rem;
         padding-left: 2rem;
+    }
+
+    .update-details-error {
+        font-size: .75rem;
+        margin-top: .5rem;
     }
 
     .actions-container {

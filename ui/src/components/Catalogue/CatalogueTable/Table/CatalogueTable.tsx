@@ -1,23 +1,6 @@
 import { useEffect, useState } from "react";
-import { deleteBook, getAllCollections, getBooks, updateBookDetails, updateReadStatus, type Book, type BookRequest, type Collection } from "../../../../api/ApiClient";
+import { deleteBook, emptyBook, getAllCollections, getBooks, updateReadStatus, type Book, type Collection } from "../../../../api/ApiClient";
 import { DetailsPopUp } from "../../DetailsPopUp/DetailsPopUp";
-
-const emptyBook: Book = {
-    id: 0,
-    isbn: '',
-    title: '',
-    subtitle: '',
-    authors: [''],
-    translator: '',
-    language: '',
-    originalLanguage: '',
-    collection: '',
-    publicationYear: 0,
-    notes: '',
-    tags: [''],
-    read: false,
-    owner: ''
-};
 
 export default function CatalogueTable(props:
     {
@@ -31,15 +14,23 @@ export default function CatalogueTable(props:
     const [pageNum, setPageNum] = useState("1");
     const [changeReadStatusId, setChangeReadStatusId] = useState(0);
     const [deleteId, setDeleteId] = useState(0);
-    const [editedBook, setEditedBook] = useState(emptyBook);
     const [showPopUp, setShowPopUp] = useState(false);
     const [selectedBook, setSelectedBook] = useState<Book>(emptyBook);
+    const [refetch, setRefetch] = useState<boolean>(false);
+    const [editedBook, setEditedBook] = useState<Book>(emptyBook);
 
     useEffect(() => {
         getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
-            .then(response => setBooks(response))
+            .then(response => {
+                setBooks(response)
+                setRefetch(false)
+                if (editedBook.id !== 0) {
+                    setSelectedBook(editedBook);
+                    setEditedBook(emptyBook);
+                }
+            })
             .catch(err => console.error(err));
-    }, [props, pageNum]);
+    }, [props, pageNum, refetch]);
 
     useEffect(() => {
         getAllCollections()
@@ -84,38 +75,6 @@ export default function CatalogueTable(props:
             setChangeReadStatusId(0);
         }
     }, [changeReadStatusId]);
-
-    useEffect(() => {
-        if (editedBook.id !== 0) {
-            const doUpdate = async () => {
-                try {
-                    const bookUpdate: BookRequest = {
-                        isbn: editedBook.isbn,
-                        title: editedBook.title,
-                        subtitle: editedBook.subtitle ?? "",
-                        authors: editedBook.authors,
-                        translator: editedBook.translator ?? "",
-                        language: editedBook.language,
-                        originalLanguage: editedBook.originalLanguage ?? "",
-                        collectionId: collections.find(c => c.name === editedBook.collection)?.id ?? 0,
-                        read: editedBook.read,
-                        publicationYear: editedBook.publicationYear,
-                        notes: editedBook.notes ?? "",
-                        tags: editedBook.tags
-                    };
-                    console.log(typeof editedBook.read);
-                    await updateBookDetails(editedBook.id, bookUpdate);
-                    await getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
-                        .then(response => setBooks(response));
-                } catch (err) {
-                    console.error("Failed to update or fetch books: ", err);
-                }
-            };
-            doUpdate();
-            setSelectedBook(editedBook);
-            setEditedBook(emptyBook);
-        }
-    }, [editedBook])
 
     useEffect(() => {
         if (deleteId) {
@@ -180,7 +139,7 @@ export default function CatalogueTable(props:
                         )}
                 </tbody>
             </table>
-            <DetailsPopUp showPopUp={showPopUp} closePopUp={() => setShowPopUp(false)} book={selectedBook} getEditedBook={setEditedBook} collections={collections} getDeleteId={setDeleteId} />
+            <DetailsPopUp showPopUp={showPopUp} closePopUp={() => setShowPopUp(false)} book={selectedBook} collections={collections} getDeleteId={setDeleteId} getSaveStatus={setRefetch} getEditedBook={setEditedBook}/>
 
             <button
                 onClick={() => setPageNum(prevPage(pageNum))}

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { addBook, getAllCollections, type Collection } from "../../api/ApiClient";
 
-export type FormStatus = "READY" | "SUBMITTING" | "ERROR" | "FINISHED";
+type FormStatus = "READY" | "SUBMITTING" | "ERROR" | "FINISHED";
 
 export default function AddBookForm() {
     const [status, setStatus] = useState<FormStatus>("READY");
@@ -31,7 +31,6 @@ export default function AddBookForm() {
             read: "false",
             notes: "",
             tags: "",
-            libraryId: 0
         },
     });
 
@@ -63,7 +62,6 @@ export default function AddBookForm() {
         read: string,
         notes?: string,
         tags: string,
-        libraryId: number
     }) {
         const readBoolean = data.read === "true" ? true : false;
         const bookData = {
@@ -71,7 +69,6 @@ export default function AddBookForm() {
             authors: createList(data.authors),
             tags: createList(data.tags),
             read: readBoolean,
-            libraryId: 1 //hard-coded for now
         }
         setStatus("SUBMITTING");
         addBook(bookData)
@@ -133,6 +130,7 @@ export default function AddBookForm() {
                 <label htmlFor="collectionId">
                     Collection
                     <select
+                        id="collectionId"
                         {...register("collectionId", { required: true, valueAsNumber: true })}>
                         <option value="">Select</option>
                         {collections.map((collection) => (

@@ -6,33 +6,32 @@ type Props = {
     showPopUp: boolean,
     closePopUp: () => void,
     book: Book,
-    getEditedBook: (book: Book) => void,
     collections: Collection[],
     getDeleteId: (id: number) => void,
+    getSaveStatus: (bool: boolean) => void,
+    getEditedBook: (book: Book) => void,
 }
 
-export const DetailsPopUp: React.FC<Props> = ({ showPopUp, closePopUp, book, getEditedBook, collections, getDeleteId }) => {
-    const [commaSeparatedInputs, setCommaSeparatedInputs] = useState({ "tags": "", "authors": "" });
+export const DetailsPopUp: React.FC<Props> = ({ showPopUp, closePopUp, book, collections, getDeleteId, getSaveStatus, getEditedBook }) => {
     const [editedBook, setEditedBook] = useState(emptyBook);
+    const [editStatus, setEditStatus] = useState(false);
     const [saveStatus, setSaveStatus] = useState(false);
     const [deleteMessage, setDeleteMessage] = useState(false);
 
     useEffect(() => {
         if (editedBook.id !== 0 && saveStatus === true) {
-            getEditedBook(editedBook);
-
-            if (saveStatus === true) {
-                setEditedBook(emptyBook);
-                setSaveStatus(false);
-            }
+            getEditedBook(editedBook)
+            getSaveStatus(true);
+            setEditStatus(false);
+            setSaveStatus(false);
         }
-    }, [editedBook]);
+    }, [saveStatus]);
 
     if (!showPopUp) { return null }
     return (
         <div className="PopUp" >
             <button className="close-button" onClick={closePopUp}>x</button>
-            {editedBook.id === 0 ?
+            {!editStatus ?
                 <div>
                     <table>
                         <thead>
@@ -96,7 +95,7 @@ export const DetailsPopUp: React.FC<Props> = ({ showPopUp, closePopUp, book, get
                         <button
                             onClick={() => {
                                 setEditedBook(book)
-                                setCommaSeparatedInputs({ "tags": book.tags.join(", "), "authors": book.authors.join(", ") });
+                                setEditStatus(true)
                             }}>
                             Edit
                         </button>
@@ -120,7 +119,7 @@ export const DetailsPopUp: React.FC<Props> = ({ showPopUp, closePopUp, book, get
                         </div>}
                 </div> :
                 <div>
-                    <EditDetails book={editedBook} commaSeparatedInputs={commaSeparatedInputs} getEditedBook={setEditedBook} getSaveStatus={setSaveStatus} collections={collections} />
+                    <EditDetails book={editedBook} collections={collections} getEditedBook={setEditedBook} getEditStatus={setEditStatus} getSaveStatus={setSaveStatus} />
                 </div>
             }
         </div >
