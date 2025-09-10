@@ -1,17 +1,21 @@
-import { useEffect, useState } from "react";
-import { getBooks, type Book } from "../../../api/ApiClient";
+import { useContext, useEffect, useState } from "react";
+import { getAllBooks, type Book } from "../../../api/ApiClient";
 import { UserBarCharts } from "../UserBarCharts/UserBarCharts";
+import { LoginContext } from "../../LoginManager/LoginManager";
 
 type Props = {
     username: string;
 }
 
 export const UserStats: React.FC<Props> = ({ username }) => {
+    const loginContext = useContext(LoginContext);
     const [books, setBooks] = useState<Book[]>([]);
 
     useEffect(() => {
-        getBooks("", "", "", "")
-            .then(response => setBooks(response))
+        getAllBooks()
+            .then(response => {
+                setBooks(response.filter(b => b.owner === loginContext.username))
+            })
             .catch(err => console.error(err));
     }, []);
 

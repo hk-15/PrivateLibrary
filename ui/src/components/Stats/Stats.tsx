@@ -7,7 +7,7 @@ export default function Stats() {
     const [books, setBooks] = useState<Book[]>([]);
 
     useEffect(() => {
-        getAllBooks("")
+        getAllBooks()
             .then(response => setBooks(response))
             .catch(err => console.error(err));
     }, []);
