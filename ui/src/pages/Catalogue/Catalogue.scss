@@ -85,10 +85,12 @@
     .close-button {
         position: absolute;
         right: 0;
+        padding: .5rem 1rem;
+        margin: .5rem;
     }
 
     table {
-        margin: 2rem auto;
+        margin: 1rem auto;
         text-align: left;
         width: 100%;
         
