@@ -95,7 +95,7 @@ return (
                 </thead>
                 <tbody>
                     <tr key={book.id}>
-                        <td className="first-col">ISBN</td>
+                        <td className="first-col">ISBN *</td>
                         <td className="input-td">
                             <input
                                 key={book.id}
@@ -109,7 +109,7 @@ return (
                         </td>
                     </tr>
                     <tr>
-                        <td className="first-col">Title</td>
+                        <td className="first-col">Title *</td>
                         <td className="input-td">
                             <input
                                 key={book.id}
@@ -132,7 +132,7 @@ return (
                         </td>
                     </tr>
                     <tr>
-                        <td className="first-col">Author(s)</td>
+                        <td className="first-col">Author(s) *</td>
                         <td className="input-td">
                             <input
                                 key={book.id}
@@ -145,7 +145,7 @@ return (
                         </td>
                     </tr>
                     <tr>
-                        <td className="first-col">Publication Year</td>
+                        <td className="first-col">Publication Year *</td>
                         <td className="input-td">
                             <input
                                 key={book.id}
@@ -158,7 +158,7 @@ return (
                         </td>
                     </tr>
                     <tr>
-                        <td className="first-col">Language</td>
+                        <td className="first-col">Language *</td>
                         <td className="input-td">
                             <input
                                 key={book.id}
@@ -228,7 +228,7 @@ return (
                         </td>
                     </tr>
                     <tr>
-                        <td className="first-col">Read?</td>
+                        <td className="first-col">Read? *</td>
                         <td className="input-td-read">
                             <label htmlFor="true">
                                 Yes

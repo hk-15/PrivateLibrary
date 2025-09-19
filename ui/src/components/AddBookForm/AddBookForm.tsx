@@ -91,7 +91,7 @@ export default function AddBookForm() {
         <div className="border-spaced-bottom">
             <form className="add-book-form" onSubmit={handleSubmit(submitForm)}>
                 <label htmlFor="isbn">
-                    ISBN
+                    ISBN *
                     <input
                         id="isbn"
                         type="text"
@@ -101,7 +101,7 @@ export default function AddBookForm() {
                 {errors.isbn && (<span className="error">{errors.isbn.message}</span>)}
 
                 <label htmlFor="title">
-                    Title
+                    Title *
                     <input
                         id="title"
                         type="text"
@@ -119,7 +119,7 @@ export default function AddBookForm() {
                 </label>
 
                 <label htmlFor="author">
-                    Author(s)
+                    Author(s) *
                     <input
                         id="author"
                         type="text"
@@ -128,7 +128,7 @@ export default function AddBookForm() {
                 </label>
 
                 <label htmlFor="collectionId">
-                    Collection
+                    Collection *
                     <select
                         id="collectionId"
                         {...register("collectionId", { required: true, valueAsNumber: true })}>
@@ -142,7 +142,7 @@ export default function AddBookForm() {
                 </label>
 
                 <label htmlFor="publicationYear">
-                    Year of publication
+                    Year of publication *
                     <input
                         id="publicationYear"
                         type="number"
@@ -152,7 +152,7 @@ export default function AddBookForm() {
                 {errors.publicationYear && (<span className="error">{errors.publicationYear.message}</span>)}
 
                 <label htmlFor="language">
-                    Language
+                    Language *
                     <input
                         id="language"
                         type="text"
@@ -196,7 +196,7 @@ export default function AddBookForm() {
                 </label>
 
                 <label>
-                    Read?
+                    Read? *
                     <span className="radio-options">
                         <label htmlFor="true" className="read-label">
                             <input
