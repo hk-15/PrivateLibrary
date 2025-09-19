@@ -9,6 +9,7 @@
     label {
         padding: 0 2rem;
     }
+
     select {
         margin: 0.5rem 1rem 0.5rem 0.5rem;
     }
@@ -63,7 +64,7 @@
 
 .PopUp {
     position: fixed;
-    
+
     left: 20%;
     top: 15%;
 
@@ -99,12 +100,17 @@
             flex-direction: column;
         }
         
+        .input-td-read {
+            display: flex;
+        }
+
         .first-col {
             width: 10rem;
             text-transform: uppercase;
             font-size: .75rem;
             font-weight: 500;
         }
+
         tr {
             height: 2.5rem;
             border-bottom: solid grey;
@@ -124,9 +130,14 @@
         width: 2rem;
     }
 
-    .input-tip {
+    span.input-tip {
+        display: none;
         font-size: .75rem;
-        padding-left: 2rem;
+        padding-top: .5rem;
+    }
+
+    input:focus+.input-tip {
+        display: block;
     }
 
     .update-details-error {

@@ -132,7 +132,7 @@ return (
                         </td>
                     </tr>
                     <tr>
-                        <td className="first-col">Author</td>
+                        <td className="first-col">Author(s)</td>
                         <td className="input-td">
                             <input
                                 key={book.id}
@@ -141,6 +141,7 @@ return (
                                 required
                                 {...register("authors", { required: true })}
                             />
+                            <span className="input-tip">Tip: Separate authors with a comma</span>
                         </td>
                     </tr>
                     <tr>
@@ -223,11 +224,12 @@ return (
                                 id="tags"
                                 {...register("tags")}
                             />
+                            <span className="input-tip">Tip: Separate tags with a comma</span>
                         </td>
                     </tr>
                     <tr>
                         <td className="first-col">Read?</td>
-                        <td className="input-td">
+                        <td className="input-td-read">
                             <label htmlFor="true">
                                 Yes
                                 <input
