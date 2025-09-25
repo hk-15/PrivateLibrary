@@ -1,14 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using api.Database;
 using api.Models.Database;
+using Microsoft.AspNetCore.Identity;
 
 namespace api.Repositories;
 
 public interface ICollectionsRepo
 {
-    Task<List<Collection>> GetAll();
+    Task<List<Collection>> GetByUser(string user);
     Task<Collection?> GetByName(string name);
     Task Add(Collection collection);
+    Task Update(Collection collection);
     void Delete(Collection collection);
 }
 
@@ -21,9 +23,11 @@ public class CollectionsRepo : ICollectionsRepo
         _context = context;
     }
 
-    public async Task<List<Collection>> GetAll()
+    public async Task<List<Collection>> GetByUser(string user)
     {
-        return await _context.Collections.ToListAsync();
+        return await _context.Collections
+            .Where(c => c.Users.Contains(user))
+            .ToListAsync();
     }
 
     public async Task<Collection?> GetByName(string name)
@@ -34,6 +38,12 @@ public class CollectionsRepo : ICollectionsRepo
     public async Task Add(Collection collection)
     {
         await _context.Collections.AddAsync(collection);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task Update(Collection collection)
+    {
+        _context.Update(collection);
         await _context.SaveChangesAsync();
     }
 

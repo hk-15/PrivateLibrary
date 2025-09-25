@@ -8,19 +8,7 @@ public class DatabaseSeeder
     public static async Task SeedDatabase (IServiceProvider serviceProvider)
     {
         var context = serviceProvider.GetRequiredService<PrivateLibraryDbContext>();
-
-        if (!context.Set<Collection>().Any())
-        {
-            List<Collection> collections = [
-                new Collection { Id = 1, Name = "Fiction"},
-                new Collection { Id = 2, Name = "Non-fiction"},
-                new Collection { Id = 3, Name = "Poetry"},
-                new Collection { Id = 4, Name = "Anthologies"},
-                new Collection { Id = 5, Name = "Plays" }
-            ];
-            await context.Set<Collection>().AddRangeAsync(collections);
-            await context.SaveChangesAsync();
-        }
+        
         if (!context.Set<Author>().Any())
         {
             List<Author> authors = [
@@ -57,6 +45,16 @@ public class DatabaseSeeder
             var user = await userManager.FindByEmailAsync("user@user.com");
             if (admin != null && user != null)
             {
+                List<Collection> collections = [
+                new Collection { Id = 1, Name = "Fiction", Users = [admin.UserName!, user.UserName!] },
+                new Collection { Id = 2, Name = "Non-fiction", Users = [admin.UserName!, user.UserName!] },
+                new Collection { Id = 3, Name = "Poetry", Users = [admin.UserName!, user.UserName!] },
+                new Collection { Id = 4, Name = "Anthologies", Users = [admin.UserName!, user.UserName!] },
+                new Collection { Id = 5, Name = "Plays", Users = [admin.UserName!, user.UserName!] }
+            ];
+            await context.Set<Collection>().AddRangeAsync(collections);
+            await context.SaveChangesAsync();
+
                 List<Book> books = [
                     new Book { Id = 1, Isbn = "9780140449303", Title = "The Decameron", Authors = [authors[0]], Translator = "G. H. McWilliam", Language = "English", OriginalLanguage = "Italian", CollectionId = 1, PublicationYear = 1972, Read = false, Notes = "Currently reading", UserId = admin.Id },
                     new Book { Id = 2, Isbn = "9781529030235", Title = "Cannibal", Authors = [authors[1]], Language = "English", CollectionId = 3, PublicationYear = 2016, Read = true, UserId = admin.Id },

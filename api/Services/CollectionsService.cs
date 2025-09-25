@@ -1,14 +1,15 @@
 using api.Exceptions;
 using api.Models.Database;
 using api.Repositories;
+using Microsoft.AspNetCore.Identity;
 
 namespace api.Services;
 
 public interface ICollectionsService
 {
-    Task<List<Collection>> GetAll();
-    Task Add(string name);
-    Task Delete(string name);
+    Task<List<Collection>> GetByUser(string user);
+    Task Add(string name, string user);
+    Task Delete(string name, string user);
 }
 
 public class CollectionsService : ICollectionsService
@@ -22,25 +23,31 @@ public class CollectionsService : ICollectionsService
         _booksService = booksService;
     }
 
-    public async Task<List<Collection>> GetAll()
+    public async Task<List<Collection>> GetByUser(string user)
     {
-        return await _collectionsRepo.GetAll();
+        return await _collectionsRepo.GetByUser(user);
     }
 
-    public async Task Add(string name)
+    public async Task Add(string name, string user)
     {
         var collection = await _collectionsRepo.GetByName(name);
         if (collection == null)
         {
             collection = new Collection
             {
-                Name = name
+                Name = name,
+                Users = [user]
             };
             await _collectionsRepo.Add(collection);
         }
+        else
+        {
+            collection.Users.Add(user);
+            await _collectionsRepo.Update(collection);
+        }
     }
 
-    public async Task Delete(string name)
+    public async Task Delete(string name, string user)
     {
         var collection = await _collectionsRepo.GetByName(name) ?? throw new NotFoundException("Collection not found");
         var books = await _booksService.GetByCollection(collection);
@@ -48,6 +55,11 @@ public class CollectionsService : ICollectionsService
         {
             throw new Exception("Cannot delete a collection that contains books");
         }
-        _collectionsRepo.Delete(collection);
+        if (collection.Users.Count == 1)
+        {
+            _collectionsRepo.Delete(collection);
+        }
+        collection.Users.Remove(user);
+        await _collectionsRepo.Update(collection);
     }
 }

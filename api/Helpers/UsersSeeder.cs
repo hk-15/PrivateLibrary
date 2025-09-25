@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Identity;
-using api.Models.Database;
 
 namespace api.Helpers;
 
