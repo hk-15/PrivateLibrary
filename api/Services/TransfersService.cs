@@ -1,6 +1,7 @@
 using api.Models.Database;
 using api.Models.Response;
 using api.Repositories;
+using Microsoft.AspNetCore.Identity;
 
 namespace api.Services;
 
@@ -8,7 +9,7 @@ public interface ITransfersService
 {
     Task<List<TransferResponse>> GetByUser(string userId);
     Task Add(List<int> bookIds, string userId, string newUserId);
-    Task Accept(int id);
+    Task Accept(int id, string collectionName, IdentityUser newUser);
     Task Reject(int id, string message);
     Task Delete(int id);
 }
@@ -17,11 +18,13 @@ public class TransfersService : ITransfersService
 {
     private readonly ITransfersRepo _transfersRepo;
     private readonly IBooksRepo _booksRepo;
+    private readonly ICollectionsRepo _collectionsRepo;
     private readonly IBooksService _booksService;
-    public TransfersService(ITransfersRepo transfersRepo, IBooksRepo booksRepo, IBooksService booksService)
+    public TransfersService(ITransfersRepo transfersRepo, IBooksRepo booksRepo, ICollectionsRepo collectionsRepo, IBooksService booksService)
     {
         _transfersRepo = transfersRepo;
         _booksRepo = booksRepo;
+        _collectionsRepo = collectionsRepo;
         _booksService = booksService;
     }
 
@@ -57,14 +60,25 @@ public class TransfersService : ITransfersService
         await _transfersRepo.Add(transfers);
     }
 
-    public async Task Accept(int id)
+    public async Task Accept(int id, string collectionName, IdentityUser newUser)
     {
         var transfer = await _transfersRepo.Get(id);
+        var collection = await _collectionsRepo.GetByName(collectionName);
+        if (collection == null)
+        {
+            collection = new Collection
+            {
+                Name = collectionName,
+                Users = [newUser.UserName!]
+            };
+            await _collectionsRepo.Add(collection);
+        }
         var book = transfer.Book;
         book.UserId = transfer.NewUserId;
         book.Read = false;
         book.Notes = "";
         book.Tags = [];
+        book.CollectionId = collection.Id;
         book.TransferPending = false;
         await _booksRepo.Update(book);
         _transfersRepo.Delete(transfer);

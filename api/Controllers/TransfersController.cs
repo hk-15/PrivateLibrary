@@ -80,11 +80,16 @@ public class TransfersController : ControllerBase
 
     [HttpPatch]
     [Route("accept/{id}")]
-    public async Task<IActionResult> AcceptTransfer(int id, [FromBody] string message)
+    public async Task<IActionResult> AcceptTransfer(int id, [FromBody] string collection)
     {
         try
         {
-            await _transfersService.Accept(id);
+            var newUser = await _userManager.GetUserAsync(User);
+            if (newUser == null)
+            {
+                return BadRequest(new { message = "User must be logged in" });
+            }
+            await _transfersService.Accept(id, collection, newUser);
             return Ok();
         }
         catch (Exception ex)
