@@ -227,7 +227,7 @@ export async function deleteTransfer(id: number) {
 }
 
 export async function getAllCollections(): Promise<Collection[]> {
-    const response = await fetch("http://localhost:5108/collections/all", {
+    const response = await fetch("http://localhost:5108/collections/current-user", {
         credentials: "include",
         headers: {
             "Content-Type": "application/json"

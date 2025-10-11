@@ -51,7 +51,8 @@ public class CollectionsService : ICollectionsService
     {
         var collection = await _collectionsRepo.GetByName(name) ?? throw new NotFoundException("Collection not found");
         var books = await _booksService.GetByCollection(collection);
-        if (books.Count != 0)
+        var userBooks = books.Where(b => b.User?.UserName == user).ToList();
+        if (userBooks.Count != 0)
         {
             throw new Exception("Cannot delete a collection that contains books");
         }
