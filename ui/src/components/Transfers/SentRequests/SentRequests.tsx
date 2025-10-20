@@ -32,22 +32,14 @@ export const SentRequests: React.FC<Props> = ({ requests, getRefresh }) => {
                         <td>{r.bookTitle}</td>
                         <td>{r.author}</td>
                         <td>{r.transferTo}</td>
-                        {r.rejectedMessage === "" ? 
-                        <div>
-                        <td>Pending</td>
-                        <td>
-                        <button
-                        onClick={() => handleClick(r.id)}
-                        >Cancel</button>
-                        </td>
-                        </div>
-                        :
-                        <div>
-                        <td className="transfer-status-col">Rejected <br/> Reason: {r.rejectedMessage}</td>
-                            <td>
-                        <button className="no-margin-button" onClick={() => handleClick(r.id)}>Close</button></td>  
-                        </div> 
-                    }
+                        {r.rejectedMessage === "" ?
+                            <td>Pending</td>
+                            :
+                            <td className="transfer-status-col rejected-status">Rejected: <br/> {r.rejectedMessage}</td>
+                        }
+                        <td><button
+                            onClick={() => handleClick(r.id)}
+                        >{r.rejectedMessage === "" ? 'Cancel' : 'Close'}</button></td>
                     </tr>
                 ))}
             </tbody>

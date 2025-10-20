@@ -52,6 +52,10 @@
         margin-left: 1rem;
     }
 
+    .rejected-status {
+        color: red;
+    }
+
     .action-check {
         display: flex;
         flex-direction: column;
@@ -68,4 +72,32 @@
         }
     }
 
+}
+
+.transfers-pop-up {
+    height: 50%;
+
+    .transfers-pop-up-body {
+        padding-top: 2rem;
+
+        label {
+            display: block;
+
+            input {
+                width: 100%;
+                padding: .25rem;
+                margin-top: .5rem;
+            }
+        }
+    }
+
+    .searchable-dropdown {
+        padding: 2rem;
+        width: 40%;
+        margin: 0 auto;
+    }
+
+    .error-message {
+        margin: 0.5rem 0 0;
+    }
 }

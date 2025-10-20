@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { handleTransfer, type Transfer } from "../../../api/ApiClient";
+import { type Transfer } from "../../../api/ApiClient";
+import { TransfersPopUp } from "../TransfersPopUp/TransfersPopUp";
 
 type Props = {
     requests: Transfer[];
@@ -9,136 +10,79 @@ type Props = {
 type Actions = "accept" | "reject" | "";
 
 export const IncomingRequests: React.FC<Props> = ({ requests, getRefresh }) => {
-    const [handleRequest, setHandleRequest] = useState<{
+    const [showPopUp, setShowPopUp] = useState(false);
+    const [request, setRequest] = useState<{
         id: number,
+        isbn: string,
+        title: string,
+        author: string[],
+        user: string,
         action: Actions,
-        message: string,
     }>({
         id: 0,
+        isbn: "",
+        title: "",
+        author: [],
+        user: "",
         action: "",
-        message: "",
     });
-    const [err, setErr] = useState("");
-
-    const handleSave = () => {
-        if (handleRequest.action === "reject" && handleRequest.message === "") {
-            setErr("This field is required")
-            return;
-        }
-        handleTransfer(handleRequest.id, handleRequest.action, handleRequest.message)
-            .then(() => {
-                setErr("");
-                setHandleRequest({
-                    id: 0,
-                    action: "",
-                    message: "",
-                });
-                getRefresh(true);
-            })
-            .catch(err => console.error(err));
-
-    }
 
     return (
-        <table className="requests-table">
-            <thead>
-                <tr>
-                    <th>ISBN</th>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>User</th>
-                    <th className="actions"></th>
-                </tr>
-            </thead>
-            <tbody>
-                {requests.map(r => (
-                    <tr key={r.id}>
-                        <td>{r.isbn}</td>
-                        <td>{r.bookTitle}</td>
-                        <td>{r.author}</td>
-                        <td>{r.transferFrom}</td>
-                        <td>
-                            {handleRequest.id === 0 &&
-                                <div>
-                                    <button
-                                        className="no-margin-button green-button"
-                                        onClick={() =>
-                                            setHandleRequest(prev => ({
-                                                ...prev,
-                                                id: r.id,
-                                                action: "accept"
-                                            }))}
-                                    >Accept</button>
-                                    <button
-                                        className="no-margin-button red-button"
-                                        onClick={() => setHandleRequest(prev => ({
+        <div>
+            <table className="requests-table">
+                <thead>
+                    <tr>
+                        <th>ISBN</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>User</th>
+                        <th className="actions"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {requests.map(r => (
+                        <tr key={r.id}>
+                            <td>{r.isbn}</td>
+                            <td>{r.bookTitle}</td>
+                            <td>{r.author}</td>
+                            <td>{r.transferFrom}</td>
+                            <td>
+                                <button
+                                    className="no-margin-button green-button"
+                                    onClick={() => {
+                                        setRequest(prev => ({
                                             ...prev,
                                             id: r.id,
+                                            isbn: r.isbn,
+                                            title: r.bookTitle,
+                                            author: r.author,
+                                            user: r.transferFrom,
+                                            action: "accept"
+                                        }))
+                                        setShowPopUp(true)
+                                    }}
+                                >Accept</button>
+                                <button
+                                    className="no-margin-button red-button"
+                                    onClick={() => {
+                                        setRequest(prev => ({
+                                            ...prev,
+                                            id: r.id,
+                                            isbn: r.isbn,
+                                            title: r.bookTitle,
+                                            author: r.author,
+                                            user: r.transferFrom,
                                             action: "reject"
-                                        }))}
-                                    >Reject</button>
-                                </div>
-                            }
-                            {handleRequest.id === r.id && handleRequest.action === "accept" &&
-                                <span className="action-check">Are you sure?
-                                    <button
-                                        className="no-margin-button green-button"
-                                        onClick={handleSave}
-                                    >
-                                        Add to catalogue
-                                    </button>
-                                    <button
-                                        className="no-margin-button"
-                                        onClick={() => setHandleRequest(prev => ({
-                                            ...prev,
-                                            id: 0,
-                                            action: ""
-                                        }))}
-                                    >
-                                        Cancel
-                                    </button>
-                                </span>
-                            }
-                            {handleRequest.id === r.id && handleRequest.action === "reject" &&
-                                <span className="action-check">
-                                    <label
-                                        htmlFor="message"
-                                    >Please provide a reason:
-                                        <input
-                                            type="text"
-                                            id="message"
-                                            name="message"
-                                            onChange={(e) => setHandleRequest(prev => ({
-                                                ...prev,
-                                                message: e.target.value
-                                            }))}
-                                        />
-                                    </label>
-                                    {err && <p>{err}</p>}
-                                    <button
-                                        className="red-button"
-                                        onClick={handleSave}
-                                    >
-                                        Reject request
-                                    </button>
-                                    <button
-                                        onClick={() => {
-                                            setHandleRequest(prev => ({
-                                            ...prev,
-                                            id: 0,
-                                            action: ""
-                                            }))
-                                            setErr("");
-                                        }}
-                                    >
-                                        Cancel
-                                    </button>
-                                </span>
-                            }
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+                                        }))
+                                        setShowPopUp(true)
+                                    }}
+                                >Reject</button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            <TransfersPopUp showPopUp={showPopUp} closePopUp={() => setShowPopUp(false)} request={request} getRefresh={getRefresh} />
+        </div>
     )
 };

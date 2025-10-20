@@ -37,6 +37,22 @@ a {
   color: constants.$color-pink;
 }
 
+.fade-out {
+  animation: fade-out 0.7s ease-out forwards;
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+    display: block;
+  }
+
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
+
 a:hover {
   color: constants.$color-primary;
 }

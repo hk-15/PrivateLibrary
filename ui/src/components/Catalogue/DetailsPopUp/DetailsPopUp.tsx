@@ -29,7 +29,7 @@ export const DetailsPopUp: React.FC<Props> = ({ showPopUp, closePopUp, book, col
 
     if (!showPopUp) { return null }
     return (
-        <div className="PopUp" >
+        <div className="pop-up" >
             <button className="close-button" onClick={closePopUp}>x</button>
             {!editStatus ?
                 <div>

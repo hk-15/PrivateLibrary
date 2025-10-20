@@ -199,14 +199,14 @@ export async function addTransfer(request: TransferRequest) {
     }
 }
 
-export async function handleTransfer(id: number, action: string, message: string) {
+export async function handleTransfer(id: number, action: string, messageOrCollection: string) {
     const response = await fetch(`http://localhost:5108/transfers/${action}/${id}`, {
         method: "PATCH",
         credentials: "include",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(message),
+        body: JSON.stringify(messageOrCollection),
     });
     if (!response.ok) {
         throw new Error(await response.json());
