@@ -60,7 +60,10 @@ public class CollectionsService : ICollectionsService
         {
             _collectionsRepo.Delete(collection);
         }
-        collection.Users.Remove(user);
-        await _collectionsRepo.Update(collection);
+        else
+        {
+            collection.Users.Remove(user);
+            await _collectionsRepo.Update(collection);
+        }
     }
 }

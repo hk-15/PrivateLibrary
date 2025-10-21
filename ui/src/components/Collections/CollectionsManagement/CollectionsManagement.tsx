@@ -9,7 +9,7 @@ type Props = {
 export const CollectionsManagement: React.FC<Props> = ({ collections, getRefresh }) => {
     const [books, setBooks] = useState<Book[]>([]);
     const [fetchBooks, setFetchBooks] = useState(false);
-    const [selectedCollection, setSelectedCollection] = useState({id: 0, name: ""});
+    const [selectedCollection, setSelectedCollection] = useState({ id: 0, name: "" });
     const [sortedCollections, setSortedCollections] = useState<Collection[]>([]);
 
     useEffect(() => {
@@ -24,7 +24,7 @@ export const CollectionsManagement: React.FC<Props> = ({ collections, getRefresh
     }, [collections])
 
     useEffect(() => {
-        if (selectedCollection.name) {
+        if (selectedCollection.name !== "") {
             const performDelete = async () => {
                 try {
                     await deleteCollection(selectedCollection.name);
@@ -33,14 +33,14 @@ export const CollectionsManagement: React.FC<Props> = ({ collections, getRefresh
                 }
             };
             performDelete();
+            setSelectedCollection({ id: 0, name: "" });
             getRefresh(true);
-            setSelectedCollection({id: 0, name: ""});
         }
-    })
+    }, [selectedCollection.name])
 
     return (
-        <div className="border-spaced-bottom collections-list-container">
-            <table>
+        <div className="border-spaced-bottom">
+            <table className="collections-table">
                 <thead>
                     <tr>
                         <th>Collection</th>
@@ -49,37 +49,34 @@ export const CollectionsManagement: React.FC<Props> = ({ collections, getRefresh
                     </tr>
                 </thead>
                 <tbody>
-            {sortedCollections.map(collection => {
-                const booksInCollection = books.filter(b => b.collection === collection.name);
-                const bookCount = booksInCollection.length;
-                const percentageRead = Math.round(booksInCollection.filter(b => b.read === true).length / bookCount * 100);
-                return <tr key={collection.id}>
-                    <td>{collection.name}</td>
-                    <td>{bookCount} books</td>
-                    <td>{bookCount !== 0 && `${percentageRead}%`}</td>
-                    {
-                        bookCount === 0 && selectedCollection.id === 0 && <td><button
-                            className="red-button"
-                            onClick={() => setSelectedCollection(prev => ({
-                                ...prev,
-                                id: collection.id
-                            }))}
-                        >Remove</button></td>
-                    }
-                    {
-                        selectedCollection.id === collection.id && <td> <p>Are you sure?</p>
-                            <button className="red-button" onClick={() => setSelectedCollection(prev => ({
-                                ...prev,
-                                name: collection.name
-                            }))}>Remove Collection</button>
-                            <button onClick={() => setSelectedCollection(prev => ({
-                                ...prev,
-                                id: collection.id
-                            }))}>Cancel</button></td>
-                    }
-                </tr>
-            })}
-            </tbody>
+                    {sortedCollections.map(collection => {
+                        const booksInCollection = books.filter(b => b.collection === collection.name);
+                        const bookCount = booksInCollection.length;
+                        const percentageRead = Math.round(booksInCollection.filter(b => b.read === true).length / bookCount * 100);
+                        return <tr key={collection.id}>
+                            <td>{collection.name}</td>
+                            <td>{bookCount} books</td>
+                            <td>{bookCount !== 0 && `${percentageRead}%`}</td>
+                            {
+                                bookCount === 0 && selectedCollection.id === 0 && <td className="delete-column"><button
+                                    className="red-button no-margin-button"
+                                    onClick={() => setSelectedCollection(prev => ({
+                                        ...prev,
+                                        id: collection.id
+                                    }))}
+                                >Remove</button></td>
+                            }
+                            {
+                                selectedCollection.id === collection.id && <td className="delete-column"> <p>Are you sure?</p>
+                                    <button className="red-button no-margin-button" onClick={() => setSelectedCollection(prev => ({
+                                        ...prev,
+                                        name: collection.name
+                                    }))}>Remove</button>
+                                    <button className="no-margin-button" onClick={() => setSelectedCollection({ id: 0, name: "" })}>Cancel</button></td>
+                            }
+                        </tr>
+                    })}
+                </tbody>
             </table>
         </div>
     )
