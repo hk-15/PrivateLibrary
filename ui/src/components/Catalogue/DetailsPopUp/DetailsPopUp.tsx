@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { emptyBook, type Book, type Collection } from "../../../api/ApiClient";
 import { EditDetails } from "../EditDetails/EditDetails";
+import { closePopUps } from "../../ClosePopUps/ClosePopUps";
 
 type Props = {
     showPopUp: boolean,
@@ -18,6 +19,12 @@ export const DetailsPopUp: React.FC<Props> = ({ showPopUp, closePopUp, book, col
     const [saveStatus, setSaveStatus] = useState(false);
     const [deleteMessage, setDeleteMessage] = useState(false);
 
+    const ref = closePopUps(() => {
+        setEditedBook(emptyBook);
+        setEditStatus(false);
+        closePopUp();
+    });
+
     useEffect(() => {
         if (editedBook.id !== 0 && saveStatus === true) {
             getEditedBook(editedBook)
@@ -29,7 +36,7 @@ export const DetailsPopUp: React.FC<Props> = ({ showPopUp, closePopUp, book, col
 
     if (!showPopUp) { return null }
     return (
-        <div className="pop-up" >
+        <div className="pop-up" ref={ref}>
             <button className="close-button" onClick={closePopUp}>x</button>
             {!editStatus ?
                 <div>
@@ -91,20 +98,20 @@ export const DetailsPopUp: React.FC<Props> = ({ showPopUp, closePopUp, book, col
                         </tbody>
                     </table>
                     {!deleteMessage ?
-                    <div className="actions-container">
-                        <button
-                            onClick={() => {
-                                setEditedBook(book)
-                                setEditStatus(true)
-                            }}>
-                            Edit
-                        </button>
-                        <button
-                            className="red-button"
-                            onClick={() => setDeleteMessage(true)}
-                        >Remove
-                        </button>
-                    </div> :
+                        <div className="actions-container">
+                            <button
+                                onClick={() => {
+                                    setEditedBook(book)
+                                    setEditStatus(true)
+                                }}>
+                                Edit
+                            </button>
+                            <button
+                                className="red-button"
+                                onClick={() => setDeleteMessage(true)}
+                            >Remove
+                            </button>
+                        </div> :
                         <div>
                             <p>Remove <em>{book.title}</em> from your library?</p>
                             <button

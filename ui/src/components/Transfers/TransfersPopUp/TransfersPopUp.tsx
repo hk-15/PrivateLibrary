@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { getAllCollections, handleTransfer } from "../../../api/ApiClient";
 import { SearchableDropdown } from "../../SearchableDropdown/SearchableDropdown";
+import { closePopUps } from "../../ClosePopUps/ClosePopUps";
 
 type Actions = "accept" | "reject" | "";
 
 type Props = {
-    showPopUp: boolean,
     closePopUp: () => void,
     request: {
         id: number,
@@ -18,12 +18,16 @@ type Props = {
     getRefresh: (boolean: boolean) => void,
 };
 
-export const TransfersPopUp: React.FC<Props> = ({ showPopUp, closePopUp, request, getRefresh }) => {
+export const TransfersPopUp: React.FC<Props> = ({ closePopUp, request, getRefresh }) => {
     const [collections, setCollections] = useState<string[]>();
     const [selectedCollection, setSelectedCollection] = useState<string>("");
     const [rejectedMessage, setRejectedMessage] = useState("");
     const [err, setErr] = useState("");
     const [fadeOut, setFadeOut] = useState(false);
+
+    const ref = closePopUps(() => {
+        closePopUp();
+    });
 
     useEffect(() => {
         getAllCollections()
@@ -45,23 +49,23 @@ export const TransfersPopUp: React.FC<Props> = ({ showPopUp, closePopUp, request
                 return;
             }
             handleTransfer(request.id, request.action, rejectedMessage)
-            .then(() => {
-                setErr("");
-                getRefresh(true);
-            })
-            .catch(err => console.error(err));
+                .then(() => {
+                    setErr("");
+                    getRefresh(true);
+                })
+                .catch(err => console.error(err));
             closePopUp();
             return;
         }
         if (selectedCollection === "") {
             setErr("Please select a collection");
             setFadeOut(false)
-                setTimeout(() => {
-                    setFadeOut(true);
-                }, 2000);
             setTimeout(() => {
-                    setErr("")
-                }, 3000);
+                setFadeOut(true);
+            }, 2000);
+            setTimeout(() => {
+                setErr("")
+            }, 3000);
             return;
         }
         handleTransfer(request.id, request.action, selectedCollection)
@@ -71,12 +75,11 @@ export const TransfersPopUp: React.FC<Props> = ({ showPopUp, closePopUp, request
                 getRefresh(true);
             })
             .catch(err => console.error(err));
-            closePopUp();
+        closePopUp();
     }
 
-    if (!showPopUp) { return null }
     return (
-        <div className="transfers-pop-up pop-up">
+        <div className="transfers-pop-up pop-up" ref={ref}>
             <button className="close-button" onClick={closePopUp}>x</button>
             {request.action === "accept" ?
                 <div className="transfers-pop-up-body">
@@ -101,10 +104,10 @@ export const TransfersPopUp: React.FC<Props> = ({ showPopUp, closePopUp, request
                         </tbody>
                     </table>
                     <div className="searchable-dropdown">
-                    <SearchableDropdown dropdownItems={collections} placeholderText="Select a collection..." getSelected={setSelectedCollection}/>
-                    {err && <p className={`error-message ${fadeOut ? 'fade-out' : ''}`}>{err}</p>}
+                        <SearchableDropdown dropdownItems={collections} placeholderText="Select a collection..." getSelected={setSelectedCollection} />
+                        {err && <p className={`error-message ${fadeOut ? 'fade-out' : ''}`}>{err}</p>}
                     </div>
-                    
+
                     <button
                         className="green-button"
                         onClick={handleSave}

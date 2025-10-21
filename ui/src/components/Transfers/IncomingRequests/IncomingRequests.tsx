@@ -82,7 +82,7 @@ export const IncomingRequests: React.FC<Props> = ({ requests, getRefresh }) => {
                     ))}
                 </tbody>
             </table>
-            <TransfersPopUp showPopUp={showPopUp} closePopUp={() => setShowPopUp(false)} request={request} getRefresh={getRefresh} />
+            {showPopUp && <TransfersPopUp closePopUp={() => setShowPopUp(false)} request={request} getRefresh={getRefresh} />}
         </div>
     )
 };
