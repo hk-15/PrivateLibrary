@@ -10,6 +10,9 @@ export function Navbar () {
         return (
             <nav className="nav">
             <NavLink className="nav-link" to="/">Private Library</NavLink>
+            <NavLink className="nav-link" to="/catalogue">Catalogue</NavLink>
+            <NavLink className="nav-link" to="/collections">Collections</NavLink>
+            <NavLink className="nav-link" to="/transfers">Transfers</NavLink>
             <NavLink className="nav-link login-link" to="/login">Log in</NavLink>
         </nav>
         )

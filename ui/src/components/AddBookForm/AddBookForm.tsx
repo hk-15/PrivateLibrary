@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { addBook, getAllCollections, type Collection } from "../../api/ApiClient";
-
-type FormStatus = "READY" | "SUBMITTING" | "ERROR" | "FINISHED";
+import { addBook, getAllCollections, type Collection, type FormStatus } from "../../api/ApiClient";
 
 export default function AddBookForm() {
     const [status, setStatus] = useState<FormStatus>("READY");

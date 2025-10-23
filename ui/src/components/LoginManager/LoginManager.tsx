@@ -5,7 +5,7 @@ export interface LoginContextType {
     isUserAdmin: boolean;
     username: string;
     logIn: (userAdmin: boolean, username: string) => void;
-    logOut?: () => void;
+    logOut: () => void;
 }
 
 export const LoginContext = createContext<LoginContextType>({

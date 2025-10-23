@@ -3,15 +3,15 @@ import AddBookForm from "../../components/AddBookForm/AddBookForm";
 import { LoginContext } from "../../components/LoginManager/LoginManager";
 import { Page } from "../Page/Page";
 import "./AddBook.scss";
-import LoginMessage from "../../components/LoginMessage/LoginMessage";
+import { LoginMessage } from "../../components/LoginMessage/LoginMessage";
 
-export default function Catalogue() {
+export default function AddBook() {
     const loginContext = useContext(LoginContext);
 
     if (!loginContext.isLoggedIn) {
         return (
             <Page>
-                <LoginMessage />
+                <LoginMessage message="" />
             </Page>
         )
     };

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { deleteBook, emptyBook, getAllCollections, getBooks, updateReadStatus, type Book, type Collection } from "../../../../api/ApiClient";
-import { DetailsPopUp } from "../../DetailsPopUp/DetailsPopUp";
+import { deleteBook, emptyBook, getAllCollections, getBooks, updateReadStatus, type Book, type Collection } from "../../../api/ApiClient";
+import { DetailsPopUp } from "../DetailsPopUp/DetailsPopUp";
 
 export default function CatalogueTable(props:
     {
@@ -18,7 +18,7 @@ export default function CatalogueTable(props:
     const [selectedBook, setSelectedBook] = useState<Book>(emptyBook);
     const [refetch, setRefetch] = useState<boolean>(false);
     const [editedBook, setEditedBook] = useState<Book>(emptyBook);
-
+        
     useEffect(() => {
         getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
             .then(response => {
@@ -139,7 +139,7 @@ export default function CatalogueTable(props:
                         )}
                 </tbody>
             </table>
-            <DetailsPopUp showPopUp={showPopUp} closePopUp={() => setShowPopUp(false)} book={selectedBook} collections={collections} getDeleteId={setDeleteId} getSaveStatus={setRefetch} getEditedBook={setEditedBook}/>
+            <DetailsPopUp showPopUp={showPopUp} closePopUp={() => setShowPopUp(false)} book={selectedBook} collections={collections} getDeleteId={setDeleteId} getSaveStatus={setRefetch} getEditedBook={setEditedBook} />
 
             <button
                 onClick={() => setPageNum(prevPage(pageNum))}

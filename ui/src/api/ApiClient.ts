@@ -1,3 +1,5 @@
+export type FormStatus = "READY" | "SUBMITTING" | "ERROR" | "FINISHED";
+
 export interface Book {
     id: number,
     isbn: string,
@@ -290,6 +292,19 @@ export async function logIn(user: User) {
         }
     };
     return response.json();
+}
+
+export async function logOut() {
+    const response = await fetch('http://localhost:5108/accounts/logout', {
+        method: "POST",
+        credentials: "include",
+        headers: {
+           "Content-Type": "application/json"
+        },
+    });
+    if (!response.ok) {
+        throw new Error();
+    }
 }
 
 export async function signUp(newUser: NewUser) {
