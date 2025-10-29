@@ -38,51 +38,62 @@ public class DatabaseSeeder
                 new Author { Id = 24, Name = "Sappho"},
                 new Author { Id = 25, Name = "Maggie Nelson"}
             ];
+
             await context.Set<Author>().AddRangeAsync(authors);
             await context.SaveChangesAsync();
             var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
-            var admin = await userManager.FindByEmailAsync("admin@admin.com");
-            var user = await userManager.FindByEmailAsync("user@user.com");
-            if (admin != null && user != null)
+            var demo = await userManager.FindByEmailAsync("demo@demo.com");
+            if (demo != null)
             {
                 List<Collection> collections = [
-                new Collection { Id = 1, Name = "Fiction", Users = [admin.UserName!, user.UserName!] },
-                new Collection { Id = 2, Name = "Non-fiction", Users = [admin.UserName!, user.UserName!] },
-                new Collection { Id = 3, Name = "Poetry", Users = [admin.UserName!, user.UserName!] },
-                new Collection { Id = 4, Name = "Anthologies", Users = [admin.UserName!, user.UserName!] },
-                new Collection { Id = 5, Name = "Plays", Users = [admin.UserName!, user.UserName!] }
-            ];
-            await context.Set<Collection>().AddRangeAsync(collections);
-            await context.SaveChangesAsync();
+                    new Collection { Id = 1, Name = "Fiction", Users = [demo.UserName!] },
+                    new Collection { Id = 2, Name = "Non-fiction", Users = [demo.UserName!] },
+                    new Collection { Id = 3, Name = "Poetry", Users = [demo.UserName!] },
+                    new Collection { Id = 4, Name = "Anthologies", Users = [demo.UserName!] },
+                    new Collection { Id = 5, Name = "Plays", Users = [demo.UserName!] }
+                ];
+                await context.Set<Collection>().AddRangeAsync(collections);
+                await context.SaveChangesAsync();
 
+                List<Tag> tags = [
+                    new Tag { Id = 1, Name = "Booker Prize"},
+                    new Tag { Id = 2, Name = "International Booker Prize"},
+                    new Tag { Id = 3, Name = "classics"},
+                    new Tag { Id = 4, Name = "favs"},
+                    new Tag { Id = 5, Name = "made me cry"},
+                    new Tag { Id = 6, Name = "Nobel Prize" }
+                ];
+                await context.Set<Tag>().AddRangeAsync(tags);
+                await context.SaveChangesAsync();
+            
                 List<Book> books = [
-                    new Book { Id = 1, Isbn = "9780140449303", Title = "The Decameron", Authors = [authors[0]], Translator = "G. H. McWilliam", Language = "English", OriginalLanguage = "Italian", CollectionId = 1, PublicationYear = 1972, Read = false, Notes = "Currently reading", UserId = admin.Id },
-                    new Book { Id = 2, Isbn = "9781529030235", Title = "Cannibal", Authors = [authors[1]], Language = "English", CollectionId = 3, PublicationYear = 2016, Read = true, UserId = admin.Id },
-                    new Book { Id = 3, Isbn = "9781529364736", Title = "Self-Made", Authors = [authors[2]], Language = "English", CollectionId = 2, PublicationYear = 2023, Read = true, UserId = admin.Id },
-                    new Book { Id = 4, Isbn = "9780340896983", Title = "One Day", Authors = [authors[3]], Language = "English", CollectionId = 1, PublicationYear = 2009, Read = true, UserId = admin.Id },
-                    new Book { Id = 5, Isbn = "9781911508755", Title = "Permafrost", Authors = [authors[4]], Translator = "Julia Sanches", Language = "English", OriginalLanguage = "Catalan", CollectionId = 1, PublicationYear = 2021, Read = true, UserId = admin.Id },
-                    new Book { Id = 6, Isbn = "9781805223047", Title = "Eurotrash", Authors = [authors[5]], Translator = "Daniel Bowles", Language = "English", OriginalLanguage = "German", CollectionId = 1, PublicationYear = 2024, Read = true, Notes = "International Booker Prize shortlistee 2025", UserId = admin.Id },
-                    new Book { Id = 7, Isbn = "9781473613577", Title = "Venomous Lumpsucker", Authors = [authors[6]], Language = "English", CollectionId = 1, PublicationYear = 2022, Read = true, UserId = admin.Id },
-                    new Book { Id = 8, Isbn = "9780586092262", Title = "London Observed", Subtitle = "Stories and Sketches", Authors = [authors[7]], Language = "English", CollectionId = 1, PublicationYear = 1992, Read = true, UserId = admin.Id },
-                    new Book { Id = 9, Isbn = "9781910695593", Title = "The Books of Jacob", Authors = [authors[8]], Translator = "Jennifer Croft", Language = "English", OriginalLanguage = "Polish", CollectionId = 1, PublicationYear = 2021, Read = true, UserId = admin.Id },
-                    new Book { Id = 10, Isbn = "9781908058621", Title = "Witch", Authors = [authors[9]], Language = "English", CollectionId = 3, PublicationYear = 2019, Read = true, UserId = user.Id },
-                    new Book { Id = 11, Isbn = "9780393356250", Title = "The Odyssey", Authors = [authors[10]], Translator = "Emily Wilson", Language = "English", OriginalLanguage = "Greek", CollectionId = 3, PublicationYear = 2018, Read = true, UserId = admin.Id },
-                    new Book { Id = 12, Isbn = "9780349015903", Title = "The Fran Lebowitz Reader", Authors = [authors[11]], Language = "English", CollectionId = 2, PublicationYear = 1994, Read = true, UserId = admin.Id },
-                    new Book { Id = 13, Isbn = "9781903436592", Title = "King Lear", Authors = [authors[12]], Language = "English", CollectionId = 5, PublicationYear = 1608, Read = true, UserId = user.Id },
-                    new Book { Id = 14, Isbn = "9781903436332", Title = "King Richard II", Authors = [authors[12]], Language = "English", CollectionId = 5, PublicationYear = 1353, Read = true, UserId = user.Id },
-                    new Book { Id = 15, Isbn = "9781804271049", Title = "Perfection", Authors = [authors[13]], Translator = "Sophie Hughes", Language = "English", OriginalLanguage = "Italian", CollectionId = 1, PublicationYear = 2025, Read = true, UserId = user.Id },
-                    new Book { Id = 16, Isbn = "9781914391170", Title = "The Trees", Authors = [authors[14]], Language = "English", CollectionId = 1, PublicationYear = 2021, Read = true, UserId = user.Id },
-                    new Book { Id = 17, Isbn = "9781783786138", Title = "Kairos", Authors = [authors[15]], Translator = "Michael Hofmann", Language = "English", OriginalLanguage = "German", CollectionId = 1, PublicationYear = 2023, Read = true, Notes = "International Booker Prize winner 2024", UserId = admin.Id },
-                    new Book { Id = 18, Isbn = "9781916277182", Title = "Cursed Bunny", Authors = [authors[16]], Translator = "Anton Hur", Language = "English", OriginalLanguage = "Korean", CollectionId = 1, PublicationYear = 2021, Read = true, UserId = admin.Id },
-                    new Book { Id = 19, Isbn = "9780571357567", Title = "The Premonitions Bureau", Authors = [authors[17]], Language = "English", CollectionId = 2, PublicationYear = 2022, Read = true, UserId = admin.Id },
-                    new Book { Id = 20, Isbn = "9781911547747", Title = "Real Life", Authors = [authors[18]], Language = "English", CollectionId = 1, PublicationYear = 2020, Read = true, UserId = user.Id },
-                    new Book { Id = 21, Isbn = "9780330369954", Title = "Underworld", Authors = [authors[19]], Language = "English", CollectionId = 1, PublicationYear = 1997, Read = true, UserId = admin.Id },
-                    new Book { Id = 22, Isbn = "9781803512358", Title = "Under the Eye of the Big Bird", Authors = [authors[20]], Translator = "Asa Yoneda", Language = "English", OriginalLanguage = "Japanese", CollectionId = 1, PublicationYear = 2024,Read = true, Notes = "International Booker Prize shortlistee 2025", UserId = admin.Id },
-                    new Book { Id = 23, Isbn = "9780415014144", Title = "King Henry V", Authors = [authors[12]], Language = "English", CollectionId = 5, PublicationYear = 1623, Read = true, UserId = user.Id },
-                    new Book { Id = 24, Isbn = "9780241352540", Title = "Death in Spring", Authors = [authors[21]], Translator = "Martha Tennent", Language = "English", OriginalLanguage = "Catalan", CollectionId = 1, PublicationYear = 2009, Read = true, UserId = user.Id },
-                    new Book { Id = 25, Isbn = "9781844085514", Title = "A Far Cry from Kensington", Authors = [authors[22]], Language = "English", CollectionId = 1, PublicationYear = 1988, Read = true, UserId = user.Id },
-                    new Book { Id = 26, Isbn = "9781844080816", Title = "If Not, Winter", Subtitle = "Fragments of Sappho", Authors = [authors[23]], Translator = "Anne Carson", Language = "English", OriginalLanguage = "Greek", CollectionId = 3, PublicationYear = 2002, Read = true, UserId = user.Id },
-                    new Book { Id = 27, Isbn = "9781593766580", Title = "Jane", Subtitle = "A Murder", Authors = [authors[24]], Language = "English", CollectionId = 3, PublicationYear = 2005, Read = true, UserId = admin.Id },
+                    new Book { Id = 1, Isbn = "9780140449303", Title = "The Decameron", Authors = [authors[0]], Translator = "G. H. McWilliam", Language = "English", OriginalLanguage = "Italian", CollectionId = 1, PublicationYear = 1972, Read = false, Notes = "Currently reading", UserId = demo.Id, Tags = [tags[2]] },
+                    new Book { Id = 2, Isbn = "9781529030235", Title = "Cannibal", Authors = [authors[1]], Language = "English", CollectionId = 3, PublicationYear = 2016, Read = true, UserId = demo.Id },
+                    new Book { Id = 3, Isbn = "9781529364736", Title = "Self-Made", Subtitle = "Creating Our Identities from Da Vinci to the Kardashians", Authors = [authors[2]], Language = "English", CollectionId = 2, PublicationYear = 2023, Read = false, UserId = demo.Id },
+                    new Book { Id = 4, Isbn = "9780340896983", Title = "One Day", Authors = [authors[3]], Language = "English", CollectionId = 1, PublicationYear = 2009, Read = true, UserId = demo.Id, Tags = [tags[4]] },
+                    new Book { Id = 5, Isbn = "9781911508755", Title = "Permafrost", Authors = [authors[4]], Translator = "Julia Sanches", Language = "English", OriginalLanguage = "Catalan", CollectionId = 1, PublicationYear = 2021, Read = false, UserId = demo.Id },
+                    new Book { Id = 6, Isbn = "9781805223047", Title = "Eurotrash", Authors = [authors[5]], Translator = "Daniel Bowles", Language = "English", OriginalLanguage = "German", CollectionId = 1, PublicationYear = 2024, Read = false, Tags = [tags[1]], UserId = demo.Id },
+                    new Book { Id = 7, Isbn = "9781473613577", Title = "Venomous Lumpsucker", Authors = [authors[6]], Language = "English", CollectionId = 1, PublicationYear = 2022, Read = true, UserId = demo.Id, Notes = "Louis has my copy" },
+                    new Book { Id = 8, Isbn = "9780586092262", Title = "London Observed", Subtitle = "Stories and Sketches", Authors = [authors[7]], Language = "English", CollectionId = 1, PublicationYear = 1992, Tags = [tags[2]], Read = true, UserId = demo.Id },
+                    new Book { Id = 9, Isbn = "9781910695593", Title = "The Books of Jacob", Authors = [authors[8]], Translator = "Jennifer Croft", Language = "English", OriginalLanguage = "Polish", CollectionId = 1, Tags = [tags[1], tags[3], tags[5]], PublicationYear = 2021, Read = true, UserId = demo.Id },
+                    new Book { Id = 10, Isbn = "9781908058621", Title = "Witch", Authors = [authors[9]], Language = "English", CollectionId = 3, PublicationYear = 2019, Read = false, UserId = demo.Id },
+                    new Book { Id = 11, Isbn = "9780393356250", Title = "The Odyssey", Authors = [authors[10]], Translator = "Emily Wilson", Language = "English", OriginalLanguage = "Ancient Greek", CollectionId = 3, Tags = [tags[2]], PublicationYear = 2018, Read = true, UserId = demo.Id },
+                    new Book { Id = 12, Isbn = "9780349015903", Title = "The Fran Lebowitz Reader", Authors = [authors[11]], Language = "English", CollectionId = 2, Tags = [tags[3]], PublicationYear = 1994, Read = true, UserId = demo.Id },
+                    new Book { Id = 13, Isbn = "9781903436592", Title = "King Lear", Authors = [authors[12]], Language = "English", CollectionId = 5, PublicationYear = 1997, Tags = [tags[2], tags[3]], Notes = "Read for school", Read = true, UserId = demo.Id },
+                    new Book { Id = 14, Isbn = "9781903436332", Title = "King Richard II", Authors = [authors[12]], Language = "English", CollectionId = 5, PublicationYear = 2002, Tags = [tags[2]], Read = false, UserId = demo.Id },
+                    new Book { Id = 15, Isbn = "9781804271049", Title = "Perfection", Authors = [authors[13]], Translator = "Sophie Hughes", Language = "English", OriginalLanguage = "Italian", CollectionId = 1, PublicationYear = 2025, Tags = [tags[1]], Read = true, UserId = demo.Id },
+                    new Book { Id = 16, Isbn = "9781914391170", Title = "The Trees", Authors = [authors[14]], Language = "English", CollectionId = 1, PublicationYear = 2021, Tags = [tags[0]], Read = true, UserId = demo.Id },
+                    new Book { Id = 17, Isbn = "9781783786138", Title = "Kairos", Authors = [authors[15]], Translator = "Michael Hofmann", Language = "English", OriginalLanguage = "German", CollectionId = 1, PublicationYear = 2023, Read = true, Tags = [tags[1]], Notes = "International Booker Prize winner 2024", UserId = demo.Id },
+                    new Book { Id = 18, Isbn = "9781916277182", Title = "Cursed Bunny", Authors = [authors[16]], Translator = "Anton Hur", Language = "English", OriginalLanguage = "Korean", CollectionId = 1, PublicationYear = 2021, Tags = [tags[1]], Read = true, UserId = demo.Id },
+                    new Book { Id = 19, Isbn = "9780571357567", Title = "The Premonitions Bureau", Authors = [authors[17]], Language = "English", CollectionId = 2, PublicationYear = 2022, Tags = [tags[3]], Read = true, UserId = demo.Id },
+                    new Book { Id = 20, Isbn = "9781911547747", Title = "Real Life", Authors = [authors[18]], Language = "English", CollectionId = 1, PublicationYear = 2020, Tags = [tags[0]], Read = false, UserId = demo.Id },
+                    new Book { Id = 21, Isbn = "9780330369954", Title = "Underworld", Authors = [authors[19]], Language = "English", CollectionId = 1, PublicationYear = 1997, Tags = [tags[2], tags[3]], Read = true, UserId = demo.Id },
+                    new Book { Id = 22, Isbn = "9781803512358", Title = "Under the Eye of the Big Bird", Authors = [authors[20]], Translator = "Asa Yoneda", Language = "English", OriginalLanguage = "Japanese", CollectionId = 1, PublicationYear = 2024, Tags = [tags[1]], Read = true, Notes = "International Booker Prize shortlistee 2025", UserId = demo.Id },
+                    new Book { Id = 23, Isbn = "9780415014144", Title = "King Henry V", Authors = [authors[12]], Language = "English", CollectionId = 5, PublicationYear = 1995, Read = true, UserId = demo.Id, Tags = [tags[2], tags[3]], Notes = "Read for uni" },
+                    new Book { Id = 24, Isbn = "9780241352540", Title = "Death in Spring", Authors = [authors[21]], Translator = "Martha Tennent", Language = "English", OriginalLanguage = "Catalan", CollectionId = 1, PublicationYear = 2009, Read = true, UserId = demo.Id },
+                    new Book { Id = 25, Isbn = "9781844085514", Title = "A Far Cry from Kensington", Authors = [authors[22]], Language = "English", CollectionId = 1, PublicationYear = 1988, Read = true, UserId = demo.Id },
+                    new Book { Id = 26, Isbn = "9781844080816", Title = "If Not, Winter", Subtitle = "Fragments of Sappho", Authors = [authors[23]], Translator = "Anne Carson", Language = "English", OriginalLanguage = "Ancient Greek", CollectionId = 3, PublicationYear = 2002, Read = true, Tags = [tags[2]], UserId = demo.Id },
+                    new Book { Id = 27, Isbn = "9781593766580", Title = "Jane", Subtitle = "A Murder", Authors = [authors[24]], Language = "English", CollectionId = 3, PublicationYear = 2005, Read = true, UserId = demo.Id, Tags = [tags[3], tags[4]], },
                 ];
                 await context.Set<Book>().AddRangeAsync(books);
                 await context.SaveChangesAsync();
