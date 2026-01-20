@@ -9,15 +9,10 @@ namespace api.Controllers;
 
 [ApiController]
 [Route("/books")]
-public class BooksController : ControllerBase
+public class BooksController(IBooksService booksService, UserManager<IdentityUser> userManager) : ControllerBase
 {
-    private readonly IBooksService _booksService;
-    private readonly UserManager<IdentityUser> _userManager;
-    public BooksController(IBooksService booksService, UserManager<IdentityUser> userManager)
-    {
-        _booksService = booksService;
-        _userManager = userManager;
-    }
+    private readonly IBooksService _booksService = booksService;
+    private readonly UserManager<IdentityUser> _userManager = userManager;
 
     [HttpGet]
     [Route("all-users")]

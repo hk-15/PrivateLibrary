@@ -12,16 +12,10 @@ public interface ICollectionsService
     Task Delete(string name, string user);
 }
 
-public class CollectionsService : ICollectionsService
+public class CollectionsService(ICollectionsRepo collectionsRepo, IBooksService booksService) : ICollectionsService
 {
-    private readonly ICollectionsRepo _collectionsRepo;
-    private readonly IBooksService _booksService;
-
-    public CollectionsService(ICollectionsRepo collectionsRepo, IBooksService booksService)
-    {
-        _collectionsRepo = collectionsRepo;
-        _booksService = booksService;
-    }
+    private readonly ICollectionsRepo _collectionsRepo = collectionsRepo;
+    private readonly IBooksService _booksService = booksService;
 
     public async Task<List<Collection>> GetByUser(string user)
     {

@@ -14,14 +14,9 @@ public interface ITransfersRepo
     void Delete(Transfer transfer);
 }
 
-public class TransfersRepo : ITransfersRepo
+public class TransfersRepo(PrivateLibraryDbContext context) : ITransfersRepo
 {
-    private readonly PrivateLibraryDbContext _context;
-
-    public TransfersRepo(PrivateLibraryDbContext context)
-    {
-        _context = context;
-    }
+    private readonly PrivateLibraryDbContext _context = context;
 
     public async Task<Transfer> Get(int id)
     {

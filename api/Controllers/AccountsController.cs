@@ -8,16 +8,10 @@ namespace api.Controllers;
 
 [ApiController]
 [Route("/accounts")]
-public class AccountsController : ControllerBase
+public class AccountsController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager) : ControllerBase
 {
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly SignInManager<IdentityUser> _signInManager;
-
-    public AccountsController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
-    {
-        _signInManager = signInManager;
-        _userManager = userManager;
-    }
+    private readonly UserManager<IdentityUser> _userManager = userManager;
+    private readonly SignInManager<IdentityUser> _signInManager = signInManager;
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)

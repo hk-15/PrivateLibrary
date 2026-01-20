@@ -10,15 +10,10 @@ namespace api.Controllers;
 [ApiController]
 [Route("/transfers")]
 [Authorize]
-public class TransfersController : ControllerBase
+public class TransfersController(ITransfersService transfersService, UserManager<IdentityUser> userManager) : ControllerBase
 {
-    private readonly ITransfersService _transfersService;
-    private readonly UserManager<IdentityUser> _userManager;
-    public TransfersController(ITransfersService transfersService, UserManager<IdentityUser> userManager)
-    {
-        _transfersService = transfersService;
-        _userManager = userManager;
-    }
+    private readonly ITransfersService _transfersService = transfersService;
+    private readonly UserManager<IdentityUser> _userManager = userManager;
 
     [HttpGet]
     public async Task<IActionResult> GetUserTransfers()

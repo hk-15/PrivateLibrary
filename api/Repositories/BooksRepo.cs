@@ -18,14 +18,9 @@ public interface IBooksRepo
     void Delete(Book book);
 }
 
-public class BooksRepo : IBooksRepo
+public class BooksRepo(PrivateLibraryDbContext context) : IBooksRepo
 {
-    private readonly PrivateLibraryDbContext _context;
-
-    public BooksRepo(PrivateLibraryDbContext context)
-    {
-        _context = context;
-    }
+    private readonly PrivateLibraryDbContext _context = context;
 
     public async Task<List<Book>> GetAll()
     {

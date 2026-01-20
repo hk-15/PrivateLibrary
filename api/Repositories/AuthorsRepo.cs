@@ -13,14 +13,9 @@ public interface IAuthorsRepo
     void Delete(Author author);
 }
 
-public class AuthorsRepo : IAuthorsRepo
+public class AuthorsRepo(PrivateLibraryDbContext context) : IAuthorsRepo
 {
-    private readonly PrivateLibraryDbContext _context;
-
-    public AuthorsRepo(PrivateLibraryDbContext context)
-    {
-        _context = context;
-    }
+    private readonly PrivateLibraryDbContext _context = context;
 
     public async Task<Author?> GetByName(string name)
     {

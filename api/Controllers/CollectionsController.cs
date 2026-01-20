@@ -9,15 +9,10 @@ namespace api.Controllers;
 [ApiController]
 [Route("/collections")]
 [Authorize]
-public class CollectionsController : ControllerBase
+public class CollectionsController(ICollectionsService collectionsService, UserManager<IdentityUser> userManager) : ControllerBase
 {
-    private readonly ICollectionsService _collectionsService;
-    private readonly UserManager<IdentityUser> _userManager;
-    public CollectionsController(ICollectionsService collectionsService, UserManager<IdentityUser> userManager)
-    {
-        _collectionsService = collectionsService;
-        _userManager = userManager;
-    }
+    private readonly ICollectionsService _collectionsService = collectionsService;
+    private readonly UserManager<IdentityUser> _userManager = userManager;
 
     [HttpGet]
     [Route("current-user")]

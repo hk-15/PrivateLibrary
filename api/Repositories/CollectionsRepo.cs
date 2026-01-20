@@ -14,14 +14,9 @@ public interface ICollectionsRepo
     void Delete(Collection collection);
 }
 
-public class CollectionsRepo : ICollectionsRepo
+public class CollectionsRepo(PrivateLibraryDbContext context) : ICollectionsRepo
 {
-    private readonly PrivateLibraryDbContext _context;
-
-    public CollectionsRepo(PrivateLibraryDbContext context)
-    {
-        _context = context;
-    }
+    private readonly PrivateLibraryDbContext _context = context;
 
     public async Task<List<Collection>> GetByUser(string user)
     {

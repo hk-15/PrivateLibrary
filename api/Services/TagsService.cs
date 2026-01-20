@@ -9,13 +9,9 @@ public interface ITagsService
     Task DeleteUnnecessaryTags(List<Tag> tags);
 }
 
-public class TagsService : ITagsService
+public class TagsService(ITagsRepo tagsRepo) : ITagsService
 {
-    private readonly ITagsRepo _tagsRepo;
-    public TagsService(ITagsRepo tagsRepo)
-    {
-        _tagsRepo = tagsRepo;
-    }
+    private readonly ITagsRepo _tagsRepo = tagsRepo;
 
     public async Task<List<Tag>> GetListFromRequest(List<string> request)
     {

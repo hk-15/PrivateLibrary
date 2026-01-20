@@ -14,14 +14,9 @@ public interface ITagsRepo
     void Delete(Tag tag);
 }
 
-public class TagsRepo : ITagsRepo
+public class TagsRepo(PrivateLibraryDbContext context) : ITagsRepo
 {
-    private readonly PrivateLibraryDbContext _context;
-
-    public TagsRepo(PrivateLibraryDbContext context)
-    {
-        _context = context;
-    }
+    private readonly PrivateLibraryDbContext _context = context;
 
     public async Task<List<Tag>> GetAll()
     {

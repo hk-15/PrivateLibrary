@@ -14,19 +14,12 @@ public interface ITransfersService
     Task Delete(int id);
 }
 
-public class TransfersService : ITransfersService
+public class TransfersService(ITransfersRepo transfersRepo, IBooksRepo booksRepo, ICollectionsRepo collectionsRepo, IBooksService booksService) : ITransfersService
 {
-    private readonly ITransfersRepo _transfersRepo;
-    private readonly IBooksRepo _booksRepo;
-    private readonly ICollectionsRepo _collectionsRepo;
-    private readonly IBooksService _booksService;
-    public TransfersService(ITransfersRepo transfersRepo, IBooksRepo booksRepo, ICollectionsRepo collectionsRepo, IBooksService booksService)
-    {
-        _transfersRepo = transfersRepo;
-        _booksRepo = booksRepo;
-        _collectionsRepo = collectionsRepo;
-        _booksService = booksService;
-    }
+    private readonly ITransfersRepo _transfersRepo = transfersRepo;
+    private readonly IBooksRepo _booksRepo = booksRepo;
+    private readonly ICollectionsRepo _collectionsRepo = collectionsRepo;
+    private readonly IBooksService _booksService = booksService;
 
     public async Task<List<TransferResponse>> GetByUser(string userId)
     {

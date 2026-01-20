@@ -18,17 +18,11 @@ public interface IBooksService
     Task Delete(int id);
 }
 
-public class BooksService : IBooksService
+public class BooksService(IBooksRepo booksRepo, IAuthorsService authorsService, ITagsService tagsService) : IBooksService
 {
-    private readonly IBooksRepo _booksRepo;
-    private readonly IAuthorsService _authorsService;
-    private readonly ITagsService _tagsService;
-    public BooksService(IBooksRepo booksRepo, IAuthorsService authorsService, ITagsService tagsService)
-    {
-        _booksRepo = booksRepo;
-        _authorsService = authorsService;
-        _tagsService = tagsService;
-    }
+    private readonly IBooksRepo _booksRepo = booksRepo;
+    private readonly IAuthorsService _authorsService = authorsService;
+    private readonly ITagsService _tagsService = tagsService;
 
     public async Task<List<BookResponse>> GetAllBooksResponse()
     {

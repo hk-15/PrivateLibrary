@@ -9,13 +9,9 @@ public interface IAuthorsService
     Task DeleteUnnecessaryAuthors(List<Author> authors);
 }
 
-public class AuthorsService : IAuthorsService
+public class AuthorsService(IAuthorsRepo authorsRepo) : IAuthorsService
 {
-    private readonly IAuthorsRepo _authorsRepo;
-    public AuthorsService(IAuthorsRepo authorsRepo)
-    {
-        _authorsRepo = authorsRepo;
-    }
+    private readonly IAuthorsRepo _authorsRepo = authorsRepo;
 
     public async Task<List<Author>> GetListFromRequest(List<string> request)
     {
