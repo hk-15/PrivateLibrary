@@ -1,7 +1,6 @@
 using api.Exceptions;
 using api.Models.Database;
 using api.Repositories;
-using Microsoft.AspNetCore.Identity;
 
 namespace api.Services;
 

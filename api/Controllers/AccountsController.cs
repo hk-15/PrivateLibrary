@@ -67,7 +67,7 @@ public class AccountsController(SignInManager<IdentityUser> signInManager, UserM
             }
             else if (await _userManager.FindByEmailAsync(newUser.Email!) != null)
             {
-                return BadRequest(new { message = "Sorry, there is already an account associated with that email. Please try logging in." } );
+                return BadRequest(new { message = "Sorry, there is already an account associated with that email. Please try logging in." });
             }
 
             var result = await _userManager.CreateAsync(user, newUser.Password);

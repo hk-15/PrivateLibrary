@@ -3,12 +3,13 @@ using api.Database;
 using api.Models.Database;
 
 namespace api.Helpers;
+
 public class DatabaseSeeder
 {
-    public static async Task SeedDatabase (IServiceProvider serviceProvider)
+    public static async Task SeedDatabase(IServiceProvider serviceProvider)
     {
         var context = serviceProvider.GetRequiredService<PrivateLibraryDbContext>();
-        
+
         if (!context.Set<Author>().Any())
         {
             List<Author> authors = [
@@ -65,7 +66,7 @@ public class DatabaseSeeder
                 ];
                 await context.Set<Tag>().AddRangeAsync(tags);
                 await context.SaveChangesAsync();
-            
+
                 List<Book> books = [
                     new Book { Id = 1, Isbn = "9780140449303", Title = "The Decameron", Authors = [authors[0]], Translator = "G. H. McWilliam", Language = "English", OriginalLanguage = "Italian", CollectionId = 1, PublicationYear = 1972, Read = false, Notes = "Currently reading", UserId = demo.Id, Tags = [tags[2]] },
                     new Book { Id = 2, Isbn = "9781529030235", Title = "Cannibal", Authors = [authors[1]], Language = "English", CollectionId = 3, PublicationYear = 2016, Read = true, UserId = demo.Id },

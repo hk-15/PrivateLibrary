@@ -85,7 +85,7 @@ public class BooksService(IBooksRepo booksRepo, IAuthorsService authorsService, 
     {
         CleanData(request);
         var oldBook = await _booksRepo.Get(id);
-        if (oldBook.TransferPending == true) throw new Exception ( message: "Cannot edit a book that is being transferred");
+        if (oldBook.TransferPending == true) throw new Exception(message: "Cannot edit a book that is being transferred");
         UpdateBookFields(request, oldBook);
 
         if (!oldBook.Authors.Select(a => a.Name).SequenceEqual(request.Authors))

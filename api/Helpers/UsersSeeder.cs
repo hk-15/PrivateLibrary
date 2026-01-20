@@ -23,7 +23,7 @@ public static class UsersSeeder
         var demoPassword = "Demo@123";
 
         var demoExists = await userManager.FindByEmailAsync(demoEmail);
-        
+
         if (demoExists == null)
         {
             var demo = new IdentityUser
