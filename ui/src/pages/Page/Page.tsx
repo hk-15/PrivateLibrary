@@ -1,16 +1,16 @@
 import type { JSX, ReactNode } from "react";
 
 interface PageProps {
-    children: ReactNode;
-    containerClassName?: string;
+  children: ReactNode;
+  containerClassName?: string;
 }
 
 export function Page(props: PageProps): JSX.Element {
-    return ( 
-        <div className={"page"}>           
-            <main className={`main ${props.containerClassName}`}>
-                {props.children}
-            </main>            
-        </div>
-    );
+  return (
+    <div className={"page"}>
+      <main className={`main ${props.containerClassName}`}>
+        {props.children}
+      </main>
+    </div>
+  );
 }

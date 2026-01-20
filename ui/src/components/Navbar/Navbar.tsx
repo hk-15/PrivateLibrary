@@ -3,29 +3,51 @@ import "./Navbar.scss";
 import { useContext } from "react";
 import { LoginContext } from "../LoginManager/LoginManager";
 
-export function Navbar () {
-    const loginContext = useContext(LoginContext);
+export function Navbar() {
+  const loginContext = useContext(LoginContext);
 
-    if (!loginContext.isLoggedIn) {
-        return (
-            <nav className="nav">
-            <NavLink className="nav-link" to="/">Private Library</NavLink>
-            <NavLink className="nav-link" to="/catalogue">Catalogue</NavLink>
-            <NavLink className="nav-link" to="/collections">Collections</NavLink>
-            <NavLink className="nav-link" to="/transfers">Transfers</NavLink>
-            <NavLink className="nav-link login-link" to="/login">Log in</NavLink>
-        </nav>
-        )
-    }
-
+  if (!loginContext.isLoggedIn) {
     return (
-        <nav className="nav">
-            <NavLink className="nav-link" to="/">Private Library</NavLink>
-            <NavLink className="nav-link" to="/catalogue">Catalogue</NavLink>
-            <NavLink className="nav-link add-link" to="/add-book">Shelve a book</NavLink>
-            <NavLink className="nav-link" to="/collections">Collections</NavLink>
-            <NavLink className="nav-link" to="/transfers">Transfers</NavLink>
-            <NavLink className="nav-link login-link" to="/login">Log out?</NavLink>
-        </nav>
-    )
-};
+      <nav className="nav">
+        <NavLink className="nav-link" to="/">
+          Private Library
+        </NavLink>
+        <NavLink className="nav-link" to="/catalogue">
+          Catalogue
+        </NavLink>
+        <NavLink className="nav-link" to="/collections">
+          Collections
+        </NavLink>
+        <NavLink className="nav-link" to="/transfers">
+          Transfers
+        </NavLink>
+        <NavLink className="nav-link login-link" to="/login">
+          Log in
+        </NavLink>
+      </nav>
+    );
+  }
+
+  return (
+    <nav className="nav">
+      <NavLink className="nav-link" to="/">
+        Private Library
+      </NavLink>
+      <NavLink className="nav-link" to="/catalogue">
+        Catalogue
+      </NavLink>
+      <NavLink className="nav-link add-link" to="/add-book">
+        Shelve a book
+      </NavLink>
+      <NavLink className="nav-link" to="/collections">
+        Collections
+      </NavLink>
+      <NavLink className="nav-link" to="/transfers">
+        Transfers
+      </NavLink>
+      <NavLink className="nav-link login-link" to="/login">
+        Log out?
+      </NavLink>
+    </nav>
+  );
+}

@@ -1,14 +1,14 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import './App.css'
-import Catalogue from './pages/Catalogue/Catalogue'
-import AddBook from './pages/AddBook/AddBook'
-import Collections from './pages/Collections/Collections'
-import Home from './pages/Home/Home'
-import { Navbar } from './components/Navbar/Navbar'
-import Login from './pages/Login/Login'
-import { LoginManager } from './components/LoginManager/LoginManager'
-import Transfers from './pages/Transfers/Transfers'
-import Footer from './components/Footer/Footer'
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
+import Catalogue from "./pages/Catalogue/Catalogue";
+import AddBook from "./pages/AddBook/AddBook";
+import Collections from "./pages/Collections/Collections";
+import Home from "./pages/Home/Home";
+import { Navbar } from "./components/Navbar/Navbar";
+import Login from "./pages/Login/Login";
+import { LoginManager } from "./components/LoginManager/LoginManager";
+import Transfers from "./pages/Transfers/Transfers";
+import Footer from "./components/Footer/Footer";
 
 export default function App() {
   return (
@@ -30,5 +30,5 @@ export default function App() {
         </BrowserRouter>
       </div>
     </LoginManager>
-  )
+  );
 }

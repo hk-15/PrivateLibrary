@@ -8,38 +8,40 @@ import "./Collections.scss";
 import { LoginMessage } from "../../components/LoginMessage/LoginMessage";
 
 export default function Collections() {
-    const loginContext = useContext(LoginContext);
+  const loginContext = useContext(LoginContext);
 
-    if (!loginContext.isLoggedIn) {
-        return (
-            <Page>
-                <LoginMessage message=""/>
-            </Page>
-        )
-    };
-
-    const [collections, setCollections] = useState<Collection[]>([]);
-    const [collectionNames, setCollectionNames] = useState<string[]>([]);
-    const [refresh, setRefresh] = useState(false);
-
-    useEffect(() => {
-        getAllCollections()
-            .then((response) => {
-                setCollections(response)
-                setCollectionNames(response.map(response => response.name));
-            })
-            .catch((err) => console.error(err));
-        setRefresh(false);
-    }, [refresh]);
-
-
+  if (!loginContext.isLoggedIn) {
     return (
-        <Page>
-            <h1 className="border-spaced-bottom">Collections</h1>
-            <div className="collection-options-container border-spaced-bottom">
-                <AddCollection collections={collectionNames} getRefresh={setRefresh} />
-            </div>
-            <CollectionsManagement collections={collections}getRefresh={setRefresh}/>
-        </Page>
-    )
+      <Page>
+        <LoginMessage message="" />
+      </Page>
+    );
+  }
+
+  const [collections, setCollections] = useState<Collection[]>([]);
+  const [collectionNames, setCollectionNames] = useState<string[]>([]);
+  const [refresh, setRefresh] = useState(false);
+
+  useEffect(() => {
+    getAllCollections()
+      .then((response) => {
+        setCollections(response);
+        setCollectionNames(response.map((response) => response.name));
+      })
+      .catch((err) => console.error(err));
+    setRefresh(false);
+  }, [refresh]);
+
+  return (
+    <Page>
+      <h1 className="border-spaced-bottom">Collections</h1>
+      <div className="collection-options-container border-spaced-bottom">
+        <AddCollection collections={collectionNames} getRefresh={setRefresh} />
+      </div>
+      <CollectionsManagement
+        collections={collections}
+        getRefresh={setRefresh}
+      />
+    </Page>
+  );
 }

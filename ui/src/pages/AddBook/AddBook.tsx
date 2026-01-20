@@ -6,20 +6,20 @@ import "./AddBook.scss";
 import { LoginMessage } from "../../components/LoginMessage/LoginMessage";
 
 export default function AddBook() {
-    const loginContext = useContext(LoginContext);
+  const loginContext = useContext(LoginContext);
 
-    if (!loginContext.isLoggedIn) {
-        return (
-            <Page>
-                <LoginMessage message="" />
-            </Page>
-        )
-    };
-
+  if (!loginContext.isLoggedIn) {
     return (
-        <Page>
-            <h1 className="border-spaced-bottom">Shelve a book</h1>
-            <AddBookForm />
-        </Page>
+      <Page>
+        <LoginMessage message="" />
+      </Page>
     );
+  }
+
+  return (
+    <Page>
+      <h1 className="border-spaced-bottom">Shelve a book</h1>
+      <AddBookForm />
+    </Page>
+  );
 }

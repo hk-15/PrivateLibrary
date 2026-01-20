@@ -11,25 +11,31 @@ import { LoginMessage } from "../../components/LoginMessage/LoginMessage";
 import CatalogueTable from "../../components/Catalogue/CatalogueTable/CatalogueTable";
 
 export default function Catalogue() {
-    const [pageSize, setPageSize] = useState("25");
-    const [sortBy, setSortBy] = useState("Title");
-    const [searchTerm, setSearchTerm] = useState("");
-    const loginContext = useContext(LoginContext);
+  const [pageSize, setPageSize] = useState("25");
+  const [sortBy, setSortBy] = useState("Title");
+  const [searchTerm, setSearchTerm] = useState("");
+  const loginContext = useContext(LoginContext);
 
-    return (
-        <Page>
-            <h1 className="border-spaced-bottom">Catalogue</h1>
-            {!loginContext.isLoggedIn && <LoginMessage message="to view your own catalogue and access full functionality" />}
-            <div className="catalogue-options-container border-spaced-bottom">
-                <SearchBar getSearchTerm={setSearchTerm} />
-                <CatalogueSort getSortBy={setSortBy} />
-                <CataloguePageSize getPageSize={setPageSize} />
-            </div>
-            <CatalogueTable pageSize={pageSize} sortBy={sortBy} searchTerm={searchTerm} />
-            <div className="border-spaced-bottom">
-                <AddBookButton />
-                <ManageCollectionsButton />
-            </div>
-        </Page>
-    );
+  return (
+    <Page>
+      <h1 className="border-spaced-bottom">Catalogue</h1>
+      {!loginContext.isLoggedIn && (
+        <LoginMessage message="to view your own catalogue and access full functionality" />
+      )}
+      <div className="catalogue-options-container border-spaced-bottom">
+        <SearchBar getSearchTerm={setSearchTerm} />
+        <CatalogueSort getSortBy={setSortBy} />
+        <CataloguePageSize getPageSize={setPageSize} />
+      </div>
+      <CatalogueTable
+        pageSize={pageSize}
+        sortBy={sortBy}
+        searchTerm={searchTerm}
+      />
+      <div className="border-spaced-bottom">
+        <AddBookButton />
+        <ManageCollectionsButton />
+      </div>
+    </Page>
+  );
 }
