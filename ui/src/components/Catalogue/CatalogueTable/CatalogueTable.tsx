@@ -108,7 +108,7 @@ export default function CatalogueTable(props:
                     </tr>
                 </thead>
                 <tbody>
-                    {books.length === 0 ? <tr><td>No books to see here...</td></tr> :
+                    {!books.length ? <tr><td>No books to see here...</td></tr> :
                         books.map(b =>
                             <tr key={b.id} className={`${b.read ? 'marked-read' : ''}`}>
                                 <td><span
