@@ -51,7 +51,7 @@ public class BooksController(IBooksService booksService, UserManager<IdentityUse
             {
                 var searchTerm = parameters.SearchTerm.Trim();
                 query = query.Where(b =>
-                b.Isbn.Contains(searchTerm) ||
+                (b.Isbn ?? "").Contains(searchTerm) ||
                 b.Authors.Any(a => a.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase)) ||
                 (b.Translator ?? "").Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||
                 b.Title.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase) ||

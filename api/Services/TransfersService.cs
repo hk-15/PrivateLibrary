@@ -27,7 +27,7 @@ public class TransfersService(ITransfersRepo transfersRepo, IBooksRepo booksRepo
         return [..transfers.Select(t => new TransferResponse
         {
             Id = t.Id,
-            Isbn = t.Book.Isbn,
+            Isbn = t.Book.Isbn ?? "",
             BookTitle = t.Book.Title,
             Author = GetAuthorNames(t.Book.Authors),
             TransferFrom = t.User.UserName ?? "",

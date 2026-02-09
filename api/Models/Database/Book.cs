@@ -7,7 +7,7 @@ public class Book
 {
     public int Id { get; set; }
     [MinLength(10), MaxLength(13)]
-    public required string Isbn { get; set; }
+    public string? Isbn { get; set; }
     public required string Title { get; set; }
     public string? Subtitle { get; set; }
     public List<Author> Authors { get; set; } = [];

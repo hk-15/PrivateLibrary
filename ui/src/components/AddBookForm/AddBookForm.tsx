@@ -22,7 +22,7 @@ export default function AddBookForm() {
   } = useForm({
     mode: "onChange",
     defaultValues: {
-      isbn: "978",
+      isbn: "",
       title: "",
       subtitle: "",
       authors: "",
@@ -53,7 +53,7 @@ export default function AddBookForm() {
   }
 
   function submitForm(data: {
-    isbn: string;
+    isbn?: string;
     title: string;
     subtitle?: string;
     authors: string;
@@ -73,6 +73,7 @@ export default function AddBookForm() {
       tags: createList(data.tags),
       read: readBoolean,
     };
+    
     setStatus("SUBMITTING");
     addBook(bookData)
       .then(() => {
@@ -94,12 +95,11 @@ export default function AddBookForm() {
     <div className="border-spaced-bottom">
       <form className="add-book-form" onSubmit={handleSubmit(submitForm)}>
         <label htmlFor="isbn">
-          ISBN *
+          ISBN
           <input
             id="isbn"
             type="text"
             {...register("isbn", {
-              required: true,
               pattern: {
                 value: /^[0-9]{10,13}$/,
                 message:

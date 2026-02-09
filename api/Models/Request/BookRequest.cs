@@ -4,8 +4,9 @@ namespace api.Models.Request;
 
 public class BookRequest
 {
-    [MinLength(10), MaxLength(13)]
-    public required string Isbn { get; set; }
+    [DisplayFormat(ConvertEmptyStringToNull = true)]
+    [RegularExpression(@"^\d{10,13}$", ErrorMessage = "ISBN must be 10–13 digits")]
+    public string? Isbn { get; set; }
     public required string Title { get; set; }
     public string? Subtitle { get; set; }
     public List<string> Authors { get; set; } = [];

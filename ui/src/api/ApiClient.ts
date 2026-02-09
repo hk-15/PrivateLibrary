@@ -2,7 +2,7 @@ export type FormStatus = "READY" | "SUBMITTING" | "ERROR" | "FINISHED";
 
 export interface Book {
   id: number;
-  isbn: string;
+  isbn?: string;
   title: string;
   subtitle?: string;
   authors: string[];
@@ -15,6 +15,7 @@ export interface Book {
   notes?: string;
   tags: string[];
   owner: string;
+  transferPending: boolean;
 }
 
 export const emptyBook: Book = {
@@ -32,10 +33,11 @@ export const emptyBook: Book = {
   tags: [""],
   read: false,
   owner: "",
+  transferPending: false,
 };
 
 export interface BookRequest {
-  isbn: string;
+  isbn?: string;
   title: string;
   subtitle?: string;
   authors: string[];
@@ -56,7 +58,7 @@ export interface RecategoriseRequest {
 
 export interface Transfer {
   id: number;
-  isbn: string;
+  isbn?: string;
   bookTitle: string;
   author: string[];
   transferFrom: string;

@@ -169,7 +169,7 @@ public class BooksService(IBooksRepo booksRepo, IAuthorsService authorsService, 
 
     private static void CleanData(BookRequest request)
     {
-        request.Isbn = request.Isbn.Trim();
+        if (!string.IsNullOrEmpty(request.Isbn)) request.Isbn = request.Isbn.Trim();
         request.Title = request.Title.Trim();
         if (!string.IsNullOrEmpty(request.Subtitle)) request.Subtitle = request.Subtitle.Trim();
         if (!string.IsNullOrEmpty(request.Translator)) request.Translator = request.Translator.Trim();
@@ -224,7 +224,8 @@ public class BooksService(IBooksRepo booksRepo, IAuthorsService authorsService, 
             Tags = GetBookTags(b.Tags),
             Owner = b.User != null
                 ? b.User.UserName
-                : ""
+                : "",
+            TransferPending = b.TransferPending
         })];
     }
 }

@@ -3,7 +3,7 @@ namespace api.Models.Response;
 public class BookResponse
 {
     public required int Id { get; set; }
-    public required string Isbn { get; set; }
+    public string? Isbn { get; set; }
     public required string Title { get; set; }
     public string? SortTitle { get; set; }
     public string? Subtitle { get; set; }
@@ -19,4 +19,5 @@ public class BookResponse
     public string? Notes { get; set; }
     public List<string> Tags { get; set; } = [];
     public string? Owner { get; set; }
+    public bool TransferPending { get; set; }
 }
