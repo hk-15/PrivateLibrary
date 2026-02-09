@@ -20,6 +20,11 @@
     font-weight: 500;
 }
 
+.transfer-pending {
+    background-color: light-dark(constants.$color-pink, constants.$color-pink-opaque);
+    font-weight: 500;
+}
+
 .library-view-table button {
     margin: 0.25rem;
     padding: 0.25rem;
@@ -82,6 +87,12 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+
+    .transfer-pending-message {
+        font-size: .75rem;
+        margin-top: 1rem;
+        padding: 0 1rem;
+    }
 
     .close-button {
         position: absolute;

@@ -116,37 +116,48 @@ export const DetailsPopUp: React.FC<Props> = ({
               </tr>
             </tbody>
           </table>
-          {!deleteMessage ? (
-            <div className="actions-container">
-              <button
-                onClick={() => {
-                  setEditedBook(book);
-                  setEditStatus(true);
-                }}
-              >
-                Edit
-              </button>
-              <button
-                className="red-button"
-                onClick={() => setDeleteMessage(true)}
-              >
-                Remove
-              </button>
-            </div>
+          {book.transferPending ? (
+            <p className="transfer-pending-message">
+              This book is pending transfer to another user&#8217;s library. To
+              edit or delete the record, please cancel the transfer first.
+            </p>
           ) : (
             <div>
-              <p>
-                Remove <em>{book.title}</em> from your library?
-              </p>
-              <button
-                onClick={() => {
-                  getDeleteId(book.id);
-                  setDeleteMessage(false);
-                }}
-              >
-                Yes
-              </button>
-              <button onClick={() => setDeleteMessage(false)}>Cancel</button>
+              {!deleteMessage ? (
+                <div className="actions-container">
+                  <button
+                    onClick={() => {
+                      setEditedBook(book);
+                      setEditStatus(true);
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="red-button"
+                    onClick={() => setDeleteMessage(true)}
+                  >
+                    Remove
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <p>
+                    Remove <em>{book.title}</em> from your library?
+                  </p>
+                  <button
+                    onClick={() => {
+                      getDeleteId(book.id);
+                      setDeleteMessage(false);
+                    }}
+                  >
+                    Yes
+                  </button>
+                  <button onClick={() => setDeleteMessage(false)}>
+                    Cancel
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>

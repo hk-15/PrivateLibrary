@@ -133,7 +133,7 @@ export default function CatalogueTable(props: {
             </tr>
           ) : (
             books.map((b) => (
-              <tr key={b.id} className={`${b.read ? "marked-read" : ""}`}>
+              <tr key={b.id} className={`${b.read ? "marked-read" : ""} ${b.transferPending ? "transfer-pending" : ""}`}>
                 <td>
                   <span
                     className="clickable"
