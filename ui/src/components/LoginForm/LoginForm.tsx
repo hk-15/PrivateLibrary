@@ -26,9 +26,9 @@ export const LoginForm: React.FC = (): JSX.Element => {
         setStatus("FINISHED");
         navigate("/");
       })
-      .catch((err) => {
+      .catch(() => {
         setStatus("ERROR");
-        setError("Login failed. " + err.message);
+        setError("Login failed. Please try again.");
       });
   }
 
@@ -61,7 +61,7 @@ export const LoginForm: React.FC = (): JSX.Element => {
       >
         Log In
       </button>
-      {status === "ERROR" && <p>{error}.</p>}
+      {status === "ERROR" && <p>{error}</p>}
     </form>
   );
 };

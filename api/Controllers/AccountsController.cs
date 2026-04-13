@@ -19,7 +19,7 @@ public class AccountsController(SignInManager<IdentityUser> signInManager, UserM
         var user = await _userManager.FindByEmailAsync(request.Email);
         if (user == null)
         {
-            return Unauthorized(new { message = "Invalid Email" });
+            return Unauthorized();
         }
 
         var result = await _signInManager.PasswordSignInAsync(
@@ -30,7 +30,7 @@ public class AccountsController(SignInManager<IdentityUser> signInManager, UserM
         );
         if (!result.Succeeded)
         {
-            return Unauthorized(new { message = "Invalid password" });
+            return Unauthorized();
         }
         bool isAdmin = false;
         var roles = await _userManager.GetRolesAsync(user);
