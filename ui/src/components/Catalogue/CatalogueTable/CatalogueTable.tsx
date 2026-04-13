@@ -13,6 +13,7 @@ import { DetailsPopUp } from "../DetailsPopUp/DetailsPopUp";
 export default function CatalogueTable(props: {
   pageSize: string;
   sortBy: string;
+  filter: string;
   searchTerm: string;
 }) {
   const [books, setBooks] = useState<Book[]>([]);
@@ -27,7 +28,7 @@ export default function CatalogueTable(props: {
   const [editedBook, setEditedBook] = useState<Book>(emptyBook);
 
   useEffect(() => {
-    getBooks(pageNum, props.pageSize, props.sortBy, props.searchTerm)
+    getBooks(pageNum, props.pageSize, props.sortBy, props.filter, props.searchTerm)
       .then((response) => {
         setBooks(response);
         setRefetch(false);
@@ -65,6 +66,7 @@ export default function CatalogueTable(props: {
         nextPage(pageNum),
         props.pageSize,
         props.sortBy,
+        props.filter,
         props.searchTerm,
       ).then((response) => setNextPageBooks(response));
     }, [props, pageNum]);
@@ -80,6 +82,7 @@ export default function CatalogueTable(props: {
             pageNum,
             props.pageSize,
             props.sortBy,
+            props.filter,
             props.searchTerm,
           ).then((response) => setBooks(response));
         } catch (err) {
@@ -100,6 +103,7 @@ export default function CatalogueTable(props: {
             pageNum,
             props.pageSize,
             props.sortBy,
+            props.filter,
             props.searchTerm,
           ).then((response) => setBooks(response));
         } catch (err) {

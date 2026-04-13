@@ -9,10 +9,12 @@ import { LoginContext } from "../../components/LoginManager/LoginManager";
 import "./Catalogue.scss";
 import { LoginMessage } from "../../components/LoginMessage/LoginMessage";
 import CatalogueTable from "../../components/Catalogue/CatalogueTable/CatalogueTable";
+import { CatalogueFilter } from "../../components/Catalogue/CatalogueFilter/CatalogueFilter";
 
 export default function Catalogue() {
   const [pageSize, setPageSize] = useState("25");
   const [sortBy, setSortBy] = useState("Title");
+  const [filter, setFilter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const loginContext = useContext(LoginContext);
 
@@ -25,11 +27,13 @@ export default function Catalogue() {
       <div className="catalogue-options-container border-spaced-bottom">
         <SearchBar getSearchTerm={setSearchTerm} />
         <CatalogueSort getSortBy={setSortBy} />
+        <CatalogueFilter getFilter={setFilter} />
         <CataloguePageSize getPageSize={setPageSize} />
       </div>
       <CatalogueTable
         pageSize={pageSize}
         sortBy={sortBy}
+        filter={filter}
         searchTerm={searchTerm}
       />
       <div className="border-spaced-bottom">

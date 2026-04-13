@@ -91,6 +91,7 @@ export async function getBooks(
   pageNum: string,
   pageSize: string,
   sortBy: string,
+  readFilter: string,
   searchTerm: string,
 ): Promise<Book[]> {
   const page =
@@ -108,9 +109,13 @@ export async function getBooks(
       : page === "" && sort === ""
         ? `?SearchTerm=${searchTerm}`
         : `&SearchTerm=${searchTerm}`;
-
+  const filter = readFilter === ""
+      ? ""
+      : page === "" && sort === "" && search === ""
+        ? `?Filter=${readFilter}`
+        : `&Filter=${readFilter}`;
   const response = await fetch(
-    `http://localhost:5108/books/current-user${page}${sort}${search}`,
+    `http://localhost:5108/books/current-user${page}${sort}${search}${filter}`,
     {
       credentials: "include",
       headers: {

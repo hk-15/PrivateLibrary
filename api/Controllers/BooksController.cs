@@ -62,6 +62,12 @@ public class BooksController(IBooksService booksService, UserManager<IdentityUse
                 );
             }
 
+            if (!string.IsNullOrWhiteSpace(parameters.Filter))
+            {
+                var filter = Convert.ToBoolean(parameters.Filter);
+                query = query.Where(b => b.Read == filter);
+            }
+
             if (!string.IsNullOrWhiteSpace(parameters.SortBy))
             {
                 query = SortQuery(parameters.SortBy, query);
